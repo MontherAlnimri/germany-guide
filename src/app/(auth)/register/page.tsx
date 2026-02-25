@@ -45,8 +45,8 @@ export default function RegisterPage() {
     <div className="w-full max-w-md">
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">{dict.auth.createAccount}</h1>
-          <p className="text-gray-600 mt-2">{dict.auth.createAccountDesc}</p>
+          <h1 className="text-2xl font-bold text-gray-900">{dict.auth.register}</h1>
+          <p className="text-gray-600 mt-2">{dict.auth.registerDesc}</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -93,7 +93,7 @@ export default function RegisterPage() {
             disabled={loading}
             className="w-full py-2.5 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-colors disabled:opacity-50"
           >
-            {loading ? dict.common.loading : dict.auth.createAccountBtn}
+            {loading ? dict.common.loading : dict.auth.registerBtn}
           </button>
         </form>
 

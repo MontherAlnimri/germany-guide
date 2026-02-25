@@ -1,8 +1,8 @@
-﻿import type { Locale } from './config';
-import type { Dictionary } from './dictionaries/en';
+﻿import type { Dictionary } from './dictionaries/en';
+import en from './dictionaries/en';
 
-const dictionaries: Record<Locale, () => Promise<Dictionary>> = {
-  en: () => import('./dictionaries/en').then((m) => m.default),
+const dictionaries: Record<string, () => Promise<Dictionary>> = {
+  en: () => Promise.resolve(en),
   de: () => import('./dictionaries/de').then((m) => m.default),
   ar: () => import('./dictionaries/ar').then((m) => m.default),
   tr: () => import('./dictionaries/tr').then((m) => m.default),
@@ -15,23 +15,32 @@ const dictionaries: Record<Locale, () => Promise<Dictionary>> = {
   hu: () => import('./dictionaries/hu').then((m) => m.default),
 };
 
-export async function getDictionary(locale: Locale): Promise<Dictionary> {
-  try {
-    return await dictionaries[locale]();
-  } catch {
-    return await dictionaries.en();
+function deepMerge(base: Record<string, unknown>, override: Record<string, unknown>): Record<string, unknown> {
+  const result: Record<string, unknown> = { ...base };
+  for (const key of Object.keys(override)) {
+    if (
+      typeof base[key] === 'object' && base[key] !== null && !Array.isArray(base[key]) &&
+      typeof override[key] === 'object' && override[key] !== null && !Array.isArray(override[key])
+    ) {
+      result[key] = deepMerge(base[key] as Record<string, unknown>, override[key] as Record<string, unknown>);
+    } else {
+      result[key] = override[key];
+    }
   }
+  return result;
 }
 
-const cachedDictionaries: Partial<Record<Locale, Dictionary>> = {};
+const cache = new Map<string, Dictionary>();
 
-export async function preloadDictionary(locale: Locale): Promise<Dictionary> {
-  if (!cachedDictionaries[locale]) {
-    cachedDictionaries[locale] = await getDictionary(locale);
-  }
-  return cachedDictionaries[locale]!;
-}
+export async function getDictionary(locale: string): Promise<Dictionary> {
+  if (cache.has(locale)) return cache.get(locale)!;
 
-export function getCachedDictionary(locale: Locale): Dictionary | undefined {
-  return cachedDictionaries[locale];
+  const loader = dictionaries[locale] || dictionaries.en;
+  const dict = await loader();
+
+  // Merge with English as fallback so missing keys don't break
+  const merged = locale === 'en' ? dict : deepMerge(en as unknown as Record<string, unknown>, dict as unknown as Record<string, unknown>) as unknown as Dictionary;
+
+  cache.set(locale, merged);
+  return merged;
 }

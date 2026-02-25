@@ -72,7 +72,7 @@ export default function LoginPage() {
             disabled={loading}
             className="w-full py-2.5 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-colors disabled:opacity-50"
           >
-            {loading ? dict.common.loading : dict.auth.signInBtn}
+            {loading ? dict.common.loading : dict.auth.login}
           </button>
         </form>
 
