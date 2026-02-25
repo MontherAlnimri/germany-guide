@@ -1,16 +1,16 @@
 ﻿import { NextRequest, NextResponse } from 'next/server';
 import { stripe } from '@/lib/stripe/server';
-import { createServerClient } from '@/lib/supabase/server';
+import { createClient } from '@/lib/supabase/server';
 
 export async function POST(req: NextRequest) {
   try {
-    const supabase = createServerClient();
+    const supabase = createClient();
     const { data: { user } } = await supabase.auth.getUser();
 
     const { amount } = await req.json();
 
     if (!amount || amount < 100) {
-      return NextResponse.json({ error: 'Minimum tip is €1.00' }, { status: 400 });
+      return NextResponse.json({ error: 'Minimum tip is 1.00' }, { status: 400 });
     }
 
     const origin = req.headers.get('origin') || 'https://my-german-guide.vercel.app';
