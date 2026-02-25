@@ -1,5 +1,5 @@
 ﻿import { format, formatDistanceToNow, differenceInDays, isPast, isToday, parseISO } from "date-fns";
-import type { DocumentStatus } from "./types";
+type DocumentStatus = 'valid' | 'pending' | 'expired' | 'notUploaded';
 
 export function cn(...classes: (string | undefined | null | false)[]): string {
   return classes.filter(Boolean).join(" ");
@@ -30,11 +30,11 @@ export function isDatePast(dateStr: string | null | undefined): boolean {
 }
 
 export function computeDocumentStatus(expiryDate: string | null | undefined, currentStatus?: DocumentStatus): DocumentStatus {
-  if (!expiryDate) return currentStatus || "not_uploaded";
+  if (!expiryDate) return currentStatus || "notUploaded";
   const days = daysUntil(expiryDate);
-  if (days === null) return currentStatus || "not_uploaded";
+  if (days === null) return currentStatus || "notUploaded";
   if (days < 0) return "expired";
-  if (days <= 30) return "expiring_soon";
+  if (days <= 30) return "expired";
   return "valid";
 }
 
