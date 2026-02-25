@@ -39,7 +39,10 @@ export async function POST(req: NextRequest) {
           const subscriptionId = session.subscription as string;
 
           if (userId) {
-            const stripeSubscription = await stripe.subscriptions.retrieve(subscriptionId);
+            const sub = await stripe.subscriptions.retrieve(subscriptionId);
+            const subData = sub as unknown as Record<string, unknown>;
+            const periodStart = subData.current_period_start as number;
+            const periodEnd = subData.current_period_end as number;
 
             await adminSupabase
               .from('subscriptions')
@@ -49,8 +52,8 @@ export async function POST(req: NextRequest) {
                 stripe_subscription_id: subscriptionId,
                 plan,
                 status: 'active',
-                current_period_start: new Date(stripeSubscription.current_period_start * 1000).toISOString(),
-                current_period_end: new Date(stripeSubscription.current_period_end * 1000).toISOString(),
+                current_period_start: periodStart ? new Date(periodStart * 1000).toISOString() : null,
+                current_period_end: periodEnd ? new Date(periodEnd * 1000).toISOString() : null,
                 updated_at: new Date().toISOString(),
               }, { onConflict: 'user_id' });
 
@@ -75,24 +78,28 @@ export async function POST(req: NextRequest) {
       }
 
       case 'customer.subscription.updated': {
-        const subscription = event.data.object as Stripe.Subscription;
+        const subscription = event.data.object as unknown as Record<string, unknown>;
         const customerId = subscription.customer as string;
+        const subStatus = subscription.status as string;
+        const cancelAtPeriodEnd = subscription.cancel_at_period_end as boolean;
+        const periodStart = subscription.current_period_start as number;
+        const periodEnd = subscription.current_period_end as number;
 
-        const { data: sub } = await adminSupabase
+        const { data: existingSub } = await adminSupabase
           .from('subscriptions')
           .select('user_id')
           .eq('stripe_customer_id', customerId)
           .single();
 
-        if (sub) {
-          const isActive = subscription.status === 'active';
+        if (existingSub) {
+          const isActive = subStatus === 'active';
 
           await adminSupabase
             .from('subscriptions')
             .update({
-              status: subscription.cancel_at_period_end ? 'cancelled' : (isActive ? 'active' : 'past_due'),
-              current_period_start: new Date(subscription.current_period_start * 1000).toISOString(),
-              current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
+              status: cancelAtPeriodEnd ? 'cancelled' : (isActive ? 'active' : 'past_due'),
+              current_period_start: periodStart ? new Date(periodStart * 1000).toISOString() : null,
+              current_period_end: periodEnd ? new Date(periodEnd * 1000).toISOString() : null,
               updated_at: new Date().toISOString(),
             })
             .eq('stripe_customer_id', customerId);
@@ -100,22 +107,22 @@ export async function POST(req: NextRequest) {
           await adminSupabase
             .from('profiles')
             .update({ is_premium: isActive, updated_at: new Date().toISOString() })
-            .eq('id', sub.user_id);
+            .eq('id', existingSub.user_id);
         }
         break;
       }
 
       case 'customer.subscription.deleted': {
-        const subscription = event.data.object as Stripe.Subscription;
+        const subscription = event.data.object as unknown as Record<string, unknown>;
         const customerId = subscription.customer as string;
 
-        const { data: sub } = await adminSupabase
+        const { data: existingSub } = await adminSupabase
           .from('subscriptions')
           .select('user_id')
           .eq('stripe_customer_id', customerId)
           .single();
 
-        if (sub) {
+        if (existingSub) {
           await adminSupabase
             .from('subscriptions')
             .update({
@@ -127,7 +134,7 @@ export async function POST(req: NextRequest) {
           await adminSupabase
             .from('profiles')
             .update({ is_premium: false, updated_at: new Date().toISOString() })
-            .eq('id', sub.user_id);
+            .eq('id', existingSub.user_id);
         }
         break;
       }
