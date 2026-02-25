@@ -1,6 +1,6 @@
-export const i18n = {
+﻿export const i18n = {
   defaultLocale: "en",
-  locales: ["en", "de", "ar", "tr", "uk", "fr", "es", "ru", "zh", "hi"],
+  locales: ["en", "de", "ar", "tr", "uk", "fr", "es", "ru", "zh", "hi", "hu"],
 } as const;
 
 export type Locale = (typeof i18n)["locales"][number];
@@ -16,6 +16,7 @@ export const localeNames: Record<Locale, string> = {
   ru: "\u0420\u0443\u0441\u0441\u043A\u0438\u0439",
   zh: "\u4E2D\u6587",
   hi: "\u0939\u093F\u0928\u094D\u0926\u0940",
+  hu: "Magyar",
 };
 
 export const rtlLocales: Locale[] = ["ar"];
@@ -39,4 +40,5 @@ export const localeFlags: Record<Locale, string> = {
   ru: "\uD83C\uDDF7\uD83C\uDDFA",
   zh: "\uD83C\uDDE8\uD83C\uDDF3",
   hi: "\uD83C\uDDEE\uD83C\uDDF3",
+  hu: "\uD83C\uDDED\uD83C\uDDFA",
 };

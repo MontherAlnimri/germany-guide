@@ -19,6 +19,7 @@ const dictionaryImports: Record<Locale, () => Promise<Dictionary>> = {
   ru: () => import('@/lib/i18n/dictionaries/ru').then((m) => m.default),
   zh: () => import('@/lib/i18n/dictionaries/zh').then((m) => m.default),
   hi: () => import('@/lib/i18n/dictionaries/hi').then((m) => m.default),
+  hu: () => import('@/lib/i18n/dictionaries/hu').then((m) => m.default),
 };
 
 export default function I18nClientProvider({

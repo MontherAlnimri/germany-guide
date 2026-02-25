@@ -1,4 +1,4 @@
-import type { Locale } from './config';
+﻿import type { Locale } from './config';
 import type { Dictionary } from './dictionaries/en';
 
 const dictionaries: Record<Locale, () => Promise<Dictionary>> = {
@@ -12,18 +12,17 @@ const dictionaries: Record<Locale, () => Promise<Dictionary>> = {
   ru: () => import('./dictionaries/ru').then((m) => m.default),
   zh: () => import('./dictionaries/zh').then((m) => m.default),
   hi: () => import('./dictionaries/hi').then((m) => m.default),
+  hu: () => import('./dictionaries/hu').then((m) => m.default),
 };
 
 export async function getDictionary(locale: Locale): Promise<Dictionary> {
   try {
     return await dictionaries[locale]();
   } catch {
-    // Fallback to English if locale not found
     return await dictionaries.en();
   }
 }
 
-// Synchronous version for client components (pre-loaded)
 const cachedDictionaries: Partial<Record<Locale, Dictionary>> = {};
 
 export async function preloadDictionary(locale: Locale): Promise<Dictionary> {
