@@ -115,6 +115,9 @@ export interface Dictionary {
     updateProfile: string;
     fillAllFields: string;
     selectCity: string;
+    completeSetup: string;
+    saveChanges: string;
+    welcome: string;
   };
   dashboard: {
     title: string;
@@ -441,6 +444,9 @@ const en: Dictionary = {
     updateProfile: 'Update Profile',
     fillAllFields: 'Please fill in all required fields',
     selectCity: 'Please select a city',
+    completeSetup: 'Complete Setup',
+    saveChanges: 'Save Changes',
+    welcome: 'Welcome! Let us set up your profile.',
   },
   dashboard: {
     title: 'Dashboard',
