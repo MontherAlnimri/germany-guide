@@ -1,7 +1,7 @@
 ﻿/* eslint-disable */
 import type { Dictionary } from './en';
 
-const hi: Dictionary = {
+const hi = {
   common: { appName: 'जर्मनी गाइड', loading: 'लोड हो रहा है...', save: 'सहेजें', cancel: 'रद्द करें', delete: 'हटाएं', edit: 'संपादित करें', back: 'वापस', next: 'अगला', submit: 'जमा करें', yes: 'हाँ', no: 'नहीं', or: 'या', error: 'त्रुटि', success: 'सफलता', close: 'बंद करें', optional: 'वैकल्पिक', required: 'आवश्यक', search: 'खोजें', noResults: 'कोई परिणाम नहीं मिला', confirm: 'पुष्टि करें', welcome: 'स्वागत है' },
   landing: { hero: 'जर्मनी में रहने के लिए आपका पूर्ण मार्गदर्शक', subtitle: 'नौकरशाही को समझें, दस्तावेज़ प्रबंधित करें और समय सीमा ट्रैक करें — सब एक जगह।', getStarted: 'शुरू करें', login: 'लॉग इन', features: 'सुविधाएँ', featureFlows: 'चरण-दर-चरण प्रक्रियाएँ', featureFlowsDesc: 'वीजा आवेदन, शहर पंजीकरण और अधिक के लिए निर्देशित प्रक्रियाओं का पालन करें।', featureDocs: 'दस्तावेज़ तिजोरी', featureDocsDesc: 'समाप्ति अलर्ट के साथ सभी महत्वपूर्ण दस्तावेज़ स्टोर और ट्रैक करें।', featureDeadlines: 'समय सीमा ट्रैकर', featureDeadlinesDesc: 'फिर कभी कोई अपॉइंटमेंट या नवीनीकरण तिथि न चूकें।', featureI18n: 'बहुभाषी समर्थन', featureI18nDesc: 'अरबी, तुर्की, यूक्रेनी और अधिक सहित 11 भाषाओं में उपलब्ध।', pricing: 'मूल्य निर्धारण', pricingSubtitle: 'अपने लिए सही योजना चुनें', free: 'मुफ्त', premium: 'प्रीमियम', premiumPrice: '€4.99/माह', premiumYearly: '€39.99/वर्ष', saveYearly: '33% बचाएं', currentPlan: 'वर्तमान योजना', upgrade: 'अभी अपग्रेड करें', freeTier1: '3 सक्रिय प्रक्रियाएँ तक', freeTier2: '10 दस्तावेज़ तक', freeTier3: 'बुनियादी समय सीमा ट्रैकिंग', freeTier4: 'सामुदायिक सहायता', premiumTier1: 'असीमित प्रक्रियाएँ', premiumTier2: 'असीमित दस्तावेज़', premiumTier3: 'प्राथमिकता ईमेल सहायता', premiumTier4: 'विज्ञापन-मुक्त अनुभव', premiumTier5: 'दस्तावेज़ PDF में निर्यात करें', premiumTier6: 'उन्नत समय सीमा रिमाइंडर', premiumTier7: 'व्यक्तिगत चेकलिस्ट' },
   auth: { login: 'लॉग इन', register: 'खाता बनाएं', email: 'ईमेल', password: 'पासवर्ड', confirmPassword: 'पासवर्ड पुष्टि करें', forgotPassword: 'पासवर्ड भूल गए?', noAccount: 'खाता नहीं है?', hasAccount: 'पहले से खाता है?', loginError: 'अमान्य ईमेल या पासवर्ड', registerError: 'पंजीकरण विफल। कृपया पुनः प्रयास करें।', passwordMismatch: 'पासवर्ड मेल नहीं खाते', checkEmail: 'अपना खाता सत्यापित करने के लिए ईमेल जांचें', fullName: 'पूरा नाम', logout: 'लॉग आउट' },
@@ -18,4 +18,4 @@ const hi: Dictionary = {
   ads: { sponsored: 'प्रायोजित', advertisement: 'विज्ञापन' },
 };
 
-export default hi;
+export default hi as unknown as Dictionary;

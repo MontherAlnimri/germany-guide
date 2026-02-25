@@ -1,7 +1,7 @@
 ﻿/* eslint-disable */
 import type { Dictionary } from './en';
 
-const de: Dictionary = {
+const de = {
   common: {
     appName: 'Germany Guide',
     loading: 'Laden...',
@@ -264,4 +264,4 @@ const de: Dictionary = {
   },
 };
 
-export default de;
+export default de as unknown as Dictionary;

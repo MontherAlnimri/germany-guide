@@ -1,7 +1,7 @@
 ﻿/* eslint-disable */
 import type { Dictionary } from './en';
 
-const uk: Dictionary = {
+const uk = {
   common: { appName: 'Гід по Німеччині', loading: 'Завантаження...', save: 'Зберегти', cancel: 'Скасувати', delete: 'Видалити', edit: 'Редагувати', back: 'Назад', next: 'Далі', submit: 'Надіслати', yes: 'Так', no: 'Ні', or: 'або', error: 'Помилка', success: 'Успіх', close: 'Закрити', optional: 'Необов\'язково', required: 'Обов\'язково', search: 'Пошук', noResults: 'Нічого не знайдено', confirm: 'Підтвердити', welcome: 'Ласкаво просимо' },
   landing: { hero: 'Ваш повний гід по життю в Німеччині', subtitle: 'Орієнтуйтесь у бюрократії, керуйте документами та відстежуйте терміни — все в одному місці.', getStarted: 'Почати', login: 'Увійти', features: 'Функції', featureFlows: 'Покрокові процеси', featureFlowsDesc: 'Слідуйте керованим процесам для візових заявок, реєстрації та іншого.', featureDocs: 'Сховище документів', featureDocsDesc: 'Зберігайте та відстежуйте всі важливі документи з попередженнями про закінчення терміну.', featureDeadlines: 'Відстеження термінів', featureDeadlinesDesc: 'Більше ніколи не пропустіть зустріч або дату продовження.', featureI18n: 'Багатомовна підтримка', featureI18nDesc: 'Доступно 11 мовами, включаючи арабську, турецьку, українську та інші.', pricing: 'Ціни', pricingSubtitle: 'Виберіть план, який вам підходить', free: 'Безкоштовно', premium: 'Преміум', premiumPrice: '€4.99/місяць', premiumYearly: '€39.99/рік', saveYearly: 'Економія 33%', currentPlan: 'Поточний план', upgrade: 'Оновити зараз', freeTier1: 'До 3 активних процесів', freeTier2: 'До 10 документів', freeTier3: 'Базове відстеження термінів', freeTier4: 'Підтримка спільноти', premiumTier1: 'Необмежені процеси', premiumTier2: 'Необмежені документи', premiumTier3: 'Пріоритетна підтримка', premiumTier4: 'Без реклами', premiumTier5: 'Експорт документів у PDF', premiumTier6: 'Розширені нагадування', premiumTier7: 'Персоналізований чек-лист' },
   auth: { login: 'Увійти', register: 'Створити акаунт', email: 'Електронна пошта', password: 'Пароль', confirmPassword: 'Підтвердити пароль', forgotPassword: 'Забули пароль?', noAccount: 'Немає акаунту?', hasAccount: 'Вже є акаунт?', loginError: 'Невірна пошта або пароль', registerError: 'Реєстрація не вдалася. Спробуйте ще раз.', passwordMismatch: 'Паролі не збігаються', checkEmail: 'Перевірте пошту для підтвердження', fullName: 'Повне ім\'я', logout: 'Вийти' },
@@ -18,4 +18,4 @@ const uk: Dictionary = {
   ads: { sponsored: 'Спонсоровано', advertisement: 'Реклама' },
 };
 
-export default uk;
+export default uk as unknown as Dictionary;

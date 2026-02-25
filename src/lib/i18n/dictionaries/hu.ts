@@ -1,7 +1,7 @@
 ﻿/* eslint-disable */
 import type { Dictionary } from './en';
 
-const hu: Dictionary = {
+const hu = {
   common: { appName: 'Németország Útmutató', loading: 'Betöltés...', save: 'Mentés', cancel: 'Mégse', delete: 'Törlés', edit: 'Szerkesztés', back: 'Vissza', next: 'Tovább', submit: 'Küldés', yes: 'Igen', no: 'Nem', or: 'vagy', error: 'Hiba', success: 'Siker', close: 'Bezárás', optional: 'Opcionális', required: 'Kötelező', search: 'Keresés', noResults: 'Nincs találat', confirm: 'Megerősítés', welcome: 'Üdvözöljük' },
   landing: { hero: 'Teljes körű útmutató a németországi élethez', subtitle: 'Navigáljon a bürokráciában, kezelje dokumentumait és kövesse határidőit — minden egy helyen.', getStarted: 'Kezdés', login: 'Bejelentkezés', features: 'Funkciók', featureFlows: 'Lépésről lépésre folyamatok', featureFlowsDesc: 'Kövesse az irányított folyamatokat vízumkérelmekhez, regisztrációhoz és többhöz.', featureDocs: 'Dokumentum trezor', featureDocsDesc: 'Tárolja és kövesse összes fontos dokumentumát lejárati figyelmeztetésekkel.', featureDeadlines: 'Határidő követés', featureDeadlinesDesc: 'Soha többé ne mulasszon el időpontot vagy meghosszabbítási dátumot.', featureI18n: 'Többnyelvű támogatás', featureI18nDesc: '11 nyelven elérhető, beleértve az arab, török, ukrán és további nyelveket.', pricing: 'Árazás', pricingSubtitle: 'Válassza ki az Önnek megfelelő csomagot', free: 'Ingyenes', premium: 'Prémium', premiumPrice: '€4,99/hó', premiumYearly: '€39,99/év', saveYearly: '33% megtakarítás', currentPlan: 'Jelenlegi csomag', upgrade: 'Frissítés most', freeTier1: 'Legfeljebb 3 aktív folyamat', freeTier2: 'Legfeljebb 10 dokumentum', freeTier3: 'Alapszintű határidő követés', freeTier4: 'Közösségi támogatás', premiumTier1: 'Korlátlan folyamatok', premiumTier2: 'Korlátlan dokumentumok', premiumTier3: 'Elsőbbségi e-mail támogatás', premiumTier4: 'Reklámmentes élmény', premiumTier5: 'Dokumentumok PDF exportja', premiumTier6: 'Fejlett határidő emlékeztetők', premiumTier7: 'Személyre szabott ellenőrzőlista' },
   auth: { login: 'Bejelentkezés', register: 'Fiók létrehozása', email: 'E-mail', password: 'Jelszó', confirmPassword: 'Jelszó megerősítése', forgotPassword: 'Elfelejtett jelszó?', noAccount: 'Nincs fiókja?', hasAccount: 'Már van fiókja?', loginError: 'Érvénytelen e-mail vagy jelszó', registerError: 'Regisztráció sikertelen. Kérjük, próbálja újra.', passwordMismatch: 'A jelszavak nem egyeznek', checkEmail: 'Ellenőrizze e-mailjét a fiók megerősítéséhez', fullName: 'Teljes név', logout: 'Kijelentkezés' },
@@ -18,4 +18,4 @@ const hu: Dictionary = {
   ads: { sponsored: 'Szponzorált', advertisement: 'Hirdetés' },
 };
 
-export default hu;
+export default hu as unknown as Dictionary;

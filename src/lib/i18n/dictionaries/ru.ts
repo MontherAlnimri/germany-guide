@@ -1,7 +1,7 @@
 ﻿/* eslint-disable */
 import type { Dictionary } from './en';
 
-const ru: Dictionary = {
+const ru = {
   common: { appName: 'Гид по Германии', loading: 'Загрузка...', save: 'Сохранить', cancel: 'Отмена', delete: 'Удалить', edit: 'Редактировать', back: 'Назад', next: 'Далее', submit: 'Отправить', yes: 'Да', no: 'Нет', or: 'или', error: 'Ошибка', success: 'Успех', close: 'Закрыть', optional: 'Необязательно', required: 'Обязательно', search: 'Поиск', noResults: 'Ничего не найдено', confirm: 'Подтвердить', welcome: 'Добро пожаловать' },
   landing: { hero: 'Ваш полный гид по жизни в Германии', subtitle: 'Ориентируйтесь в бюрократии, управляйте документами и отслеживайте сроки — всё в одном месте.', getStarted: 'Начать', login: 'Войти', features: 'Возможности', featureFlows: 'Пошаговые процессы', featureFlowsDesc: 'Следуйте руководствам для визовых заявок, регистрации и многого другого.', featureDocs: 'Хранилище документов', featureDocsDesc: 'Храните и отслеживайте все важные документы с уведомлениями об истечении срока.', featureDeadlines: 'Отслеживание сроков', featureDeadlinesDesc: 'Больше никогда не пропустите встречу или дату продления.', featureI18n: 'Многоязычная поддержка', featureI18nDesc: 'Доступно на 11 языках, включая арабский, турецкий, украинский и другие.', pricing: 'Цены', pricingSubtitle: 'Выберите подходящий план', free: 'Бесплатно', premium: 'Премиум', premiumPrice: '€4.99/месяц', premiumYearly: '€39.99/год', saveYearly: 'Экономия 33%', currentPlan: 'Текущий план', upgrade: 'Обновить сейчас', freeTier1: 'До 3 активных процессов', freeTier2: 'До 10 документов', freeTier3: 'Базовое отслеживание сроков', freeTier4: 'Поддержка сообщества', premiumTier1: 'Безлимитные процессы', premiumTier2: 'Безлимитные документы', premiumTier3: 'Приоритетная поддержка по email', premiumTier4: 'Без рекламы', premiumTier5: 'Экспорт документов в PDF', premiumTier6: 'Расширенные напоминания', premiumTier7: 'Персонализированный чек-лист' },
   auth: { login: 'Войти', register: 'Создать аккаунт', email: 'Электронная почта', password: 'Пароль', confirmPassword: 'Подтвердить пароль', forgotPassword: 'Забыли пароль?', noAccount: 'Нет аккаунта?', hasAccount: 'Уже есть аккаунт?', loginError: 'Неверная почта или пароль', registerError: 'Ошибка регистрации. Попробуйте снова.', passwordMismatch: 'Пароли не совпадают', checkEmail: 'Проверьте почту для подтверждения', fullName: 'Полное имя', logout: 'Выйти' },
@@ -18,4 +18,4 @@ const ru: Dictionary = {
   ads: { sponsored: 'Спонсировано', advertisement: 'Реклама' },
 };
 
-export default ru;
+export default ru as unknown as Dictionary;

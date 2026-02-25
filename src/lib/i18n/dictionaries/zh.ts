@@ -1,7 +1,7 @@
 ﻿/* eslint-disable */
 import type { Dictionary } from './en';
 
-const zh: Dictionary = {
+const zh = {
   common: { appName: '德国指南', loading: '加载中...', save: '保存', cancel: '取消', delete: '删除', edit: '编辑', back: '返回', next: '下一步', submit: '提交', yes: '是', no: '否', or: '或', error: '错误', success: '成功', close: '关闭', optional: '可选', required: '必填', search: '搜索', noResults: '未找到结果', confirm: '确认', welcome: '欢迎' },
   landing: { hero: '您在德国生活的完整指南', subtitle: '导航官僚机构、管理文件、跟踪截止日期——一站式解决。', getStarted: '开始使用', login: '登录', features: '功能', featureFlows: '分步流程', featureFlowsDesc: '按照引导流程完成签证申请、城市注册等。', featureDocs: '文件保管库', featureDocsDesc: '存储和跟踪所有重要文件，附带到期提醒。', featureDeadlines: '截止日期追踪', featureDeadlinesDesc: '再也不会错过预约或续签日期。', featureI18n: '多语言支持', featureI18nDesc: '支持11种语言，包括阿拉伯语、土耳其语、乌克兰语等。', pricing: '定价', pricingSubtitle: '选择适合您的方案', free: '免费', premium: '高级版', premiumPrice: '€4.99/月', premiumYearly: '€39.99/年', saveYearly: '节省33%', currentPlan: '当前方案', upgrade: '立即升级', freeTier1: '最多3个活跃流程', freeTier2: '最多10个文件', freeTier3: '基本截止日期追踪', freeTier4: '社区支持', premiumTier1: '无限流程', premiumTier2: '无限文件', premiumTier3: '优先邮件支持', premiumTier4: '无广告体验', premiumTier5: '导出PDF文件', premiumTier6: '高级提醒功能', premiumTier7: '个性化清单' },
   auth: { login: '登录', register: '创建账户', email: '电子邮件', password: '密码', confirmPassword: '确认密码', forgotPassword: '忘记密码？', noAccount: '没有账户？', hasAccount: '已有账户？', loginError: '邮箱或密码无效', registerError: '注册失败，请重试。', passwordMismatch: '密码不匹配', checkEmail: '请检查邮箱确认账户', fullName: '全名', logout: '退出' },
@@ -18,4 +18,4 @@ const zh: Dictionary = {
   ads: { sponsored: '赞助', advertisement: '广告' },
 };
 
-export default zh;
+export default zh as unknown as Dictionary;

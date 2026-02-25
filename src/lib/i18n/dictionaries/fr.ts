@@ -1,7 +1,7 @@
 ﻿/* eslint-disable */
 import type { Dictionary } from './en';
 
-const fr: Dictionary = {
+const fr = {
   common: { appName: 'Guide Allemagne', loading: 'Chargement...', save: 'Enregistrer', cancel: 'Annuler', delete: 'Supprimer', edit: 'Modifier', back: 'Retour', next: 'Suivant', submit: 'Soumettre', yes: 'Oui', no: 'Non', or: 'ou', error: 'Erreur', success: 'Succès', close: 'Fermer', optional: 'Optionnel', required: 'Requis', search: 'Rechercher', noResults: 'Aucun résultat trouvé', confirm: 'Confirmer', welcome: 'Bienvenue' },
   landing: { hero: 'Votre guide complet pour vivre en Allemagne', subtitle: 'Naviguez la bureaucratie, gérez vos documents et suivez vos échéances — tout en un seul endroit.', getStarted: 'Commencer', login: 'Se connecter', features: 'Fonctionnalités', featureFlows: 'Processus étape par étape', featureFlowsDesc: 'Suivez des processus guidés pour les demandes de visa, l\'enregistrement et plus.', featureDocs: 'Coffre à documents', featureDocsDesc: 'Stockez et suivez tous vos documents importants avec des alertes d\'expiration.', featureDeadlines: 'Suivi des échéances', featureDeadlinesDesc: 'Ne manquez plus jamais un rendez-vous ou une date de renouvellement.', featureI18n: 'Support multilingue', featureI18nDesc: 'Disponible en 11 langues dont l\'arabe, le turc, l\'ukrainien et plus.', pricing: 'Tarifs', pricingSubtitle: 'Choisissez le plan qui vous convient', free: 'Gratuit', premium: 'Premium', premiumPrice: '€4,99/mois', premiumYearly: '€39,99/an', saveYearly: 'Économisez 33%', currentPlan: 'Plan actuel', upgrade: 'Mettre à niveau', freeTier1: 'Jusqu\'à 3 processus actifs', freeTier2: 'Jusqu\'à 10 documents', freeTier3: 'Suivi basique des échéances', freeTier4: 'Support communautaire', premiumTier1: 'Processus illimités', premiumTier2: 'Documents illimités', premiumTier3: 'Support prioritaire par email', premiumTier4: 'Expérience sans publicité', premiumTier5: 'Export des documents en PDF', premiumTier6: 'Rappels avancés', premiumTier7: 'Liste de vérification personnalisée' },
   auth: { login: 'Se connecter', register: 'Créer un compte', email: 'Email', password: 'Mot de passe', confirmPassword: 'Confirmer le mot de passe', forgotPassword: 'Mot de passe oublié?', noAccount: 'Pas de compte?', hasAccount: 'Déjà un compte?', loginError: 'Email ou mot de passe invalide', registerError: 'Échec de l\'inscription. Veuillez réessayer.', passwordMismatch: 'Les mots de passe ne correspondent pas', checkEmail: 'Vérifiez votre email pour confirmer votre compte', fullName: 'Nom complet', logout: 'Se déconnecter' },
@@ -18,4 +18,4 @@ const fr: Dictionary = {
   ads: { sponsored: 'Sponsorisé', advertisement: 'Publicité' },
 };
 
-export default fr;
+export default fr as unknown as Dictionary;

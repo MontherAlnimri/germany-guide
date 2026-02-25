@@ -1,7 +1,7 @@
 ﻿/* eslint-disable */
 import type { Dictionary } from './en';
 
-const es: Dictionary = {
+const es = {
   common: { appName: 'Guía Alemania', loading: 'Cargando...', save: 'Guardar', cancel: 'Cancelar', delete: 'Eliminar', edit: 'Editar', back: 'Atrás', next: 'Siguiente', submit: 'Enviar', yes: 'Sí', no: 'No', or: 'o', error: 'Error', success: 'Éxito', close: 'Cerrar', optional: 'Opcional', required: 'Requerido', search: 'Buscar', noResults: 'No se encontraron resultados', confirm: 'Confirmar', welcome: 'Bienvenido' },
   landing: { hero: 'Tu guía completa para vivir en Alemania', subtitle: 'Navega la burocracia, gestiona documentos y rastrea plazos — todo en un solo lugar.', getStarted: 'Comenzar', login: 'Iniciar sesión', features: 'Características', featureFlows: 'Procesos paso a paso', featureFlowsDesc: 'Sigue procesos guiados para solicitudes de visa, registro y más.', featureDocs: 'Bóveda de documentos', featureDocsDesc: 'Almacena y rastrea todos tus documentos importantes con alertas de vencimiento.', featureDeadlines: 'Rastreador de plazos', featureDeadlinesDesc: 'Nunca pierdas una cita o fecha de renovación.', featureI18n: 'Soporte multilingüe', featureI18nDesc: 'Disponible en 11 idiomas incluyendo árabe, turco, ucraniano y más.', pricing: 'Precios', pricingSubtitle: 'Elige el plan que te convenga', free: 'Gratis', premium: 'Premium', premiumPrice: '€4,99/mes', premiumYearly: '€39,99/año', saveYearly: 'Ahorra 33%', currentPlan: 'Plan actual', upgrade: 'Actualizar ahora', freeTier1: 'Hasta 3 procesos activos', freeTier2: 'Hasta 10 documentos', freeTier3: 'Rastreo básico de plazos', freeTier4: 'Soporte comunitario', premiumTier1: 'Procesos ilimitados', premiumTier2: 'Documentos ilimitados', premiumTier3: 'Soporte prioritario por email', premiumTier4: 'Experiencia sin anuncios', premiumTier5: 'Exportar documentos como PDF', premiumTier6: 'Recordatorios avanzados', premiumTier7: 'Lista de verificación personalizada' },
   auth: { login: 'Iniciar sesión', register: 'Crear cuenta', email: 'Correo electrónico', password: 'Contraseña', confirmPassword: 'Confirmar contraseña', forgotPassword: '¿Olvidaste tu contraseña?', noAccount: '¿No tienes cuenta?', hasAccount: '¿Ya tienes cuenta?', loginError: 'Correo o contraseña inválidos', registerError: 'Error en el registro. Inténtalo de nuevo.', passwordMismatch: 'Las contraseñas no coinciden', checkEmail: 'Revisa tu correo para confirmar tu cuenta', fullName: 'Nombre completo', logout: 'Cerrar sesión' },
@@ -18,4 +18,4 @@ const es: Dictionary = {
   ads: { sponsored: 'Patrocinado', advertisement: 'Publicidad' },
 };
 
-export default es;
+export default es as unknown as Dictionary;

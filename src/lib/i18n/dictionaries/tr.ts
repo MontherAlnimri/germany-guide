@@ -1,7 +1,7 @@
 ﻿/* eslint-disable */
 import type { Dictionary } from './en';
 
-const tr: Dictionary = {
+const tr = {
   common: {
     appName: 'Almanya Rehberi',
     loading: 'Yükleniyor...',
@@ -264,4 +264,4 @@ const tr: Dictionary = {
   },
 };
 
-export default tr;
+export default tr as unknown as Dictionary;
