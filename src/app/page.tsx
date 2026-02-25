@@ -1,71 +1,151 @@
 ﻿'use client';
 
 import Link from 'next/link';
-import { useDict } from '@/lib/i18n/context';
+import { useDict, useLocale } from '@/lib/i18n';
 import LanguageSwitcher from '@/components/i18n/LanguageSwitcher';
 
-export default function Home() {
+export default function LandingPage() {
   const dict = useDict();
+  const locale = useLocale();
 
   const features = [
-    { icon: '\uD83D\uDCCB', ...dict.landing.features.visa },
-    { icon: '\u2705', ...dict.landing.features.progress },
-    { icon: '\uD83D\uDCC1', ...dict.landing.features.documents },
-    { icon: '\u23F0', ...dict.landing.features.deadlines },
-    { icon: '\uD83C\uDFE0', ...dict.landing.features.registration },
-    { icon: '\uD83C\uDFE5', ...dict.landing.features.insurance },
+    { icon: '\u{1F504}', title: dict.landing.featureFlows, desc: dict.landing.featureFlowsDesc },
+    { icon: '\u{1F4C4}', title: dict.landing.featureDocs, desc: dict.landing.featureDocsDesc },
+    { icon: '\u{1F4C5}', title: dict.landing.featureDeadlines, desc: dict.landing.featureDeadlinesDesc },
+    { icon: '\u{1F30D}', title: dict.landing.featureI18n, desc: dict.landing.featureI18nDesc },
+  ];
+
+  const freeFeatures = [
+    dict.landing.freeTier1,
+    dict.landing.freeTier2,
+    dict.landing.freeTier3,
+    dict.landing.freeTier4,
+  ];
+
+  const premiumFeatures = [
+    dict.landing.premiumTier1,
+    dict.landing.premiumTier2,
+    dict.landing.premiumTier3,
+    dict.landing.premiumTier4,
+    dict.landing.premiumTier5,
+    dict.landing.premiumTier6,
+    dict.landing.premiumTier7,
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
-      <header className="w-full flex items-center justify-between px-6 py-4 max-w-7xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-950">
+      <header className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="text-2xl">{'\uD83C\uDDE9\uD83C\uDDEA'}</span>
-          <span className="font-bold text-xl text-gray-900">{dict.common.appName}</span>
+          <span className="text-2xl">DE</span>
+          <span className="font-bold text-xl text-gray-900 dark:text-white">{dict.common.appName}</span>
         </div>
         <div className="flex items-center gap-3">
           <LanguageSwitcher />
-          <Link href="/login" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
-            {dict.landing.signIn}
+          <Link href="/login" className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 transition">
+            {dict.landing.login}
+          </Link>
+          <Link href="/register" className="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition">
+            {dict.landing.getStarted}
           </Link>
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-6 pt-16 pb-24">
-        <div className="text-center max-w-3xl mx-auto">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 leading-tight">
-            {dict.landing.heroTitle1}{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
-              {dict.landing.heroTitle2}
-            </span>
-          </h1>
-          <p className="mt-6 text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
-            {dict.landing.heroDesc}
-          </p>
-          <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="/register" className="px-8 py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-colors shadow-lg shadow-blue-200 w-full sm:w-auto text-center">
-              {dict.landing.getStarted}
-            </Link>
-            <Link href="/login" className="px-8 py-3 bg-white text-gray-700 rounded-xl font-medium hover:bg-gray-50 transition-colors border border-gray-200 w-full sm:w-auto text-center">
-              {dict.landing.haveAccount}
-            </Link>
-          </div>
+      <section className="max-w-4xl mx-auto px-4 py-20 text-center">
+        <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 dark:text-white mb-6 leading-tight">
+          {dict.landing.hero}
+        </h1>
+        <p className="text-lg text-gray-600 dark:text-gray-400 mb-8 max-w-2xl mx-auto">
+          {dict.landing.subtitle}
+        </p>
+        <div className="flex items-center justify-center gap-4">
+          <Link href="/register" className="px-6 py-3 bg-blue-600 text-white text-lg rounded-xl hover:bg-blue-700 transition shadow-lg shadow-blue-600/25">
+            {dict.landing.getStarted}
+          </Link>
+          <Link href="/login" className="px-6 py-3 text-gray-700 dark:text-gray-300 text-lg rounded-xl border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 transition">
+            {dict.landing.login}
+          </Link>
         </div>
+      </section>
 
-        <div className="mt-24 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {features.map((feature, idx) => (
-            <div key={idx} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-              <div className="text-3xl mb-4">{feature.icon}</div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">{feature.title}</h3>
-              <p className="text-gray-600 text-sm leading-relaxed">{feature.desc}</p>
+      <section className="max-w-6xl mx-auto px-4 py-16">
+        <h2 className="text-2xl font-bold text-center text-gray-900 dark:text-white mb-10">
+          {dict.landing.features}
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {features.map((f, i) => (
+            <div key={i} className="bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700 text-center hover:shadow-lg transition">
+              <span className="text-4xl">{f.icon}</span>
+              <h3 className="font-bold text-gray-900 dark:text-white mt-3 mb-2">{f.title}</h3>
+              <p className="text-sm text-gray-500 dark:text-gray-400">{f.desc}</p>
             </div>
           ))}
         </div>
+      </section>
 
-        <div className="mt-24 text-center text-sm text-gray-500">
-          {dict.landing.footer}
+      <section className="max-w-5xl mx-auto px-4 py-16" id="pricing">
+        <h2 className="text-2xl font-bold text-center text-gray-900 dark:text-white mb-2">
+          {dict.landing.pricing}
+        </h2>
+        <p className="text-center text-gray-500 dark:text-gray-400 mb-10">
+          {dict.landing.pricingSubtitle}
+        </p>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-6">
+            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">{dict.landing.free}</h3>
+            <p className="text-3xl font-extrabold text-gray-900 dark:text-white mb-4">{'\u20AC'}0</p>
+            <ul className="space-y-2 mb-6">
+              {freeFeatures.map((f, i) => (
+                <li key={i} className="flex items-start gap-2 text-sm text-gray-600 dark:text-gray-400">
+                  <span className="text-green-500">{'\u2713'}</span>
+                  {f}
+                </li>
+              ))}
+            </ul>
+            <Link href="/register" className="block w-full py-2.5 text-center border border-gray-300 dark:border-gray-600 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition">
+              {dict.landing.getStarted}
+            </Link>
+          </div>
+
+          <div className="bg-white dark:bg-gray-800 rounded-2xl border-2 border-blue-500 p-6 relative">
+            <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full">
+              {'\u2B50'} {dict.landing.premium}
+            </div>
+            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">{dict.landing.premium}</h3>
+            <div className="mb-4">
+              <span className="text-3xl font-extrabold text-gray-900 dark:text-white">{dict.landing.premiumPrice}</span>
+              <span className="text-sm text-gray-500 ml-2">
+                {dict.common.or} {dict.landing.premiumYearly}
+                <span className="ml-1 text-green-600 font-medium">{dict.landing.saveYearly}</span>
+              </span>
+            </div>
+            <ul className="space-y-2 mb-6">
+              {premiumFeatures.map((f, i) => (
+                <li key={i} className="flex items-start gap-2 text-sm text-gray-600 dark:text-gray-400">
+                  <span className="text-blue-500">{'\u2713'}</span>
+                  {f}
+                </li>
+              ))}
+            </ul>
+            <Link href="/register" className="block w-full py-2.5 text-center bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition">
+              {dict.landing.upgrade}
+            </Link>
+          </div>
         </div>
-      </main>
+      </section>
+
+      <footer className="max-w-6xl mx-auto px-4 py-8 border-t border-gray-200 dark:border-gray-800">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
+            <span>DE</span>
+            <span className="text-sm text-gray-500">{dict.common.appName} {new Date().getFullYear()}</span>
+          </div>
+          <div className="flex items-center gap-4 text-sm text-gray-500">
+            <Link href="/register" className="hover:text-blue-600">{dict.landing.getStarted}</Link>
+            <Link href="/login" className="hover:text-blue-600">{dict.landing.login}</Link>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
