@@ -247,7 +247,7 @@ const tr = {
     openAccount: 'Hesap Aç',
     getQuote: 'Teklif Al',
     viewPlans: 'Planları Gör',
-    findHousing: 'Konut Bul',
+    findHousing: 'Konut Bul', bankingDesc: 'Ucretsiz Alman banka hesabi, evrak yok. 8 dakikada acin.', insuranceDesc: 'Almanyanin en buyuk kamu saglik sigortasi. Ingilizce destek mevcut.', mobileDesc: 'Aylik 10 Eurodan baslayan basit mobil planlar. Sozlesme yok.', housingDesc: 'Almanyanin 1 numarali ortak daire ve konut platformu.',
   },
   support: {
     tipTitle: 'Bu Projeyi Destekleyin',

@@ -313,6 +313,10 @@ export interface Dictionary {
     getQuote: string;
     viewPlans: string;
     findHousing: string;
+    bankingDesc: string;
+    insuranceDesc: string;
+    mobileDesc: string;
+    housingDesc: string;
   };
   support: {
     tipTitle: string;
@@ -642,6 +646,10 @@ const en: Dictionary = {
     getQuote: 'Get Quote',
     viewPlans: 'View Plans',
     findHousing: 'Find Housing',
+    bankingDesc: 'Free German bank account, no paperwork. Open in 8 minutes.',
+    insuranceDesc: 'Germany\u0027s largest public health insurance. English support available.',
+    mobileDesc: 'Simple mobile plans starting at 10/month. No contract needed.',
+    housingDesc: 'Germany\u0027s number one platform for shared apartments and housing.',
   },
   support: {
     tipTitle: 'Support This Project',

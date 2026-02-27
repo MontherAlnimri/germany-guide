@@ -247,7 +247,7 @@ const de = {
     openAccount: 'Konto eröffnen',
     getQuote: 'Angebot einholen',
     viewPlans: 'Tarife ansehen',
-    findHousing: 'Wohnung finden',
+    findHousing: 'Wohnung finden', bankingDesc: 'Kostenloses deutsches Bankkonto, kein Papierkram. In 8 Minuten eroeffnen.', insuranceDesc: 'Deutschlands groesste gesetzliche Krankenversicherung. Englischer Support verfuegbar.', mobileDesc: 'Einfache Mobilfunktarife ab 10 Euro/Monat. Kein Vertrag noetig.', housingDesc: 'Deutschlands Nr. 1 Plattform fuer WGs und Wohnungen.',
   },
   support: {
     tipTitle: 'Dieses Projekt unterstützen',
