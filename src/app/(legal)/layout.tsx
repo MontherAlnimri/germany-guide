@@ -1,31 +1,52 @@
-﻿import Link from "next/link";
+﻿"use client";
 
-export default function PrivacyLayout({ children }: { children: React.ReactNode }) {
+import Link from "next/link";
+import LanguageSwitcher from "@/components/i18n/LanguageSwitcher";
+import { useDict } from "@/lib/i18n/context";
+
+export default function LegalLayout({ children }: { children: React.ReactNode }) {
+  const dict = useDict();
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
       <nav className="bg-white border-b border-gray-200 px-4 py-3">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
           <Link href="/" className="text-xl font-bold text-blue-700">
-            Germany Guide
+            {dict.common?.appName || "Germany Guide"}
           </Link>
-          <div className="flex gap-4 text-sm">
-            <Link href="/privacy" className="text-gray-600 hover:text-blue-700">Privacy</Link>
-            <Link href="/terms" className="text-gray-600 hover:text-blue-700">Terms</Link>
-            <Link href="/about" className="text-gray-600 hover:text-blue-700">About</Link>
+          <div className="flex items-center gap-4">
+            <div className="flex gap-4 text-sm">
+              <Link href="/privacy" className="text-gray-600 hover:text-blue-700">
+                {dict.privacy?.title || "Privacy"}
+              </Link>
+              <Link href="/terms" className="text-gray-600 hover:text-blue-700">
+                {dict.terms?.title || "Terms"}
+              </Link>
+              <Link href="/about" className="text-gray-600 hover:text-blue-700">
+                {dict.about?.title || "About"}
+              </Link>
+            </div>
+            <LanguageSwitcher />
           </div>
         </div>
       </nav>
-      <main className="max-w-4xl mx-auto px-4 py-8">
+      <main className="max-w-4xl mx-auto px-4 py-8 flex-1">
         {children}
       </main>
-      <footer className="bg-white border-t border-gray-200 px-4 py-6 mt-12">
+      <footer className="bg-white border-t border-gray-200 px-4 py-6">
         <div className="max-w-4xl mx-auto text-center text-sm text-gray-500">
           <div className="flex justify-center gap-4 mb-2">
-            <Link href="/privacy" className="hover:text-blue-700">Privacy Policy</Link>
-            <Link href="/terms" className="hover:text-blue-700">Terms of Service</Link>
-            <Link href="/about" className="hover:text-blue-700">About</Link>
+            <Link href="/privacy" className="hover:text-blue-700">
+              {dict.privacy?.title || "Privacy Policy"}
+            </Link>
+            <Link href="/terms" className="hover:text-blue-700">
+              {dict.terms?.title || "Terms of Service"}
+            </Link>
+            <Link href="/about" className="hover:text-blue-700">
+              {dict.about?.title || "About"}
+            </Link>
           </div>
-          <p>{'\u00A9'} {new Date().getFullYear()} Germany Guide. All rights reserved.</p>
+          <p>{"\u00A9"} {new Date().getFullYear()} {dict.common?.appName || "Germany Guide"}. All rights reserved.</p>
         </div>
       </footer>
     </div>
