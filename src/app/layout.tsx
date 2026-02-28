@@ -17,6 +17,14 @@ export default function RootLayout({
 }) {
   return (
     <html className="light" lang="en" dir="ltr" suppressHydrationWarning>
+      <head>
+        <meta name="google-adsense-account" content="ca-pub-3388930204483365" />
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3388930204483365"
+          crossOrigin="anonymous"
+        />
+      </head>
       <body className={inter.className}>
         <I18nClientProvider>
           {children}
