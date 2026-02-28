@@ -1,22 +1,22 @@
-﻿'use client';
+﻿"use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import { createClient } from '@/lib/supabase/client';
-import { useDict } from '@/lib/i18n/context';
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { createClient } from "@/lib/supabase/client";
+import { useDict } from "@/lib/i18n/context";
 
 export default function LoginPage() {
   const dict = useDict();
   const router = useRouter();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError("");
     setLoading(true);
 
     const supabase = createClient();
@@ -28,7 +28,7 @@ export default function LoginPage() {
       return;
     }
 
-    router.push('/dashboard');
+    router.push("/dashboard");
     router.refresh();
   };
 
@@ -36,8 +36,8 @@ export default function LoginPage() {
     <div className="w-full max-w-md">
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">{dict.auth.login}</h1>
-          <p className="text-gray-600 mt-2">{dict.auth.email}</p>
+          <h1 className="text-2xl font-bold text-gray-900">{dict.auth.loginTitle}</h1>
+          <p className="text-gray-600 mt-2">{dict.auth.loginSubtitle}</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -72,12 +72,12 @@ export default function LoginPage() {
             disabled={loading}
             className="w-full py-2.5 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-colors disabled:opacity-50"
           >
-            {loading ? dict.common.loading : dict.auth.login}
+            {loading ? dict.common.loading : dict.auth.signIn}
           </button>
         </form>
 
         <p className="mt-6 text-center text-sm text-gray-600">
-          {dict.auth.noAccount}{' '}
+          {dict.auth.noAccount}{" "}
           <Link href="/register" className="text-blue-600 hover:text-blue-700 font-medium">
             {dict.auth.createOne}
           </Link>
