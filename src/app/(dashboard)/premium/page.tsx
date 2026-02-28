@@ -1,34 +1,31 @@
-﻿'use client';
+﻿"use client";
 
-import { useState } from 'react';
-import { useDict } from '@/lib/i18n';
-import { useSubscription } from '@/hooks/useSubscription';
-import { getStripe } from '@/lib/stripe/client';
+import { useState } from "react";
+import { useDict } from "@/lib/i18n/context";
+import { useSubscription } from "@/hooks/useSubscription";
 
 export default function PremiumPage() {
   const dict = useDict();
   const { subscription, isPremium, loading } = useSubscription();
-  const [billingInterval, setBillingInterval] = useState<'monthly' | 'yearly'>('monthly');
+  const [billingInterval, setBillingInterval] = useState<"monthly" | "yearly">("monthly");
   const [checkoutLoading, setCheckoutLoading] = useState(false);
 
   const handleCheckout = async () => {
     setCheckoutLoading(true);
     try {
-      const res = await fetch('/api/stripe/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("/api/stripe/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ plan: billingInterval }),
       });
-
       const data = await res.json();
-
       if (data.url) {
         window.location.href = data.url;
       } else {
-        alert(data.error || 'Something went wrong');
+        alert(data.error || "Something went wrong");
       }
     } catch {
-      alert('Failed to start checkout');
+      alert("Failed to start checkout");
     } finally {
       setCheckoutLoading(false);
     }
@@ -36,15 +33,13 @@ export default function PremiumPage() {
 
   const handleManage = async () => {
     try {
-      const res = await fetch('/api/stripe/portal', {
-        method: 'POST',
-      });
+      const res = await fetch("/api/stripe/portal", { method: "POST" });
       const data = await res.json();
       if (data.url) {
         window.location.href = data.url;
       }
     } catch {
-      alert('Failed to open portal');
+      alert("Failed to open portal");
     }
   };
 
@@ -68,30 +63,30 @@ export default function PremiumPage() {
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
       <div className="text-center mb-10">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-3">
+        <h1 className="text-3xl font-bold text-gray-900 mb-3">
           {dict.premium.title}
         </h1>
-        <p className="text-gray-600 dark:text-gray-400 text-lg">
+        <p className="text-gray-600 text-lg">
           {dict.premium.subtitle}
         </p>
       </div>
 
       {isPremium && subscription ? (
-        <div className="bg-gradient-to-r from-yellow-50 to-amber-50 dark:from-yellow-900/20 dark:to-amber-900/20 border border-yellow-200 dark:border-yellow-800 rounded-2xl p-8 text-center">
-          <div className="text-5xl mb-4">👑</div>
-          <h2 className="text-2xl font-bold text-yellow-800 dark:text-yellow-200 mb-2">
-            {dict.premium.thankYou}
+        <div className="bg-gradient-to-r from-yellow-50 to-amber-50 border border-yellow-200 rounded-2xl p-8 text-center">
+          <div className="text-5xl mb-4">{"\u{1F451}"}</div>
+          <h2 className="text-2xl font-bold text-yellow-800 mb-2">
+            {dict.premium.successTitle}
           </h2>
-          <p className="text-yellow-700 dark:text-yellow-300 mb-2">
-            {dict.premium.welcomePremium}
+          <p className="text-yellow-700 mb-2">
+            {dict.premium.successDesc}
           </p>
-          <div className="mt-4 space-y-1 text-sm text-yellow-600 dark:text-yellow-400">
+          <div className="mt-4 space-y-1 text-sm text-yellow-600">
             <p>
-              {dict.premium.active} — {subscription.plan === 'monthly' ? dict.premium.monthlyPrice : dict.premium.yearlyPrice}
+              {dict.premium.currentPlan}: {subscription.plan === "monthly" ? dict.premium.billedMonthly : dict.premium.billedYearly}
             </p>
             {subscription.current_period_end && (
               <p>
-                {subscription.status === 'cancelled' ? dict.premium.expiresOn : dict.premium.renewsOn}:{' '}
+                {subscription.status === "cancelled" ? "Expires" : "Renews"}:{" "}
                 {new Date(subscription.current_period_end).toLocaleDateString()}
               </p>
             )}
@@ -100,29 +95,28 @@ export default function PremiumPage() {
             onClick={handleManage}
             className="mt-6 px-6 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition"
           >
-            {dict.premium.manage}
+            {dict.premium.managePlan}
           </button>
         </div>
       ) : (
         <>
-          {/* Billing toggle */}
           <div className="flex items-center justify-center gap-4 mb-8">
             <button
-              onClick={() => setBillingInterval('monthly')}
+              onClick={() => setBillingInterval("monthly")}
               className={`px-4 py-2 rounded-lg font-medium transition ${
-                billingInterval === 'monthly'
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300'
+                billingInterval === "monthly"
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-100 text-gray-700"
               }`}
             >
               {dict.premium.monthly}
             </button>
             <button
-              onClick={() => setBillingInterval('yearly')}
+              onClick={() => setBillingInterval("yearly")}
               className={`px-4 py-2 rounded-lg font-medium transition ${
-                billingInterval === 'yearly'
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300'
+                billingInterval === "yearly"
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-100 text-gray-700"
               }`}
             >
               {dict.premium.yearly}
@@ -132,16 +126,15 @@ export default function PremiumPage() {
             </button>
           </div>
 
-          {/* Pricing card */}
-          <div className="max-w-md mx-auto bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+          <div className="max-w-md mx-auto bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden">
             <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-6 text-center text-white">
-              <h3 className="text-xl font-bold">{dict.landing.premium}</h3>
+              <h3 className="text-xl font-bold">{dict.premium.premiumBadge}</h3>
               <div className="mt-2">
                 <span className="text-4xl font-bold">
-                  {billingInterval === 'monthly' ? '€4.99' : '€39.99'}
+                  {"\u20AC"}{billingInterval === "monthly" ? dict.premium.monthlyPrice : dict.premium.yearlyPrice}
                 </span>
                 <span className="text-blue-200">
-                  /{billingInterval === 'monthly' ? dict.premium.monthly.toLowerCase() : dict.premium.yearly.toLowerCase()}
+                  {billingInterval === "monthly" ? dict.premium.perMonth : dict.premium.perYear}
                 </span>
               </div>
             </div>
@@ -150,18 +143,24 @@ export default function PremiumPage() {
               <ul className="space-y-3">
                 {features.map((feature, i) => (
                   <li key={i} className="flex items-start gap-3">
-                    <span className="text-green-500 mt-0.5">✓</span>
-                    <span className="text-gray-700 dark:text-gray-300">{feature}</span>
+                    <svg className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span className="text-gray-700">{feature}</span>
                   </li>
                 ))}
               </ul>
 
+              <p className="text-center text-sm text-gray-500 mt-4">
+                {dict.premium.cancelAnytime}
+              </p>
+
               <button
                 onClick={handleCheckout}
                 disabled={checkoutLoading}
-                className="mt-6 w-full py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition disabled:opacity-50"
+                className="mt-4 w-full py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition disabled:opacity-50"
               >
-                {checkoutLoading ? dict.premium.processing : dict.premium.subscribe}
+                {checkoutLoading ? dict.common.loading : dict.premium.subscribe}
               </button>
             </div>
           </div>
