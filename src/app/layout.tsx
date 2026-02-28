@@ -1,13 +1,62 @@
-﻿import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
-import './globals.css';
-import I18nClientProvider from '@/components/i18n/I18nClientProvider';
+﻿import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "./globals.css";
+import { I18nClientProvider } from "@/components/i18n/I18nClientProvider";
 
-const inter = Inter({ subsets: ['latin', 'cyrillic', 'latin-ext'] });
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'Germany Guide - Navigate German Bureaucracy',
-  description: 'Your personal step-by-step companion for visa applications, city registration, and everything you need as a newcomer in Germany.',
+  title: {
+    default: "Germany Guide - Navigate German Bureaucracy with Confidence",
+    template: "%s | Germany Guide",
+  },
+  description:
+    "Step-by-step guidance for visas, city registration, health insurance, and settling in Germany. Available in 11 languages. Free for migrants and international students.",
+  keywords: [
+    "Germany visa guide",
+    "German bureaucracy",
+    "Anmeldung",
+    "city registration Germany",
+    "student visa Germany",
+    "Blue Card Germany",
+    "health insurance Germany",
+    "settle in Germany",
+    "migrant guide Germany",
+    "international students Germany",
+  ],
+  authors: [{ name: "Germany Guide" }],
+  creator: "Germany Guide",
+  publisher: "Germany Guide",
+  metadataBase: new URL("https://my-germany-guide.vercel.app"),
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: "Germany Guide - Navigate German Bureaucracy with Confidence",
+    description:
+      "Step-by-step guidance for visas, registration, and settling in Germany. Available in 11 languages.",
+    url: "https://my-germany-guide.vercel.app",
+    siteName: "Germany Guide",
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Germany Guide - Navigate German Bureaucracy with Confidence",
+    description:
+      "Step-by-step guidance for visas, registration, and settling in Germany. Available in 11 languages.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
 };
 
 export default function RootLayout({
@@ -16,19 +65,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html className="light" lang="en" dir="ltr" suppressHydrationWarning>
+    <html lang="en" className="light">
       <head>
-        <meta name="google-adsense-account" content="ca-pub-3388930204483365" />
+        <meta
+          name="google-adsense-account"
+          content="ca-pub-3388930204483365"
+        />
         <script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3388930204483365"
           crossOrigin="anonymous"
         />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
       <body className={inter.className}>
-        <I18nClientProvider>
-          {children}
-        </I18nClientProvider>
+        <I18nClientProvider>{children}</I18nClientProvider>
       </body>
     </html>
   );
