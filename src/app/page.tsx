@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useDict } from "@/lib/i18n/context";
-import { LanguageSwitcher } from "@/components/i18n/LanguageSwitcher";
+import LanguageSwitcher from "@/components/i18n/LanguageSwitcher";
 import LegalFooter from "@/components/layout/LegalFooter";
 import StructuredData from "@/components/StructuredData";
 
