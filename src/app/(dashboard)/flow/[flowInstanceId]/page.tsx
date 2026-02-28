@@ -1,285 +1,373 @@
-﻿'use client';
+﻿"use client";
 
-import { useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
-import Link from 'next/link';
-import { createClient } from '@/lib/supabase/client';
-import { useDict } from '@/lib/i18n/context';
+import { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
+import { useDict } from "@/lib/i18n/context";
+import { useSubscription } from "@/hooks/useSubscription";
+import { exportFlowToPDF } from "@/lib/pdf-export";
 
-interface FlowStep {
+interface StepData {
   id: string;
   title: string;
   description: string;
   step_order: number;
-  required_documents: string[];
-  useful_links: string[];
-  tips: string;
+  required_documents: string[] | null;
+  useful_links: { label: string; url: string }[] | null;
+  tips: string | null;
   is_optional: boolean;
-}
-
-interface StepSnapshot {
-  step_id: string;
   is_done: boolean;
-  notes: string;
+  user_notes: string;
 }
 
-export default function FlowInstancePage() {
-  const dict = useDict();
-  const params = useParams();
-  const router = useRouter();
-  const flowInstanceId = params.flowInstanceId as string;
+interface FlowInstance {
+  id: string;
+  user_id: string;
+  flow_variant_id: string;
+  status: string;
+  progress: number;
+  step_snapshot: StepData[];
+}
 
-  const [instance, setInstance] = useState<any>(null);
-  const [steps, setSteps] = useState<FlowStep[]>([]);
-  const [snapshot, setSnapshot] = useState<StepSnapshot[]>([]);
-  const [activeStep, setActiveStep] = useState(0);
-  const [noteText, setNoteText] = useState('');
+export default function StepRunnerPage() {
+  const dict = useDict();
+  const f = dict.flows;
+  const router = useRouter();
+  const params = useParams();
+  const flowInstanceId = params.flowInstanceId as string;
+  const { isPremium } = useSubscription();
+
+  const [instance, setInstance] = useState<FlowInstance | null>(null);
+  const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [flowTitle, setFlowTitle] = useState("");
 
   useEffect(() => {
     async function load() {
       const supabase = createClient();
-
-      const { data: inst } = await supabase
-        .from('flow_instances')
-        .select('*, flow_variant:flow_variant_id(*, base_flow:base_flow_id(*))')
-        .eq('id', flowInstanceId)
+      const { data } = await supabase
+        .from("flow_instances")
+        .select("*")
+        .eq("id", flowInstanceId)
         .single();
 
-      if (!inst) {
-        router.push('/flow');
-        return;
+      if (data) {
+        setInstance(data);
+        // Find first incomplete step
+        const snapshot = data.step_snapshot as StepData[];
+        const firstIncomplete = snapshot.findIndex((s) => !s.is_done);
+        setCurrentStepIndex(firstIncomplete >= 0 ? firstIncomplete : 0);
+
+        // Get flow title
+        const { data: variant } = await supabase
+          .from("flow_variants")
+          .select("base_flow_id")
+          .eq("id", data.flow_variant_id)
+          .single();
+        if (variant) {
+          const { data: base } = await supabase
+            .from("base_flows")
+            .select("title")
+            .eq("id", variant.base_flow_id)
+            .single();
+          if (base) setFlowTitle(base.title);
+        }
       }
-      setInstance(inst);
-      setSnapshot(inst.step_snapshot || []);
-
-      const { data: stepsData } = await supabase
-        .from('flow_steps')
-        .select('*')
-        .eq('flow_variant_id', inst.flow_variant_id)
-        .order('step_order');
-
-      if (stepsData) setSteps(stepsData as any);
-
-      const snap = inst.step_snapshot || [];
-      const firstIncomplete = snap.findIndex((s: StepSnapshot) => !s.is_done);
-      setActiveStep(firstIncomplete >= 0 ? firstIncomplete : 0);
-
-      if (firstIncomplete >= 0 && snap[firstIncomplete]) {
-        setNoteText(snap[firstIncomplete].notes || '');
-      }
-
       setLoading(false);
     }
     load();
-  }, [flowInstanceId, router]);
+  }, [flowInstanceId]);
 
-  const updateStepStatus = async (stepIndex: number, isDone: boolean) => {
+  const updateSnapshot = async (newSnapshot: StepData[]) => {
+    if (!instance) return;
+    setSaving(true);
     const supabase = createClient();
-    const newSnapshot = [...snapshot];
-    newSnapshot[stepIndex] = { ...newSnapshot[stepIndex], is_done: isDone };
 
     const doneCount = newSnapshot.filter((s) => s.is_done).length;
-    const progress = steps.length > 0 ? (doneCount / steps.length) * 100 : 0;
-    const status = progress >= 100 ? 'completed' : 'in_progress';
+    const progress = Math.round((doneCount / newSnapshot.length) * 100);
+    const status = progress === 100 ? "completed" : "in_progress";
 
-    await supabase
-      .from('flow_instances')
-      .update({ step_snapshot: newSnapshot, progress, status })
-      .eq('id', flowInstanceId);
+    const { data } = await supabase
+      .from("flow_instances")
+      .update({
+        step_snapshot: newSnapshot,
+        progress,
+        status,
+      })
+      .eq("id", instance.id)
+      .select()
+      .single();
 
-    setSnapshot(newSnapshot);
-    setInstance((prev: any) => ({ ...prev, progress, status }));
+    if (data) setInstance(data);
+    setSaving(false);
   };
 
-  const saveNotes = async () => {
-    const supabase = createClient();
-    const newSnapshot = [...snapshot];
-    newSnapshot[activeStep] = { ...newSnapshot[activeStep], notes: noteText };
+  const toggleDone = async () => {
+    if (!instance) return;
+    const snapshot = [...(instance.step_snapshot as StepData[])];
+    snapshot[currentStepIndex] = {
+      ...snapshot[currentStepIndex],
+      is_done: !snapshot[currentStepIndex].is_done,
+    };
+    await updateSnapshot(snapshot);
+  };
 
-    await supabase
-      .from('flow_instances')
-      .update({ step_snapshot: newSnapshot })
-      .eq('id', flowInstanceId);
+  const updateNotes = async (notes: string) => {
+    if (!instance) return;
+    const snapshot = [...(instance.step_snapshot as StepData[])];
+    snapshot[currentStepIndex] = {
+      ...snapshot[currentStepIndex],
+      user_notes: notes,
+    };
+    await updateSnapshot(snapshot);
+  };
 
-    setSnapshot(newSnapshot);
+  const handleExportPDF = () => {
+    if (!instance) return;
+    const snapshot = instance.step_snapshot as StepData[];
+    exportFlowToPDF({
+      flowTitle: flowTitle || "Flow",
+      progress: instance.progress,
+      steps: snapshot.map((s) => ({
+        title: s.title,
+        description: s.description,
+        step_order: s.step_order,
+        is_done: s.is_done,
+        user_notes: s.user_notes || "",
+        required_documents: s.required_documents || [],
+        tips: s.tips || "",
+      })),
+      exportDate: new Date().toLocaleDateString(),
+    });
   };
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-20">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="text-gray-500">{dict.common?.loading || "Loading..."}</div>
       </div>
     );
   }
 
-  const currentStep = steps[activeStep];
-  const currentSnap = snapshot[activeStep];
-  const doneCount = snapshot.filter((s) => s.is_done).length;
-  const progress = instance?.progress || 0;
-  const flowTitle = instance?.flow_variant?.base_flow?.title || 'Flow';
-  const flowIcon = instance?.flow_variant?.base_flow?.icon || '';
+  if (!instance) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="text-red-500">Flow not found</div>
+      </div>
+    );
+  }
+
+  const steps = instance.step_snapshot as StepData[];
+  const currentStep = steps[currentStepIndex];
+  const isCompleted = instance.progress === 100;
+
+  if (isCompleted) {
+    return (
+      <div className="max-w-2xl mx-auto p-4 text-center py-16">
+        <div className="text-6xl mb-6">{"\u{1F389}"}</div>
+        <h1 className="text-3xl font-bold text-gray-900 mb-3">
+          {f?.flowCompleted || "Flow Completed!"}
+        </h1>
+        <p className="text-gray-600 mb-4">{flowTitle}</p>
+        <p className="text-gray-500 mb-8">
+          {f?.allStepsDone || "You have completed all steps in this flow."}
+        </p>
+        <div className="flex justify-center gap-4">
+          <button
+            onClick={() => router.push("/flow")}
+            className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+          >
+            {f?.backToFlows || "Back to Flows"}
+          </button>
+          {isPremium && (
+            <button
+              onClick={handleExportPDF}
+              className="bg-amber-100 text-amber-800 px-6 py-3 rounded-lg font-semibold hover:bg-amber-200 transition-colors"
+            >
+              Export PDF
+            </button>
+          )}
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="max-w-3xl mx-auto space-y-6">
-      <div className="flex items-center gap-3">
-        <Link href="/flow" className="text-gray-500 hover:text-gray-700 text-lg">
-          &larr;
-        </Link>
+    <div className="max-w-3xl mx-auto p-4 space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold text-gray-900">
-            {flowIcon} {flowTitle}
-          </h1>
-          <p className="text-sm text-gray-500">
-            {doneCount}/{steps.length} {dict.flows.stepsCompleted}
-          </p>
+          <button
+            onClick={() => router.push("/flow")}
+            className="text-sm text-blue-600 hover:text-blue-800 mb-1 inline-block"
+          >
+            {"\u2190"} {f?.backToFlows || "Back to Flows"}
+          </button>
+          <h1 className="text-xl font-bold text-gray-900">{flowTitle}</h1>
+        </div>
+        <div className="flex items-center gap-3">
+          {isPremium && (
+            <button
+              onClick={handleExportPDF}
+              className="bg-amber-100 text-amber-800 px-4 py-2 rounded-lg text-sm font-medium hover:bg-amber-200 transition-colors"
+            >
+              Export PDF
+            </button>
+          )}
+          <div className="text-right">
+            <div className="text-sm font-medium text-blue-600">{instance.progress}%</div>
+            <div className="w-24 bg-gray-200 rounded-full h-2 mt-1">
+              <div
+                className="bg-blue-600 h-2 rounded-full transition-all"
+                style={{ width: `${instance.progress}%` }}
+              />
+            </div>
+          </div>
         </div>
       </div>
 
-      <div>
-        <div className="flex items-center justify-between text-sm text-gray-500 mb-1">
-          <span>{dict.flows.progress}</span>
-          <span>{Math.round(progress)}%</span>
+      {/* Step indicator */}
+      <div className="flex gap-1 overflow-x-auto pb-2">
+        {steps.map((step, i) => (
+          <button
+            key={i}
+            onClick={() => setCurrentStepIndex(i)}
+            className={`flex-shrink-0 w-8 h-8 rounded-full text-xs font-medium flex items-center justify-center transition-colors ${
+              i === currentStepIndex
+                ? "bg-blue-600 text-white"
+                : step.is_done
+                ? "bg-green-100 text-green-700"
+                : "bg-gray-100 text-gray-500"
+            }`}
+          >
+            {step.is_done ? "\u2713" : step.step_order}
+          </button>
+        ))}
+      </div>
+
+      {/* Current step */}
+      <div className="bg-white rounded-xl border border-gray-200 p-6 space-y-5">
+        <div className="flex items-start justify-between">
+          <div>
+            <p className="text-sm text-gray-500 mb-1">
+              {f?.stepOf
+                ?.replace("{current}", String(currentStepIndex + 1))
+                .replace("{total}", String(steps.length)) ||
+                `Step ${currentStepIndex + 1} of ${steps.length}`}
+            </p>
+            <h2 className="text-xl font-semibold text-gray-900">{currentStep.title}</h2>
+          </div>
+          {currentStep.is_optional && (
+            <span className="bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded-full">
+              {f?.optional || "Optional"}
+            </span>
+          )}
         </div>
-        <div className="h-2.5 bg-gray-100 rounded-full overflow-hidden">
-          <div
-            className="h-full bg-blue-600 rounded-full transition-all duration-300"
-            style={{ width: progress + '%' }}
+
+        <p className="text-gray-700 leading-relaxed">{currentStep.description}</p>
+
+        {/* Tips */}
+        {currentStep.tips && (
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <h3 className="text-sm font-semibold text-blue-800 mb-1">
+              {f?.tips || "Tips"}
+            </h3>
+            <p className="text-sm text-blue-700">{currentStep.tips}</p>
+          </div>
+        )}
+
+        {/* Required documents */}
+        {currentStep.required_documents && currentStep.required_documents.length > 0 && (
+          <div>
+            <h3 className="text-sm font-semibold text-gray-700 mb-2">
+              {f?.requiredDocs || "Required Documents"}
+            </h3>
+            <ul className="space-y-1">
+              {currentStep.required_documents.map((doc, i) => (
+                <li key={i} className="text-sm text-gray-600 flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 bg-gray-400 rounded-full" />
+                  {doc}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {/* Useful links */}
+        {currentStep.useful_links && currentStep.useful_links.length > 0 && (
+          <div>
+            <h3 className="text-sm font-semibold text-gray-700 mb-2">
+              {f?.usefulLinks || "Useful Links"}
+            </h3>
+            <ul className="space-y-1">
+              {currentStep.useful_links.map((link, i) => (
+                <li key={i}>
+                  <a
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm text-blue-600 hover:text-blue-800 hover:underline"
+                  >
+                    {link.label} {"\u2197"}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {/* Notes */}
+        <div>
+          <h3 className="text-sm font-semibold text-gray-700 mb-2">
+            {f?.yourNotes || "Your Notes"}
+          </h3>
+          <textarea
+            value={currentStep.user_notes || ""}
+            onChange={(e) => updateNotes(e.target.value)}
+            placeholder={f?.addNote || "Add a note..."}
+            rows={3}
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           />
         </div>
+
+        {/* Done toggle */}
+        <button
+          onClick={toggleDone}
+          disabled={saving}
+          className={`w-full py-3 rounded-lg font-semibold transition-colors ${
+            currentStep.is_done
+              ? "bg-green-100 text-green-700 hover:bg-green-200"
+              : "bg-blue-600 text-white hover:bg-blue-700"
+          } disabled:opacity-50`}
+        >
+          {saving
+            ? dict.common?.loading || "Saving..."
+            : currentStep.is_done
+            ? `\u2713 ${f?.completed || "Completed"} - ${f?.undo || "Undo"}`
+            : f?.markAsDone || "Mark as Done"}
+        </button>
       </div>
 
-      <div className="flex gap-1 overflow-x-auto pb-2">
-        {steps.map((step, idx) => {
-          const snap = snapshot[idx];
-          const isActive = idx === activeStep;
-          const isDone = snap?.is_done;
-          let btnClass = 'bg-gray-100 text-gray-600 hover:bg-gray-200';
-          if (isActive) {
-            btnClass = 'bg-blue-600 text-white';
-          } else if (isDone) {
-            btnClass = 'bg-green-100 text-green-700';
+      {/* Navigation */}
+      <div className="flex justify-between">
+        <button
+          onClick={() => setCurrentStepIndex(Math.max(0, currentStepIndex - 1))}
+          disabled={currentStepIndex === 0}
+          className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 disabled:opacity-30 disabled:cursor-not-allowed"
+        >
+          {"\u2190"} {f?.previousStep || "Previous"}
+        </button>
+        <button
+          onClick={() =>
+            setCurrentStepIndex(Math.min(steps.length - 1, currentStepIndex + 1))
           }
-          return (
-            <button
-              key={step.id}
-              onClick={() => {
-                setActiveStep(idx);
-                setNoteText(snapshot[idx]?.notes || '');
-              }}
-              className={'flex-shrink-0 w-9 h-9 rounded-lg text-sm font-medium transition-colors ' + btnClass}
-            >
-              {isDone ? '\u2713' : idx + 1}
-            </button>
-          );
-        })}
+          disabled={currentStepIndex === steps.length - 1}
+          className="px-4 py-2 text-sm font-medium text-blue-600 hover:text-blue-800 disabled:opacity-30 disabled:cursor-not-allowed"
+        >
+          {f?.nextStep || "Next"} {"\u2192"}
+        </button>
       </div>
-
-      {currentStep && (
-        <div className="bg-white rounded-xl border border-gray-100 p-6 space-y-4">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-gray-500 uppercase">
-              {dict.flows.stepOf
-                .replace('{current}', String(activeStep + 1))
-                .replace('{total}', String(steps.length))}
-            </span>
-            {currentStep.is_optional && (
-              <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">
-                {dict.common.optional}
-              </span>
-            )}
-          </div>
-
-          <h2 className="text-lg font-semibold text-gray-900">{currentStep.title}</h2>
-          <p className="text-gray-600 text-sm leading-relaxed">{currentStep.description}</p>
-
-          {currentStep.tips && (
-            <div className="bg-amber-50 border border-amber-100 rounded-lg p-3">
-              <p className="text-sm text-amber-800">
-                <span className="font-medium">{dict.flows.tip}</span> {currentStep.tips}
-              </p>
-            </div>
-          )}
-
-          {currentStep.required_documents && currentStep.required_documents.length > 0 && (
-            <div>
-              <h3 className="text-sm font-medium text-gray-700 mb-2">{dict.flows.requiredDocs}</h3>
-              <ul className="space-y-1">
-                {currentStep.required_documents.map((doc, i) => (
-                  <li key={i} className="text-sm text-gray-600 flex items-center gap-2">
-                    <span className="text-gray-400">&bull;</span> {doc}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-
-          {currentStep.useful_links && currentStep.useful_links.length > 0 && (
-            <div>
-              <h3 className="text-sm font-medium text-gray-700 mb-2">{dict.flows.usefulLinks}</h3>
-              <ul className="space-y-1">
-                {currentStep.useful_links.map((link, i) => (
-                  <li key={i}>
-                    <a
-                      href={link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-sm text-blue-600 hover:text-blue-700 underline break-all"
-                    >
-                      {link}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-
-          <div>
-            <h3 className="text-sm font-medium text-gray-700 mb-2">{dict.flows.yourNotes}</h3>
-            <textarea
-              value={noteText}
-              onChange={(e) => setNoteText(e.target.value)}
-              placeholder={dict.flows.notesPlaceholder}
-              className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm resize-none h-20 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-            />
-            <button
-              onClick={saveNotes}
-              className="mt-1 text-sm text-blue-600 hover:text-blue-700 font-medium"
-            >
-              {dict.flows.saveNotes}
-            </button>
-          </div>
-
-          <div className="flex gap-3 pt-2">
-            {currentSnap?.is_done ? (
-              <button
-                onClick={() => updateStepStatus(activeStep, false)}
-                className="flex-1 py-2.5 bg-gray-100 text-gray-700 rounded-xl font-medium hover:bg-gray-200 transition-colors"
-              >
-                {dict.flows.undo}
-              </button>
-            ) : (
-              <button
-                onClick={() => updateStepStatus(activeStep, true)}
-                className="flex-1 py-2.5 bg-green-600 text-white rounded-xl font-medium hover:bg-green-700 transition-colors"
-              >
-                {'\u2713'} {dict.flows.markAsDone}
-              </button>
-            )}
-            {activeStep < steps.length - 1 && (
-              <button
-                onClick={() => {
-                  setActiveStep(activeStep + 1);
-                  setNoteText(snapshot[activeStep + 1]?.notes || '');
-                }}
-                className="flex-1 py-2.5 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-colors"
-              >
-                {dict.common.next} &rarr;
-              </button>
-            )}
-          </div>
-        </div>
-      )}
     </div>
   );
 }

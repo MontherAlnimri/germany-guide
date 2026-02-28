@@ -1,669 +1,409 @@
-﻿/* eslint-disable */
-
-export interface Dictionary {
+﻿const en = {
   common: {
-    appName: string;
-    loading: string;
-    save: string;
-    cancel: string;
-    delete: string;
-    edit: string;
-    back: string;
-    next: string;
-    submit: string;
-    yes: string;
-    no: string;
-    or: string;
-    error: string;
-    success: string;
-    close: string;
-    optional: string;
-    required: string;
-    search: string;
-    noResults: string;
-    confirm: string;
-    welcome: string;
-  };
-  landing: {
-    hero: string;
-    subtitle: string;
-    getStarted: string;
-    login: string;
-    features: string;
-    featureFlows: string;
-    featureFlowsDesc: string;
-    featureDocs: string;
-    featureDocsDesc: string;
-    featureDeadlines: string;
-    featureDeadlinesDesc: string;
-    featureI18n: string;
-    featureI18nDesc: string;
-    pricing: string;
-    pricingSubtitle: string;
-    free: string;
-    premium: string;
-    premiumPrice: string;
-    premiumYearly: string;
-    saveYearly: string;
-    currentPlan: string;
-    upgrade: string;
-    freeTier1: string;
-    freeTier2: string;
-    freeTier3: string;
-    freeTier4: string;
-    premiumTier1: string;
-    premiumTier2: string;
-    premiumTier3: string;
-    premiumTier4: string;
-    premiumTier5: string;
-    premiumTier6: string;
-    premiumTier7: string;
-  };
-  auth: {
-    login: string;
-    register: string;
-    email: string;
-    password: string;
-    confirmPassword: string;
-    forgotPassword: string;
-    noAccount: string;
-    hasAccount: string;
-    loginError: string;
-    registerError: string;
-    passwordMismatch: string;
-    checkEmail: string;
-    fullName: string;
-    logout: string;
-    signInLink: string;
-    createOne: string;
-    registerDesc: string;
-    passwordHint: string;
-    passwordTooShort: string;
-  };
-  onboarding: {
-    title: string;
-    subtitle: string;
-    step1Title: string;
-    step1Desc: string;
-    step2Title: string;
-    step2Desc: string;
-    step3Title: string;
-    step3Desc: string;
-    visaType: string;
-    visaTypePlaceholder: string;
-    applicationType: string;
-    applicationTypePlaceholder: string;
-    firstApplication: string;
-    renewal: string;
-    city: string;
-    cityPlaceholder: string;
-    zipCode: string;
-    zipCodePlaceholder: string;
-    zipCodeHint: string;
-    visaExpiry: string;
-    visaExpiryLabel: string;
-    visaExpiryHint: string;
-    complete: string;
-    step: string;
-    of: string;
-    aboutYou: string;
-    aboutYouDesc: string;
-    fullName: string;
-    fullNamePlaceholder: string;
-    location: string;
-    locationDesc: string;
-    updateProfile: string;
-    fillAllFields: string;
-    selectCity: string;
-    completeSetup: string;
-    saveChanges: string;
-    welcome: string;
-  };
-  dashboard: {
-    title: string;
-    welcomeBack: string;
-    yourFlows: string;
-    yourDocuments: string;
-    upcomingDeadlines: string;
-    quickActions: string;
-    startNewFlow: string;
-    addDocument: string;
-    viewAllFlows: string;
-    viewAllDocs: string;
-    viewAllDeadlines: string;
-    noFlows: string;
-    noDocs: string;
-    noDeadlines: string;
-    progress: string;
-    dueIn: string;
-    days: string;
-    overdue: string;
-    today: string;
-    premiumBanner: string;
-    premiumBannerDesc: string;
-    premiumBannerCta: string;
-  };
-  flows: {
-    title: string;
-    subtitle: string;
-    startFlow: string;
-    continueFlow: string;
-    completed: string;
-    inProgress: string;
-    notStarted: string;
-    steps: string;
-    step: string;
-    markDone: string;
-    markUndone: string;
-    notes: string;
-    addNote: string;
-    saveNote: string;
-    requiredDocs: string;
-    usefulLinks: string;
-    tips: string;
-    optional: string;
-    flowProgress: string;
-    noFlows: string;
-    backToFlows: string;
-    limitReached: string;
-    limitReachedDesc: string;
-    myFlows: string;
-    myFlowsDesc: string;
-    recommendedForYou: string;
-    basedOnVisa: string;
-    otherFlows: string;
-    progress: string;
-    stepsCompleted: string;
-    stepOf: string;
-    tip: string;
-    yourNotes: string;
-    notesPlaceholder: string;
-    saveNotes: string;
-    undo: string;
-    markAsDone: string;
-    completedSection: string;
-  };
-  docs: {
-    title: string;
-    subtitle: string;
-    addDocument: string;
-    editDocument: string;
-    docType: string;
-    docTypePlaceholder: string;
-    docName: string;
-    docNamePlaceholder: string;
-    issueDate: string;
-    expiryDate: string;
-    status: string;
-    notes: string;
-    notesPlaceholder: string;
-    linkedFlow: string;
-    noDocuments: string;
-    noDocumentsDesc: string;
-    valid: string;
-    pending: string;
-    expired: string;
-    expiringSoon: string;
-    notUploaded: string;
-    deleteConfirm: string;
-    limitReached: string;
-    limitReachedDesc: string;
-    documentVault: string;
-    documentVaultDesc: string;
-    addNewDocument: string;
-    backToDocuments: string;
-    selectTypeAndName: string;
-    linkToFlow: string;
-    none: string;
-    issued: string;
-    expires: string;
-  };
-  deadlines: {
-    title: string;
-    titleDesc: string;
-    subtitle: string;
-    addDeadline: string;
-    addNewDeadline: string;
-    editDeadline: string;
-    deadlineTitle: string;
-    deadlineTitlePlaceholder: string;
-    description: string;
-    descriptionPlaceholder: string;
-    dueDate: string;
-    due: string;
-    daysLeft: string;
-    remindAt: string;
-    startReminding: string;
-    startRemindingHint: string;
-    markDone: string;
-    markUndone: string;
-    done: string;
-    upcoming: string;
-    overdue: string;
-    today: string;
-    noDeadlines: string;
-    noPending: string;
-    noPendingDesc: string;
-    deleteConfirm: string;
-    completedSection: string;
-    titleAndDateRequired: string;
-  };
-  nav: {
-    dashboard: string;
-    flows: string;
-    documents: string;
-    deadlines: string;
-    settings: string;
-    logout: string;
-    language: string;
-    premium: string;
-    upgrade: string;
-  };
-  visa: {
-    student_visa: string;
-    job_seeker_visa: string;
-    blue_card: string;
-    work_permit: string;
-    family_reunion: string;
-    freelance_visa: string;
-    permanent_residence: string;
-    other: string;
-  };
-  premium: {
-    title: string;
-    subtitle: string;
-    monthly: string;
-    yearly: string;
-    monthlyPrice: string;
-    yearlyPrice: string;
-    savePercent: string;
-    subscribe: string;
-    manage: string;
-    cancel: string;
-    cancelConfirm: string;
-    active: string;
-    cancelled: string;
-    expired: string;
-    renewsOn: string;
-    expiresOn: string;
-    feature1: string;
-    feature2: string;
-    feature3: string;
-    feature4: string;
-    feature5: string;
-    feature6: string;
-    thankYou: string;
-    welcomePremium: string;
-    paymentSuccess: string;
-    paymentCancelled: string;
-    returnToDashboard: string;
-    processing: string;
-    error: string;
-  };
-  affiliates: {
-    recommended: string;
-    subtitle: string;
-    banking: string;
-    insurance: string;
-    mobile: string;
-    housing: string;
-    learn: string;
-    disclaimer: string;
-    openAccount: string;
-    getQuote: string;
-    viewPlans: string;
-    findHousing: string;
-    bankingDesc: string;
-    insuranceDesc: string;
-    mobileDesc: string;
-    housingDesc: string;
-  };
-  support: {
-    tipTitle: string;
-    tipSubtitle: string;
-    tipAmount: string;
-    tipCustom: string;
-    tipSend: string;
-    tipThankYou: string;
-    tipOneTime: string;
-  };
-  ads: {
-    sponsored: string;
-    advertisement: string;
-  };
-}
-
-const en: Dictionary = {
-  common: {
-    appName: 'Germany Guide',
-    loading: 'Loading...',
-    save: 'Save',
-    cancel: 'Cancel',
-    delete: 'Delete',
-    edit: 'Edit',
-    back: 'Back',
-    next: 'Next',
-    submit: 'Submit',
-    yes: 'Yes',
-    no: 'No',
-    or: 'or',
-    error: 'Error',
-    success: 'Success',
-    close: 'Close',
-    optional: 'Optional',
-    required: 'Required',
-    search: 'Search',
-    noResults: 'No results found',
-    confirm: 'Confirm',
-    welcome: 'Welcome',
+    appName: "Germany Guide",
+    loading: "Loading...",
+    save: "Save",
+    cancel: "Cancel",
+    delete: "Delete",
+    edit: "Edit",
+    back: "Back",
+    next: "Next",
+    submit: "Submit",
+    search: "Search",
+    filter: "Filter",
+    sortBy: "Sort by",
+    noResults: "No results found",
+    error: "Something went wrong",
+    success: "Success",
+    confirm: "Confirm",
+    yes: "Yes",
+    no: "No",
+    close: "Close",
+    language: "Language",
+    logout: "Log out",
   },
   landing: {
-    hero: 'Your Complete Guide to Living in Germany',
-    subtitle: 'Navigate bureaucracy, manage documents, and track deadlines \u2014 all in one place.',
-    getStarted: 'Get Started',
-    login: 'Log In',
-    features: 'Features',
-    featureFlows: 'Step-by-Step Flows',
-    featureFlowsDesc: 'Follow guided flows for visa applications, city registration, and more.',
-    featureDocs: 'Document Vault',
-    featureDocsDesc: 'Store and track all your important documents with expiry alerts.',
-    featureDeadlines: 'Deadline Tracker',
-    featureDeadlinesDesc: 'Never miss an appointment or renewal date again.',
-    featureI18n: 'Multi-Language Support',
-    featureI18nDesc: 'Available in 11 languages including Arabic, Turkish, Ukrainian, and more.',
-    pricing: 'Pricing',
-    pricingSubtitle: 'Choose the plan that works for you',
-    free: 'Free',
-    premium: 'Premium',
-    premiumPrice: '\u20AC4.99/month',
-    premiumYearly: '\u20AC39.99/year',
-    saveYearly: 'Save 33%',
-    currentPlan: 'Current Plan',
-    upgrade: 'Upgrade Now',
-    freeTier1: 'Up to 3 active flows',
-    freeTier2: 'Up to 10 documents',
-    freeTier3: 'Basic deadline tracking',
-    freeTier4: 'Community support',
-    premiumTier1: 'Unlimited flows',
-    premiumTier2: 'Unlimited documents',
-    premiumTier3: 'Priority email support',
-    premiumTier4: 'Ad-free experience',
-    premiumTier5: 'Export documents as PDF',
-    premiumTier6: 'Advanced deadline reminders',
-    premiumTier7: 'Personalized checklist',
+    heroTitle: "Navigate German Bureaucracy with Confidence",
+    heroSubtitle:
+      "Step-by-step guidance for visas, registration, and settling in Germany. Available in 11 languages.",
+    getStarted: "Get Started Free",
+    learnMore: "Learn More",
+    featuresTitle: "Everything you need to settle in Germany",
+    feature1Title: "Visa Flow Engine",
+    feature1Desc:
+      "Personalized step-by-step guides based on your visa type, city, and whether it is your first application or renewal.",
+    feature2Title: "Document Vault",
+    feature2Desc:
+      "Track all your important documents, expiry dates, and statuses in one organized place.",
+    feature3Title: "Deadline Reminders",
+    feature3Desc:
+      "Never miss a visa renewal or appointment. Set reminders and get notified before deadlines.",
+    feature4Title: "11 Languages",
+    feature4Desc:
+      "Available in English, German, Arabic, Turkish, Ukrainian, French, Spanish, Russian, Chinese, Hindi, and Hungarian.",
+    howItWorksTitle: "How It Works",
+    step1Title: "Create Your Account",
+    step1Desc: "Sign up for free and tell us about your visa type and situation.",
+    step2Title: "Follow Your Flow",
+    step2Desc:
+      "Get a personalized checklist of steps based on your visa and city.",
+    step3Title: "Track Progress",
+    step3Desc:
+      "Mark steps as done, upload documents, and never miss a deadline.",
+    ctaTitle: "Ready to simplify your move to Germany?",
+    ctaSubtitle: "Join thousands of migrants and students who use Germany Guide.",
+    ctaButton: "Create Free Account",
+    pricingTitle: "Simple, Transparent Pricing",
+    pricingSubtitle: "Start for free. Upgrade when you need more.",
+    freeTier: "Free",
+    premiumTier: "Premium",
+    freePriceLabel: "Free forever",
+    freeFeature1: "Up to 3 active flows",
+    freeFeature2: "Up to 10 documents",
+    freeFeature3: "Basic deadline tracking",
+    freeFeature4: "All 11 languages",
+    premiumFeature1: "Unlimited flows",
+    premiumFeature2: "Unlimited documents",
+    premiumFeature3: "Priority reminders",
+    premiumFeature4: "Ad-free experience",
+    premiumFeature5: "PDF export",
+    premiumMonthly: "Monthly",
+    premiumYearly: "Yearly",
   },
   auth: {
-    login: 'Log In',
-    register: 'Create Account',
-    email: 'Email',
-    password: 'Password',
-    confirmPassword: 'Confirm Password',
-    forgotPassword: 'Forgot password?',
-    noAccount: "Don't have an account?",
-    hasAccount: 'Already have an account?',
-    loginError: 'Invalid email or password',
-    registerError: 'Registration failed. Please try again.',
-    passwordMismatch: 'Passwords do not match',
-    checkEmail: 'Check your email to confirm your account',
-    fullName: 'Full Name',
-    logout: 'Log Out',
-    signInLink: 'Sign in',
-    createOne: 'Create one',
-    registerDesc: 'Create your account to get started',
-    passwordHint: 'Must be at least 6 characters',
-    passwordTooShort: 'Password must be at least 6 characters',
+    loginTitle: "Welcome Back",
+    loginSubtitle: "Sign in to your Germany Guide account",
+    registerTitle: "Create Account",
+    registerSubtitle: "Start your journey in Germany",
+    email: "Email",
+    password: "Password",
+    confirmPassword: "Confirm Password",
+    fullName: "Full Name",
+    signIn: "Sign In",
+    signUp: "Sign Up",
+    forgotPassword: "Forgot password?",
+    noAccount: "Do not have an account?",
+    hasAccount: "Already have an account?",
+    signUpLink: "Sign up",
+    signInLink: "Sign in",
+    orContinueWith: "Or continue with",
+    google: "Google",
+    passwordMismatch: "Passwords do not match",
+    createOne: "Create one",
+    registerDesc: "Fill in your details to create your free account",
+    passwordHint: "Must be at least 6 characters",
+    passwordTooShort: "Password must be at least 6 characters",
   },
   onboarding: {
-    title: "Let's Set Up Your Profile",
-    subtitle: 'This helps us personalize your experience',
-    step1Title: 'Visa Type',
-    step1Desc: 'What type of visa do you have or are applying for?',
-    step2Title: 'Application Details',
-    step2Desc: 'Tell us more about your situation',
-    step3Title: 'Location',
-    step3Desc: 'Where are you in Germany?',
-    visaType: 'Visa Type',
-    visaTypePlaceholder: 'Select your visa type',
-    applicationType: 'Is this your first application or a renewal?',
-    applicationTypePlaceholder: 'Select application type',
-    firstApplication: 'First Application',
-    renewal: 'Renewal',
-    city: 'City',
-    cityPlaceholder: 'Select your city',
-    zipCode: 'ZIP Code',
-    zipCodePlaceholder: 'e.g. 10115',
-    zipCodeHint: 'Your German postal code',
-    visaExpiry: 'Visa Expiry Date',
-    visaExpiryLabel: 'When does your visa expire?',
-    visaExpiryHint: 'Leave blank if not applicable',
-    complete: 'Complete Setup',
-    step: 'Step',
-    of: 'of',
-    aboutYou: 'About You',
-    aboutYouDesc: 'Tell us a bit about yourself',
-    fullName: 'Full Name',
-    fullNamePlaceholder: 'Enter your full name',
-    location: 'Location',
-    locationDesc: 'Where are you located in Germany?',
-    updateProfile: 'Update Profile',
-    fillAllFields: 'Please fill in all required fields',
-    selectCity: 'Please select a city',
-    completeSetup: 'Complete Setup',
-    saveChanges: 'Save Changes',
-    welcome: 'Welcome! Let us set up your profile.',
+    title: "Set Up Your Profile",
+    subtitle: "Tell us about yourself so we can personalize your experience",
+    visaType: "Visa Type",
+    selectVisaType: "Select your visa type",
+    applicationType: "Application Type",
+    firstApplication: "First Application",
+    renewal: "Renewal",
+    city: "City",
+    selectCity: "Select your city",
+    zipCode: "ZIP Code",
+    enterZipCode: "Enter your ZIP code",
+    visaExpiry: "Visa Expiry Date",
+    step1Title: "Visa Information",
+    step1Desc: "What type of visa do you have or are applying for?",
+    step2Title: "Location",
+    step2Desc: "Where do you live or plan to live in Germany?",
+    step3Title: "Important Dates",
+    step3Desc: "When does your current visa expire?",
+    complete: "Complete Setup",
+    skipForNow: "Skip for now",
+    progress: "Step {current} of {total}",
+    visaPlaceholder: "Choose your visa type",
+    cityPlaceholder: "Choose your city",
+    zipPlaceholder: "e.g. 10115",
+    expiryHint: "This helps us send you renewal reminders",
+    aboutYou: "About You",
+    location: "Location",
+    completeSetup: "Complete Setup",
+    saveChanges: "Save Changes",
+    welcome: "Welcome to Germany Guide",
   },
   dashboard: {
-    title: 'Dashboard',
-    welcomeBack: 'Welcome back',
-    yourFlows: 'Your Flows',
-    yourDocuments: 'Your Documents',
-    upcomingDeadlines: 'Upcoming Deadlines',
-    quickActions: 'Quick Actions',
-    startNewFlow: 'Start New Flow',
-    addDocument: 'Add Document',
-    viewAllFlows: 'View All Flows',
-    viewAllDocs: 'View All Docs',
-    viewAllDeadlines: 'View All Deadlines',
-    noFlows: 'No active flows yet',
-    noDocs: 'No documents yet',
-    noDeadlines: 'No upcoming deadlines',
-    progress: 'Progress',
-    dueIn: 'Due in',
-    days: 'days',
-    overdue: 'Overdue',
-    today: 'Today',
-    premiumBanner: 'Upgrade to Premium',
-    premiumBannerDesc: 'Unlimited flows, ad-free experience, and more.',
-    premiumBannerCta: 'Learn More',
+    title: "Dashboard",
+    welcome: "Welcome back",
+    quickActions: "Quick Actions",
+    recentFlows: "Recent Flows",
+    upcomingDeadlines: "Upcoming Deadlines",
+    documentStatus: "Document Status",
+    noFlows: "No active flows yet",
+    noDeadlines: "No upcoming deadlines",
+    startFlow: "Start a New Flow",
+    viewAll: "View All",
+    yourProgress: "Your Progress",
+    completedSteps: "Completed Steps",
+    activeFlows: "Active Flows",
+    totalDocuments: "Total Documents",
+    overview: "Overview",
+    premiumBanner: "Upgrade to Premium",
+    premiumBannerDesc:
+      "Get unlimited flows, documents, ad-free experience, and more.",
+    premiumBannerCta: "Upgrade Now",
+    tipCard: "Support Germany Guide",
+    tipCardDesc: "Help us keep the service running and improving.",
+    tipCardCta: "Leave a Tip",
   },
   flows: {
-    title: 'Flows',
-    subtitle: 'Step-by-step guides tailored to your visa type',
-    startFlow: 'Start Flow',
-    continueFlow: 'Continue',
-    completed: 'Completed',
-    inProgress: 'In Progress',
-    notStarted: 'Not Started',
-    steps: 'Steps',
-    step: 'Step',
-    markDone: 'Mark as Done',
-    markUndone: 'Mark as Undone',
-    notes: 'Notes',
-    addNote: 'Add a note...',
-    saveNote: 'Save Note',
-    requiredDocs: 'Required Documents',
-    usefulLinks: 'Useful Links',
-    tips: 'Tips',
-    optional: 'Optional Step',
-    flowProgress: 'Flow Progress',
-    noFlows: 'No flows available for your visa type',
-    backToFlows: 'Back to Flows',
-    limitReached: 'Free plan limit reached',
-    limitReachedDesc: 'Upgrade to Premium for unlimited flows.',
-    myFlows: 'My Flows',
-    myFlowsDesc: 'Your active and completed flows',
-    recommendedForYou: 'Recommended for You',
-    basedOnVisa: 'Based on your visa type',
-    otherFlows: 'Other Flows',
-    progress: 'Progress',
-    stepsCompleted: 'steps completed',
-    stepOf: 'of',
-    tip: 'Tip',
-    yourNotes: 'Your Notes',
-    notesPlaceholder: 'Write your notes here...',
-    saveNotes: 'Save Notes',
-    undo: 'Undo',
-    markAsDone: 'Mark as Done',
-    completedSection: 'Completed',
+    title: "Your Flows",
+    startNew: "Start New Flow",
+    progress: "{percent}% complete",
+    steps: "{count} steps",
+    completed: "Completed",
+    inProgress: "In Progress",
+    notStarted: "Not Started",
+    continueFlow: "Continue",
+    viewDetails: "View Details",
+    stepOf: "Step {current} of {total}",
+    markDone: "Mark as Done",
+    markUndone: "Mark as Not Done",
+    notes: "Notes",
+    addNote: "Add a note...",
+    requiredDocs: "Required Documents",
+    usefulLinks: "Useful Links",
+    tips: "Tips",
+    optional: "Optional",
+    flowCompleted: "Flow Completed!",
+    allStepsDone: "You have completed all steps in this flow.",
+    backToFlows: "Back to Flows",
+    previousStep: "Previous",
+    nextStep: "Next",
+    recommended: "Recommended for You",
+    myFlows: "My Flows",
+    recommendedForYou: "Recommended for You",
+    basedOnVisa: "Based on your visa type and situation",
+    otherFlows: "Other Flows",
+    yourNotes: "Your Notes",
+    undo: "Undo",
+    markAsDone: "Mark as Done",
+    completedSection: "Completed",
   },
   docs: {
-    title: 'Documents',
-    subtitle: 'Track all your important documents',
-    addDocument: 'Add Document',
-    editDocument: 'Edit Document',
-    docType: 'Document Type',
-    docTypePlaceholder: 'Select document type',
-    docName: 'Document Name',
-    docNamePlaceholder: 'Enter document name',
-    issueDate: 'Issue Date',
-    expiryDate: 'Expiry Date',
-    status: 'Status',
-    notes: 'Notes',
-    notesPlaceholder: 'Add any notes...',
-    linkedFlow: 'Linked Flow',
-    noDocuments: 'No documents added yet',
-    noDocumentsDesc: 'Add your first document to get started',
-    valid: 'Valid',
-    pending: 'Pending',
-    expired: 'Expired',
-    expiringSoon: 'Expiring Soon',
-    notUploaded: 'Not Uploaded',
-    deleteConfirm: 'Are you sure you want to delete this document?',
-    limitReached: 'Free plan limit reached',
-    limitReachedDesc: 'Upgrade to Premium for unlimited documents.',
-    documentVault: 'Document Vault',
-    documentVaultDesc: 'Store and manage all your important documents',
-    addNewDocument: 'Add New Document',
-    backToDocuments: 'Back to Documents',
-    selectTypeAndName: 'Please select a type and enter a name',
-    linkToFlow: 'Link to Flow',
-    none: 'None',
-    issued: 'Issued',
-    expires: 'Expires',
+    title: "Documents",
+    addNew: "Add Document",
+    docType: "Document Type",
+    docName: "Document Name",
+    issueDate: "Issue Date",
+    expiryDate: "Expiry Date",
+    status: "Status",
+    valid: "Valid",
+    pending: "Pending",
+    expired: "Expired",
+    notUploaded: "Not Uploaded",
+    linkedFlow: "Linked Flow",
+    noDocuments: "No documents added yet",
+    addFirst: "Add your first document to start tracking",
+    selectDocType: "Select document type",
+    enterDocName: "Enter document name",
+    saveDocument: "Save Document",
+    deleteConfirm: "Are you sure you want to delete this document?",
+    notesPlaceholder: "Add notes about this document...",
+    documentVault: "Document Vault",
+    addNewDocument: "Add New Document",
+    backToDocuments: "Back to Documents",
+    selectTypeAndName: "Select document type and enter a name",
+    linkToFlow: "Link to Flow",
+    none: "None",
+    issued: "Issued",
+    expires: "Expires",
+    expiringSoon: "Expiring Soon",
   },
   deadlines: {
-    title: 'Deadlines',
-    titleDesc: 'Keep track of all your important dates',
-    subtitle: 'Never miss an important date',
-    addDeadline: 'Add Deadline',
-    addNewDeadline: 'Add New Deadline',
-    editDeadline: 'Edit Deadline',
-    deadlineTitle: 'Title',
-    deadlineTitlePlaceholder: 'e.g. Visa renewal appointment',
-    description: 'Description',
-    descriptionPlaceholder: 'Add details about this deadline...',
-    dueDate: 'Due Date',
-    due: 'Due',
-    daysLeft: 'days left',
-    remindAt: 'Reminder',
-    startReminding: 'Start Reminding',
-    startRemindingHint: 'When should we start reminding you?',
-    markDone: 'Mark as Done',
-    markUndone: 'Mark as Undone',
-    done: 'Done',
-    upcoming: 'Upcoming',
-    overdue: 'Overdue',
-    today: 'Today',
-    noDeadlines: 'No deadlines set',
-    noPending: 'No pending deadlines',
-    noPendingDesc: 'You are all caught up!',
-    deleteConfirm: 'Are you sure you want to delete this deadline?',
-    completedSection: 'Completed Deadlines',
-    titleAndDateRequired: 'Title and due date are required',
+    title: "Deadlines",
+    addNew: "Add Deadline",
+    dueDate: "Due Date",
+    reminder: "Reminder",
+    done: "Done",
+    pending: "Pending",
+    overdue: "Overdue",
+    noDeadlines: "No deadlines set",
+    addFirst: "Add a deadline to start tracking",
+    deadlineTitle: "Title",
+    description: "Description",
+    setReminder: "Set Reminder",
+    reminderDate: "Reminder Date",
+    saveDeadline: "Save Deadline",
+    markComplete: "Mark Complete",
+    deleteConfirm: "Are you sure you want to delete this deadline?",
+    titlePlaceholder: "e.g. Visa Renewal",
+    descPlaceholder: "Add details about this deadline...",
+    titleDesc: "Title and Description",
+    addNewDeadline: "Add New Deadline",
+    due: "Due",
+    daysLeft: "days left",
+    startReminding: "Start Reminding",
+    noPending: "No pending deadlines",
+    completedSection: "Completed Deadlines",
+    titleAndDateRequired: "Title and due date are required",
   },
   nav: {
-    dashboard: 'Dashboard',
-    flows: 'Flows',
-    documents: 'Documents',
-    deadlines: 'Deadlines',
-    settings: 'Settings',
-    logout: 'Log Out',
-    language: 'Language',
-    premium: 'Premium',
-    upgrade: 'Upgrade',
+    dashboard: "Dashboard",
+    flows: "Flows",
+    documents: "Documents",
+    deadlines: "Deadlines",
+    settings: "Settings",
+    help: "Help",
+    profile: "Profile",
+    premium: "Premium",
+    upgrade: "Upgrade",
   },
   visa: {
-    student_visa: 'Student Visa',
-    job_seeker_visa: 'Job Seeker Visa',
-    blue_card: 'Blue Card',
-    work_permit: 'Work Permit',
-    family_reunion: 'Family Reunion',
-    freelance_visa: 'Freelance Visa',
-    permanent_residence: 'Permanent Residence',
-    other: 'Other',
+    student_visa: "Student Visa",
+    job_seeker_visa: "Job Seeker Visa",
+    blue_card: "EU Blue Card",
+    work_permit: "Work Permit",
+    family_reunion: "Family Reunion",
+    freelance_visa: "Freelance Visa",
+    permanent_residence: "Permanent Residence",
+    other: "Other",
   },
   premium: {
-    title: 'Upgrade to Premium',
-    subtitle: 'Unlock the full power of Germany Guide',
-    monthly: 'Monthly',
-    yearly: 'Yearly',
-    monthlyPrice: '\u20AC4.99/mo',
-    yearlyPrice: '\u20AC39.99/yr',
-    savePercent: 'Save 33%',
-    subscribe: 'Subscribe Now',
-    manage: 'Manage Subscription',
-    cancel: 'Cancel Subscription',
-    cancelConfirm: 'Are you sure you want to cancel your subscription?',
-    active: 'Active',
-    cancelled: 'Cancelled',
-    expired: 'Expired',
-    renewsOn: 'Renews on',
-    expiresOn: 'Expires on',
-    feature1: 'Unlimited flows and documents',
-    feature2: 'Ad-free experience',
-    feature3: 'Priority support',
-    feature4: 'PDF export',
-    feature5: 'Advanced reminders (SMS & Email)',
-    feature6: 'Personalized checklists',
-    thankYou: 'Thank you for subscribing!',
-    welcomePremium: 'Welcome to Premium. Enjoy all features.',
-    paymentSuccess: 'Payment successful',
-    paymentCancelled: 'Payment cancelled',
-    returnToDashboard: 'Return to Dashboard',
-    processing: 'Processing your payment...',
-    error: 'Something went wrong. Please try again.',
+    title: "Upgrade to Premium",
+    subtitle: "Unlock all features and remove ads",
+    monthly: "Monthly",
+    yearly: "Yearly",
+    monthlyPrice: "4.99",
+    yearlyPrice: "39.99",
+    perMonth: "/month",
+    perYear: "/year",
+    savePercent: "Save 33%",
+    subscribe: "Subscribe Now",
+    currentPlan: "Current Plan",
+    managePlan: "Manage Subscription",
+    cancelAnytime: "Cancel anytime",
+    feature1: "Unlimited flows",
+    feature2: "Unlimited documents",
+    feature3: "Priority reminders",
+    feature4: "Ad-free experience",
+    feature5: "PDF export",
+    feature6: "Priority support",
+    free: "Free",
+    premiumBadge: "Premium",
+    upgradeNow: "Upgrade Now",
+    included: "Included",
+    notIncluded: "Not included",
+    mostPopular: "Most Popular",
+    bestValue: "Best Value",
+    successTitle: "Welcome to Premium!",
+    successDesc: "Your subscription is now active. Enjoy all premium features.",
+    goToDashboard: "Go to Dashboard",
+    billedMonthly: "Billed monthly",
+    billedYearly: "Billed yearly",
   },
   affiliates: {
-    recommended: 'Recommended Services',
-    subtitle: 'Trusted partners to help you settle in Germany',
-    banking: 'Banking',
-    insurance: 'Health Insurance',
-    mobile: 'Mobile Plans',
-    housing: 'Housing',
-    learn: 'Learn More',
-    disclaimer: 'We may receive a commission when you sign up through our links. This does not affect the price you pay.',
-    openAccount: 'Open Account',
-    getQuote: 'Get Quote',
-    viewPlans: 'View Plans',
-    findHousing: 'Find Housing',
-    bankingDesc: 'Free German bank account, no paperwork. Open in 8 minutes.',
-    insuranceDesc: 'Germany\u0027s largest public health insurance. English support available.',
-    mobileDesc: 'Simple mobile plans starting at 10/month. No contract needed.',
-    housingDesc: 'Germany\u0027s number one platform for shared apartments and housing.',
+    title: "Recommended Services",
+    subtitle: "Trusted services to help you settle in Germany",
+    banking: "N26 Bank Account",
+    insurance: "TK Health Insurance",
+    mobile: "Fraenk Mobile",
+    housing: "WG-Gesucht Housing",
+    visitSite: "Visit Site",
+    sponsored: "Partner",
+    bankingDesc: "Free digital bank account. Open in minutes with your passport. No German required.",
+    insuranceDesc: "Top-rated public health insurance in Germany. Easy online registration.",
+    mobileDesc: "Simple mobile plans starting from 5 euros per month. No contract needed.",
+    housingDesc: "Find shared apartments (WG) and flats all across Germany.",
+    bankingTag: "Banking",
+    insuranceTag: "Insurance",
+    mobileTag: "Mobile",
+    housingTag: "Housing",
   },
   support: {
-    tipTitle: 'Support This Project',
-    tipSubtitle: 'Help us keep this guide free and up to date',
-    tipAmount: 'Choose an amount',
-    tipCustom: 'Custom amount',
-    tipSend: 'Send Tip',
-    tipThankYou: 'Thank you for your support!',
-    tipOneTime: 'One-time tip',
+    title: "Support Germany Guide",
+    subtitle: "Help us keep this service free and improve it for everyone",
+    tipAmount: "Tip Amount",
+    customAmount: "Custom Amount",
+    sendTip: "Send Tip",
+    thankYouTitle: "Thank you for your support!",
+    thankYouDesc: "Your tip helps us keep Germany Guide running and improving.",
   },
   ads: {
-    sponsored: 'Sponsored',
-    advertisement: 'Advertisement',
+    placeholder: "Advertisement",
+    hiddenForPremium: "Ads are hidden for premium users",
+  },
+  privacy: {
+    title: "Privacy Policy",
+    lastUpdated: "Last updated: July 2025",
+    intro: "Your privacy is important to us. This Privacy Policy explains how Germany Guide collects, uses, and protects your personal information.",
+    section1Title: "Information We Collect",
+    section1Content: "We collect information you provide directly to us, including your name, email address, visa type, city, and document details when you create an account and use our services.",
+    section2Title: "How We Use Your Information",
+    section2Content: "We use the information we collect to provide, maintain, and improve our services, to process transactions, to send you reminders and notifications, and to communicate with you about your account.",
+    section3Title: "Data Storage and Security",
+    section3Content: "Your data is stored securely using Supabase (hosted on AWS in EU regions). We implement appropriate technical and organizational measures to protect your personal data against unauthorized access, alteration, disclosure, or destruction.",
+    section4Title: "Cookies and Tracking",
+    section4Content: "We use essential cookies to maintain your session and language preferences. We also use Google AdSense, which may use cookies to serve personalized ads. You can manage your cookie preferences through our consent manager.",
+    section5Title: "Third-Party Services",
+    section5Content: "We use the following third-party services: Supabase for authentication and data storage, Stripe for payment processing, Google AdSense for advertising, and Vercel for hosting. Each of these services has their own privacy policies.",
+    section6Title: "Your Rights (GDPR)",
+    section6Content: "Under the General Data Protection Regulation (GDPR), you have the right to access, correct, delete, or export your personal data. You can also object to or restrict processing of your data. To exercise these rights, contact us at the email below.",
+    section7Title: "Data Retention",
+    section7Content: "We retain your personal data for as long as your account is active or as needed to provide you services. You can delete your account at any time, and we will remove your data within 30 days.",
+    section8Title: "Children",
+    section8Content: "Our services are not directed to children under 16. We do not knowingly collect personal information from children under 16.",
+    section9Title: "Changes to This Policy",
+    section9Content: "We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the date above.",
+    section10Title: "Contact Us",
+    section10Content: "If you have any questions about this Privacy Policy, please contact us at:",
+    contactEmail: "support@my-germany-guide.vercel.app",
+  },
+  terms: {
+    title: "Terms of Service",
+    lastUpdated: "Last updated: July 2025",
+    intro: "By using Germany Guide, you agree to these Terms of Service. Please read them carefully.",
+    section1Title: "Acceptance of Terms",
+    section1Content: "By accessing or using our service, you agree to be bound by these Terms. If you disagree with any part of the terms, you may not access the service.",
+    section2Title: "Description of Service",
+    section2Content: "Germany Guide is a digital tool that helps migrants and international students navigate bureaucratic processes in Germany. It provides step-by-step guides, document tracking, and deadline management. The information provided is for guidance only and does not constitute legal advice.",
+    section3Title: "User Accounts",
+    section3Content: "You are responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account. You must provide accurate and complete information when creating an account.",
+    section4Title: "Free and Premium Plans",
+    section4Content: "We offer a free tier with limited features (up to 3 active flows and 10 documents) and premium subscription plans with additional features. Premium subscriptions are billed monthly or yearly through Stripe.",
+    section5Title: "Payments and Refunds",
+    section5Content: "Premium subscriptions are charged in advance on a recurring basis. You can cancel your subscription at any time through the customer portal. Refunds are handled on a case-by-case basis within 14 days of purchase, in accordance with EU consumer protection laws.",
+    section6Title: "Acceptable Use",
+    section6Content: "You agree not to use the service for any unlawful purpose, to not attempt to gain unauthorized access to our systems, and to not interfere with other users enjoyment of the service.",
+    section7Title: "Intellectual Property",
+    section7Content: "The service and its original content, features, and functionality are owned by Germany Guide and are protected by international copyright, trademark, and other intellectual property laws.",
+    section8Title: "Disclaimer",
+    section8Content: "Germany Guide provides general guidance about bureaucratic processes in Germany. We are not a law firm and do not provide legal advice. Information may change and may not be complete or up-to-date. Always verify important information with official German authorities.",
+    section9Title: "Limitation of Liability",
+    section9Content: "In no event shall Germany Guide be liable for any indirect, incidental, special, consequential, or punitive damages resulting from your use of or inability to use the service.",
+    section10Title: "Governing Law",
+    section10Content: "These Terms shall be governed by and construed in accordance with the laws of the Federal Republic of Germany, without regard to its conflict of law provisions.",
+    section11Title: "Changes to Terms",
+    section11Content: "We reserve the right to modify or replace these Terms at any time. Material changes will be notified at least 30 days before taking effect.",
+    section12Title: "Contact Us",
+    section12Content: "If you have any questions about these Terms, please contact us at:",
+  },
+  about: {
+    title: "About Germany Guide",
+    subtitle: "Making German bureaucracy manageable for everyone",
+    missionTitle: "Our Mission",
+    missionContent: "Moving to Germany is exciting but navigating the bureaucracy can be overwhelming. From residence permits to city registration, health insurance to bank accounts, the processes are complex and often only documented in German. Germany Guide was built to change that.",
+    whatWeDoTitle: "What We Do",
+    whatWeDoContent: "We provide step-by-step guides tailored to your visa type and situation. Whether you are a student applying for your first visa or a professional renewing a Blue Card, our platform walks you through every step with translated instructions, document checklists, and deadline reminders.",
+    feature1Title: "Smart Flow Engine",
+    feature1Desc: "Personalized step-by-step guides based on your visa type, city, and whether it is your first application or a renewal.",
+    feature2Title: "Document Vault",
+    feature2Desc: "Track all your important documents, their expiry dates, and statuses in one place.",
+    feature3Title: "Deadline Reminders",
+    feature3Desc: "Never miss a deadline. Set reminders for visa renewals, insurance deadlines, and more.",
+    feature4Title: "11 Languages",
+    feature4Desc: "Available in English, German, Arabic, Turkish, Ukrainian, French, Spanish, Russian, Chinese, Hindi, and Hungarian.",
+    whoWeAreTitle: "Who We Are",
+    whoWeAreContent: "Germany Guide was created by migrants who experienced the challenges of German bureaucracy firsthand. We understand the stress and confusion, and we built this tool to help others avoid the same struggles.",
+    ctaTitle: "Ready to get started?",
+    ctaContent: "Create your free account and let us guide you through the process.",
+    ctaButton: "Get Started Free",
   },
 };
 
+export type Dictionary = typeof en;
 export default en;

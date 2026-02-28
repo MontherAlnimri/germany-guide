@@ -1,29 +1,31 @@
-﻿'use client';
+﻿"use client";
 
-import { useEffect, useState } from 'react';
-import Link from 'next/link';
-import { createClient } from '@/lib/supabase/client';
-import { useDict } from '@/lib/i18n';
-import { useSubscription } from '@/hooks/useSubscription';
-import AdBanner from '@/components/AdBanner';
-import AffiliateSection from '@/components/AffiliateSection';
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
+import { useDict } from "@/lib/i18n/context";
+import { useSubscription } from "@/hooks/useSubscription";
+import { useUsageLimits } from "@/hooks/useUsageLimits";
+import AdBanner from "@/components/AdBanner";
+import AffiliateSection from "@/components/AffiliateSection";
+import UsageBar from "@/components/ui/UsageBar";
+import Link from "next/link";
 
-interface FlowInstanceRow {
+interface Profile {
+  full_name: string;
+  visa_type: string;
+  city: string;
+  onboarding_complete: boolean;
+}
+
+interface FlowInstance {
   id: string;
   status: string;
   progress: number;
   flow_variant_id: string;
 }
 
-interface DocumentRow {
-  id: string;
-  doc_type: string;
-  doc_name: string;
-  status: string;
-  expiry_date: string | null;
-}
-
-interface DeadlineRow {
+interface Deadline {
   id: string;
   title: string;
   due_date: string;
@@ -32,207 +34,262 @@ interface DeadlineRow {
 
 export default function DashboardPage() {
   const dict = useDict();
-  const supabase = createClient();
+  const d = dict.dashboard;
+  const router = useRouter();
   const { isPremium } = useSubscription();
-  const [profile, setProfile] = useState<{ full_name: string | null } | null>(null);
-  const [flows, setFlows] = useState<FlowInstanceRow[]>([]);
-  const [docs, setDocs] = useState<DocumentRow[]>([]);
-  const [deadlines, setDeadlines] = useState<DeadlineRow[]>([]);
+  const { flowCount, documentCount, maxFlows, maxDocuments } = useUsageLimits();
+
+  const [profile, setProfile] = useState<Profile | null>(null);
+  const [flows, setFlows] = useState<FlowInstance[]>([]);
+  const [deadlines, setDeadlines] = useState<Deadline[]>([]);
+  const [docCount, setDocCount] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchData() {
+    async function load() {
+      const supabase = createClient();
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      const [profileRes, flowsRes, docsRes, deadlinesRes] = await Promise.all([
-        supabase.from('profiles').select('full_name').eq('id', user.id).single(),
-        supabase.from('flow_instances').select('id, status, progress, flow_variant_id').eq('user_id', user.id).order('updated_at', { ascending: false }).limit(5),
-        supabase.from('documents').select('id, doc_type, doc_name, status, expiry_date').eq('user_id', user.id).order('created_at', { ascending: false }).limit(5),
-        supabase.from('deadlines').select('id, title, due_date, is_done').eq('user_id', user.id).eq('is_done', false).order('due_date', { ascending: true }).limit(5),
+      const [profileRes, flowRes, deadlineRes, docRes] = await Promise.all([
+        supabase.from("profiles").select("full_name, visa_type, city, onboarding_complete").eq("id", user.id).single(),
+        supabase.from("flow_instances").select("id, status, progress, flow_variant_id").eq("user_id", user.id).order("updated_at", { ascending: false }).limit(5),
+        supabase.from("deadlines").select("id, title, due_date, is_done").eq("user_id", user.id).eq("is_done", false).order("due_date").limit(5),
+        supabase.from("documents").select("id", { count: "exact", head: true }).eq("user_id", user.id),
       ]);
 
-      setProfile(profileRes.data);
-      setFlows(flowsRes.data || []);
-      setDocs(docsRes.data || []);
-      setDeadlines(deadlinesRes.data || []);
+      if (profileRes.data) {
+        setProfile(profileRes.data);
+        if (!profileRes.data.onboarding_complete) {
+          router.push("/onboarding");
+          return;
+        }
+      }
+      if (flowRes.data) setFlows(flowRes.data);
+      if (deadlineRes.data) setDeadlines(deadlineRes.data);
+      setDocCount(docRes.count || 0);
       setLoading(false);
     }
-
-    fetchData();
-  }, [supabase]);
-
-  const getDaysUntil = (date: string) => {
-    const diff = Math.ceil((new Date(date).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
-    if (diff < 0) return dict.dashboard.overdue;
-    if (diff === 0) return dict.dashboard.today;
-    return `${diff} ${dict.dashboard.days}`;
-  };
-
-  const statusBadge = (status: string) => {
-    if (status === 'valid') return 'bg-green-100 text-green-700';
-    if (status === 'expired') return 'bg-red-100 text-red-700';
-    if (status === 'pending') return 'bg-yellow-100 text-yellow-700';
-    return 'bg-gray-100 text-gray-600';
-  };
+    load();
+  }, [router]);
 
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
+        <div className="text-gray-500">{dict.common?.loading || "Loading..."}</div>
       </div>
     );
   }
 
+  const activeFlows = flows.filter((f) => f.status === "in_progress").length;
+  const completedSteps = flows.reduce((sum, f) => sum + f.progress, 0);
+
   return (
-    <div className="max-w-7xl mx-auto px-4 py-6">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-          {dict.dashboard.welcomeBack}{profile?.full_name ? `, ${profile.full_name}` : ''}
+    <div className="max-w-4xl mx-auto p-4 space-y-6">
+      {/* Welcome */}
+      <div>
+        <h1 className="text-2xl font-bold text-gray-900">
+          {d?.welcome || "Welcome back"}{profile?.full_name ? `, ${profile.full_name}` : ""}
         </h1>
+        <p className="text-gray-500 text-sm mt-1">
+          {d?.overview || "Overview"}
+        </p>
       </div>
 
+      {/* Premium upsell for free users */}
       {!isPremium && (
-        <Link href="/premium" className="block mb-6">
-          <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl p-4 text-white flex items-center justify-between hover:from-blue-700 hover:to-indigo-700 transition">
-            <div>
-              <p className="font-bold">{dict.dashboard.premiumBanner}</p>
-              <p className="text-blue-100 text-sm">{dict.dashboard.premiumBannerDesc}</p>
-            </div>
-            <span className="text-sm font-medium bg-white/20 px-3 py-1 rounded-full whitespace-nowrap">
-              {dict.dashboard.premiumBannerCta}
-            </span>
-          </div>
-        </Link>
+        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl p-6 text-white">
+          <h2 className="text-lg font-bold mb-1">
+            {d?.premiumBanner || "Upgrade to Premium"}
+          </h2>
+          <p className="text-blue-100 text-sm mb-4">
+            {d?.premiumBannerDesc || "Get unlimited flows, documents, ad-free experience, and more."}
+          </p>
+          <Link
+            href="/premium"
+            className="inline-block bg-white text-blue-700 px-5 py-2 rounded-lg text-sm font-semibold hover:bg-blue-50 transition-colors"
+          >
+            {d?.premiumBannerCta || "Upgrade Now"}
+          </Link>
+        </div>
       )}
 
-      <div className="mb-6 flex justify-center">
-        <AdBanner format="horizontal" />
-      </div>
-
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
-        <Link href="/flow" className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700 text-center hover:shadow-md transition">
-          <span className="text-2xl block">{'\u{1F504}'}</span>
-          <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mt-1">{dict.dashboard.startNewFlow}</p>
-        </Link>
-        <Link href="/documents/new" className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700 text-center hover:shadow-md transition">
-          <span className="text-2xl block">{'\u{1F4C4}'}</span>
-          <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mt-1">{dict.dashboard.addDocument}</p>
-        </Link>
-        <Link href="/deadlines" className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700 text-center hover:shadow-md transition">
-          <span className="text-2xl block">{'\u{1F4C5}'}</span>
-          <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mt-1">{dict.dashboard.viewAllDeadlines}</p>
-        </Link>
-        <Link href="/premium" className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700 text-center hover:shadow-md transition">
-          <span className="text-2xl block">{'\u26A1'}</span>
-          <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mt-1">{dict.nav.premium}</p>
-        </Link>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 space-y-6">
-
-          <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="font-bold text-gray-900 dark:text-white">{dict.dashboard.yourFlows}</h2>
-              <Link href="/flow" className="text-sm text-blue-600 hover:underline">{dict.dashboard.viewAllFlows}</Link>
-            </div>
-            {flows.length === 0 ? (
-              <p className="text-gray-500 dark:text-gray-400 text-sm">{dict.dashboard.noFlows}</p>
-            ) : (
-              <div className="space-y-3">
-                {flows.map((flow) => (
-                  <Link key={flow.id} href={`/flow/${flow.id}`} className="block">
-                    <div className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition">
-                      <div className="flex items-center gap-3">
-                        <span className="text-lg">{'\u{1F504}'}</span>
-                        <div>
-                          <p className="text-sm font-medium text-gray-900 dark:text-white">Flow</p>
-                          <p className="text-xs text-gray-500">{flow.status}</p>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <div className="w-20 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                          <div className="h-full bg-blue-600 rounded-full" style={{ width: `${flow.progress}%` }} />
-                        </div>
-                        <span className="text-xs text-gray-500">{flow.progress}%</span>
-                      </div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
-
-          <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="font-bold text-gray-900 dark:text-white">{dict.dashboard.yourDocuments}</h2>
-              <Link href="/documents" className="text-sm text-blue-600 hover:underline">{dict.dashboard.viewAllDocs}</Link>
-            </div>
-            {docs.length === 0 ? (
-              <p className="text-gray-500 dark:text-gray-400 text-sm">{dict.dashboard.noDocs}</p>
-            ) : (
-              <div className="space-y-2">
-                {docs.map((doc) => (
-                  <div key={doc.id} className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                    <div className="flex items-center gap-3">
-                      <span className="text-lg">{'\u{1F4C4}'}</span>
-                      <div>
-                        <p className="text-sm font-medium text-gray-900 dark:text-white">{doc.doc_name}</p>
-                        <p className="text-xs text-gray-500">{doc.doc_type}</p>
-                      </div>
-                    </div>
-                    <span className={`text-xs px-2 py-0.5 rounded-full ${statusBadge(doc.status)}`}>
-                      {dict.docs[doc.status as keyof typeof dict.docs] || doc.status}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-          <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="font-bold text-gray-900 dark:text-white">{dict.dashboard.upcomingDeadlines}</h2>
-              <Link href="/deadlines" className="text-sm text-blue-600 hover:underline">{dict.dashboard.viewAllDeadlines}</Link>
-            </div>
-            {deadlines.length === 0 ? (
-              <p className="text-gray-500 dark:text-gray-400 text-sm">{dict.dashboard.noDeadlines}</p>
-            ) : (
-              <div className="space-y-2">
-                {deadlines.map((dl) => (
-                  <div key={dl.id} className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                    <div className="flex items-center gap-3">
-                      <span className="text-lg">{'\u{1F4C5}'}</span>
-                      <p className="text-sm font-medium text-gray-900 dark:text-white">{dl.title}</p>
-                    </div>
-                    <span className={`text-xs font-medium ${
-                      new Date(dl.due_date) < new Date() ? 'text-red-600' : 'text-gray-500'
-                    }`}>
-                      {getDaysUntil(dl.due_date)}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+      {/* Usage bars for free users */}
+      {!isPremium && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <UsageBar
+            label={dict.flows?.title || "Flows"}
+            current={flowCount}
+            max={maxFlows as number}
+            isPremium={isPremium}
+          />
+          <UsageBar
+            label={dict.docs?.title || "Documents"}
+            current={documentCount}
+            max={maxDocuments as number}
+            isPremium={isPremium}
+          />
         </div>
+      )}
 
-        <div className="space-y-6">
-          <AffiliateSection />
-
-          <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5 text-center">
-            <span className="text-3xl">{'\u2615'}</span>
-            <h3 className="font-bold text-gray-900 dark:text-white mt-2">{dict.support.tipTitle}</h3>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 mb-3">{dict.support.tipSubtitle}</p>
-            <Link href="/support" className="inline-block px-4 py-2 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700 transition">
-              {dict.support.tipSend}
-            </Link>
-          </div>
-
-          <AdBanner format="rectangle" />
+      {/* Stats */}
+      <div className="grid grid-cols-3 gap-4">
+        <div className="bg-white rounded-xl border border-gray-200 p-5 text-center">
+          <p className="text-2xl font-bold text-blue-600">{activeFlows}</p>
+          <p className="text-sm text-gray-500 mt-1">{d?.activeFlows || "Active Flows"}</p>
+        </div>
+        <div className="bg-white rounded-xl border border-gray-200 p-5 text-center">
+          <p className="text-2xl font-bold text-green-600">{docCount}</p>
+          <p className="text-sm text-gray-500 mt-1">{d?.totalDocuments || "Documents"}</p>
+        </div>
+        <div className="bg-white rounded-xl border border-gray-200 p-5 text-center">
+          <p className="text-2xl font-bold text-purple-600">{deadlines.length}</p>
+          <p className="text-sm text-gray-500 mt-1">{d?.upcomingDeadlines || "Deadlines"}</p>
         </div>
       </div>
+
+      {/* Quick Actions */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <button
+          onClick={() => router.push("/flow")}
+          className="bg-white rounded-xl border border-gray-200 p-4 text-center hover:shadow-md transition-shadow"
+        >
+          <div className="text-2xl mb-2">{"\u{1F4CB}"}</div>
+          <p className="text-sm font-medium text-gray-700">{dict.nav?.flows || "Flows"}</p>
+        </button>
+        <button
+          onClick={() => router.push("/documents")}
+          className="bg-white rounded-xl border border-gray-200 p-4 text-center hover:shadow-md transition-shadow"
+        >
+          <div className="text-2xl mb-2">{"\u{1F4C2}"}</div>
+          <p className="text-sm font-medium text-gray-700">{dict.nav?.documents || "Documents"}</p>
+        </button>
+        <button
+          onClick={() => router.push("/deadlines")}
+          className="bg-white rounded-xl border border-gray-200 p-4 text-center hover:shadow-md transition-shadow"
+        >
+          <div className="text-2xl mb-2">{"\u{23F0}"}</div>
+          <p className="text-sm font-medium text-gray-700">{dict.nav?.deadlines || "Deadlines"}</p>
+        </button>
+        <button
+          onClick={() => router.push("/support")}
+          className="bg-white rounded-xl border border-gray-200 p-4 text-center hover:shadow-md transition-shadow"
+        >
+          <div className="text-2xl mb-2">{"\u{2764}"}</div>
+          <p className="text-sm font-medium text-gray-700">{d?.tipCardCta || "Leave a Tip"}</p>
+        </button>
+      </div>
+
+      {/* Recent Flows */}
+      {flows.length > 0 && (
+        <section>
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-lg font-semibold text-gray-800">
+              {d?.recentFlows || "Recent Flows"}
+            </h2>
+            <button
+              onClick={() => router.push("/flow")}
+              className="text-sm text-blue-600 hover:text-blue-800 font-medium"
+            >
+              {d?.viewAll || "View All"}
+            </button>
+          </div>
+          <div className="space-y-3">
+            {flows.slice(0, 3).map((flow) => (
+              <div
+                key={flow.id}
+                className="bg-white rounded-lg border border-gray-200 p-4 flex items-center justify-between cursor-pointer hover:shadow-sm transition-shadow"
+                onClick={() => router.push(`/flow/${flow.id}`)}
+              >
+                <div>
+                  <p className="font-medium text-gray-900 text-sm">Flow</p>
+                  <p className="text-xs text-gray-500">
+                    {flow.status === "completed"
+                      ? dict.flows?.completed || "Completed"
+                      : dict.flows?.inProgress || "In Progress"}
+                  </p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-medium text-blue-600">{flow.progress}%</span>
+                  <div className="w-16 bg-gray-200 rounded-full h-1.5">
+                    <div
+                      className="bg-blue-600 h-1.5 rounded-full"
+                      style={{ width: `${flow.progress}%` }}
+                    />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Upcoming Deadlines */}
+      {deadlines.length > 0 && (
+        <section>
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-lg font-semibold text-gray-800">
+              {d?.upcomingDeadlines || "Upcoming Deadlines"}
+            </h2>
+            <button
+              onClick={() => router.push("/deadlines")}
+              className="text-sm text-blue-600 hover:text-blue-800 font-medium"
+            >
+              {d?.viewAll || "View All"}
+            </button>
+          </div>
+          <div className="space-y-3">
+            {deadlines.map((dl) => {
+              const daysLeft = Math.ceil(
+                (new Date(dl.due_date).getTime() - Date.now()) / (1000 * 60 * 60 * 24)
+              );
+              return (
+                <div
+                  key={dl.id}
+                  className="bg-white rounded-lg border border-gray-200 p-4 flex items-center justify-between"
+                >
+                  <p className="font-medium text-gray-900 text-sm">{dl.title}</p>
+                  <span
+                    className={`text-xs font-medium px-2 py-1 rounded-full ${
+                      daysLeft <= 7
+                        ? "bg-red-100 text-red-700"
+                        : daysLeft <= 30
+                        ? "bg-amber-100 text-amber-700"
+                        : "bg-green-100 text-green-700"
+                    }`}
+                  >
+                    {daysLeft > 0
+                      ? `${daysLeft} ${dict.deadlines?.daysLeft || "days left"}`
+                      : dict.deadlines?.overdue || "Overdue"}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+      )}
+
+      {/* Tip card */}
+      <div className="bg-white rounded-xl border border-gray-200 p-6">
+        <h3 className="font-semibold text-gray-900 mb-1">
+          {d?.tipCard || "Support Germany Guide"}
+        </h3>
+        <p className="text-sm text-gray-500 mb-4">
+          {d?.tipCardDesc || "Help us keep the service running and improving."}
+        </p>
+        <Link
+          href="/support"
+          className="inline-block bg-pink-50 text-pink-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-pink-100 transition-colors"
+        >
+          {"\u2764"} {d?.tipCardCta || "Leave a Tip"}
+        </Link>
+      </div>
+
+      {/* Ad banner */}
+      <AdBanner />
+
+      {/* Affiliates */}
+      <AffiliateSection />
     </div>
   );
 }
