@@ -1,0 +1,2903 @@
+﻿
+
+========== src/components/layout/Navbar.tsx ==========
+"use client";
+
+import Link from "next/link";
+import { useRouter, usePathname } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
+import { useDict } from "@/lib/i18n/context";
+import { useSubscription } from "@/hooks/useSubscription";
+import LanguageSwitcher from "@/components/i18n/LanguageSwitcher";
+
+export default function Navbar() {
+  const dict = useDict();
+  const router = useRouter();
+  const pathname = usePathname();
+  const supabase = createClient();
+  const { isPremium } = useSubscription();
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    router.push("/login");
+  };
+
+  const navItems = [
+    { href: "/dashboard", label: dict.nav.dashboard, icon: "\u{1F4CA}" },
+    { href: "/flow", label: dict.nav.flows, icon: "\u{1F504}" },
+    { href: "/documents", label: dict.nav.documents, icon: "\u{1F4C4}" },
+    { href: "/deadlines", label: dict.nav.deadlines, icon: "\u{1F4C5}" },
+  ];
+
+  return (
+    <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="flex items-center justify-between h-14">
+          <Link href="/dashboard" className="flex items-center gap-2">
+            <span className="text-lg">{"\u{1F1E9}\u{1F1EA}"}</span>
+            <span className="font-bold text-gray-900 hidden sm:inline">
+              {dict.common.appName}
+            </span>
+          </Link>
+
+          <div className="hidden md:flex items-center gap-1">
+            {navItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition ${
+                  pathname.startsWith(item.href)
+                    ? "bg-blue-50 text-blue-700"
+                    : "text-gray-600 hover:bg-gray-100"
+                }`}
+              >
+                <span className="mr-1">{item.icon}</span>
+                {item.label}
+              </Link>
+            ))}
+          </div>
+
+          <div className="flex items-center gap-2">
+            {isPremium ? (
+              <Link
+                href="/premium"
+                className="flex items-center gap-1 px-2.5 py-1 bg-gradient-to-r from-yellow-400 to-amber-500 text-white text-xs font-bold rounded-full"
+              >
+                {"\u{1F451}"} {dict.premium.premiumBadge}
+              </Link>
+            ) : (
+              <Link
+                href="/premium"
+                className="flex items-center gap-1 px-2.5 py-1 bg-blue-600 text-white text-xs font-medium rounded-full hover:bg-blue-700 transition"
+              >
+                {"\u26A1"} {dict.nav.upgrade}
+              </Link>
+            )}
+
+            <Link
+              href="/support"
+              className="text-gray-500 hover:text-gray-700 text-sm hidden sm:inline"
+              title="Support"
+            >
+              {"\u2615"}
+            </Link>
+
+            <LanguageSwitcher />
+
+            <button
+              onClick={handleLogout}
+              className="text-sm text-gray-500 hover:text-red-600 transition"
+              title={dict.common.logout}
+            >
+              {"\u{1F6AA}"}
+            </button>
+          </div>
+        </div>
+
+        <div className="flex md:hidden items-center justify-around py-2 border-t border-gray-100">
+          {navItems.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`flex flex-col items-center text-xs ${
+                pathname.startsWith(item.href)
+                  ? "text-blue-600"
+                  : "text-gray-500"
+              }`}
+            >
+              <span className="text-lg">{item.icon}</span>
+              <span>{item.label}</span>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </nav>
+  );
+}
+
+========== src/components/layout/LegalFooter.tsx ==========
+"use client";
+
+import Link from "next/link";
+import { useDict } from "@/lib/i18n/context";
+
+export default function LegalFooter() {
+  const dict = useDict();
+
+  return (
+    <footer className="bg-gray-900 text-gray-400 py-12 px-4">
+      <div className="max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+          <div>
+            <h3 className="text-white font-semibold text-lg mb-4">
+              {dict.common?.appName || "Germany Guide"}
+            </h3>
+            <p className="text-sm leading-relaxed">
+              {dict.about?.subtitle || "Making German bureaucracy manageable for everyone"}
+            </p>
+          </div>
+          <div>
+            <h3 className="text-white font-semibold mb-4">Product</h3>
+            <ul className="space-y-2 text-sm">
+              <li><Link href="/register" className="hover:text-white transition-colors">{dict.landing?.getStarted || "Get Started"}</Link></li>
+              <li><Link href="/login" className="hover:text-white transition-colors">{dict.auth?.signIn || "Sign In"}</Link></li>
+              <li><Link href="/about" className="hover:text-white transition-colors">{dict.about?.title || "About Us"}</Link></li>
+            </ul>
+          </div>
+          <div>
+            <h3 className="text-white font-semibold mb-4">Legal</h3>
+            <ul className="space-y-2 text-sm">
+              <li><Link href="/privacy" className="hover:text-white transition-colors">{dict.privacy?.title || "Privacy Policy"}</Link></li>
+              <li><Link href="/terms" className="hover:text-white transition-colors">{dict.terms?.title || "Terms of Service"}</Link></li>
+            </ul>
+          </div>
+        </div>
+        <div className="border-t border-gray-800 pt-8 text-center text-sm">
+          <p>{"\u00A9"} {new Date().getFullYear()} {dict.common?.appName || "Germany Guide"}. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+========== src/components/ui/Modal.tsx ==========
+"use client";
+import React, { useEffect, useRef } from "react";
+import { cn } from "@/lib/utils";
+
+interface ModalProps { isOpen: boolean; onClose: () => void; title?: string; children: React.ReactNode; size?: "sm" | "md" | "lg"; }
+const sizeStyles = { sm: "max-w-md", md: "max-w-lg", lg: "max-w-2xl" };
+
+export function Modal({ isOpen, onClose, title, children, size = "md" }: ModalProps) {
+  const overlayRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    if (isOpen) { document.addEventListener("keydown", handleEscape); document.body.style.overflow = "hidden"; }
+    return () => { document.removeEventListener("keydown", handleEscape); document.body.style.overflow = "unset"; };
+  }, [isOpen, onClose]);
+  if (!isOpen) return null;
+  return (
+    <div ref={overlayRef} className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+      onClick={(e) => { if (e.target === overlayRef.current) onClose(); }}>
+      <div className={cn("w-full bg-white rounded-xl shadow-xl", sizeStyles[size])}>
+        {title && (
+          <div className="flex items-center justify-between px-6 py-4 border-b">
+            <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
+            <button onClick={onClose} className="p-1 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100">X</button>
+          </div>
+        )}
+        <div className="p-6">{children}</div>
+      </div>
+    </div>
+  );
+}
+
+
+========== src/components/ui/LimitModal.tsx ==========
+"use client";
+
+import Link from "next/link";
+import { useDict } from "@/lib/i18n/context";
+
+interface LimitModalProps {
+  type: "flow" | "document";
+  current: number;
+  max: number;
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export default function LimitModal({
+  type,
+  current,
+  max,
+  isOpen,
+  onClose,
+}: LimitModalProps) {
+  const dict = useDict();
+
+  if (!isOpen) return null;
+
+  const title =
+    type === "flow"
+      ? dict.flows?.title || "Flows"
+      : dict.docs?.title || "Documents";
+
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl">
+        <div className="text-center">
+          <div className="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg
+              className="w-8 h-8 text-amber-600"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"
+              />
+            </svg>
+          </div>
+          <h3 className="text-xl font-bold text-gray-900 mb-2">
+            {title} Limit Reached
+          </h3>
+          <p className="text-gray-600 mb-2">
+            You have reached the free plan limit of{" "}
+            <span className="font-semibold">{max}</span> {title.toLowerCase()}.
+          </p>
+          <p className="text-gray-600 mb-6">
+            Currently using: <span className="font-semibold">{current}</span> /{" "}
+            {max}
+          </p>
+          <div className="flex flex-col gap-3">
+            <Link
+              href="/premium"
+              className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors text-center"
+            >
+              {dict.premium?.upgradeNow || "Upgrade to Premium"}
+            </Link>
+            <button
+              onClick={onClose}
+              className="w-full bg-gray-100 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-200 transition-colors"
+            >
+              {dict.common?.close || "Close"}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+========== src/components/ui/UsageBar.tsx ==========
+"use client";
+
+import Link from "next/link";
+
+interface UsageBarProps {
+  label: string;
+  current: number;
+  max: number;
+  isPremium: boolean;
+}
+
+export default function UsageBar({ label, current, max, isPremium }: UsageBarProps) {
+  if (isPremium) return null;
+
+  const percentage = Math.min((current / max) * 100, 100);
+  const isNearLimit = percentage >= 80;
+  const isAtLimit = current >= max;
+
+  return (
+    <div className="bg-white rounded-lg border border-gray-200 p-4">
+      <div className="flex items-center justify-between mb-2">
+        <span className="text-sm font-medium text-gray-700">{label}</span>
+        <span
+          className={`text-sm font-semibold ${
+            isAtLimit
+              ? "text-red-600"
+              : isNearLimit
+              ? "text-amber-600"
+              : "text-gray-600"
+          }`}
+        >
+          {current} / {max}
+        </span>
+      </div>
+      <div className="w-full bg-gray-200 rounded-full h-2">
+        <div
+          className={`h-2 rounded-full transition-all ${
+            isAtLimit
+              ? "bg-red-500"
+              : isNearLimit
+              ? "bg-amber-500"
+              : "bg-blue-500"
+          }`}
+          style={{ width: `${percentage}%` }}
+        />
+      </div>
+      {isAtLimit && (
+        <Link
+          href="/premium"
+          className="text-xs text-blue-600 hover:text-blue-800 mt-2 inline-block font-medium"
+        >
+          Upgrade for unlimited {'\u2192'}
+        </Link>
+      )}
+    </div>
+  );
+}
+
+========== src/components/AdBanner.tsx ==========
+"use client";
+
+import { useSubscription } from "@/hooks/useSubscription";
+import { useDict } from "@/lib/i18n/context";
+
+interface AdBannerProps {
+  slot?: string;
+  format?: "horizontal" | "vertical" | "rectangle";
+  className?: string;
+}
+
+export default function AdBanner({ slot, format = "horizontal", className = "" }: AdBannerProps) {
+  const { isPremium, loading } = useSubscription();
+  const dict = useDict();
+
+  if (loading || isPremium) return null;
+
+  const sizeClasses = {
+    horizontal: "h-[90px] w-full max-w-[728px]",
+    vertical: "w-[160px] h-[600px]",
+    rectangle: "w-[300px] h-[250px]",
+  };
+
+  return (
+    <div className={`flex flex-col items-center ${className}`}>
+      <div
+        className={`${sizeClasses[format]} bg-gradient-to-r from-gray-100 to-gray-50 border border-gray-200 rounded-lg flex items-center justify-center`}
+      >
+        <div className="text-center p-4">
+          <p className="text-xs text-gray-400 mb-1">{dict.ads.placeholder}</p>
+          <p className="text-sm text-gray-500">
+            {dict.ads.hiddenForPremium}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+========== src/components/AffiliateSection.tsx ==========
+"use client";
+
+import { useDict } from "@/lib/i18n/context";
+
+interface AffiliateLink {
+  name: string;
+  descKey: string;
+  url: string;
+  icon: string;
+  gradient: string;
+  categoryKey: string;
+}
+
+const AFFILIATE_LINKS: AffiliateLink[] = [
+  {
+    name: "N26",
+    descKey: "bankingDesc",
+    url: "https://n26.com",
+    icon: "\u{1F3E6}",
+    gradient: "from-teal-500 to-emerald-600",
+    categoryKey: "bankingTag",
+  },
+  {
+    name: "TK (Techniker)",
+    descKey: "insuranceDesc",
+    url: "https://www.tk.de/en",
+    icon: "\u{1F3E5}",
+    gradient: "from-blue-500 to-indigo-600",
+    categoryKey: "insuranceTag",
+  },
+  {
+    name: "Fraenk",
+    descKey: "mobileDesc",
+    url: "https://www.fraenk.de",
+    icon: "\u{1F4F1}",
+    gradient: "from-purple-500 to-pink-600",
+    categoryKey: "mobileTag",
+  },
+  {
+    name: "WG-Gesucht",
+    descKey: "housingDesc",
+    url: "https://www.wg-gesucht.de",
+    icon: "\u{1F3E0}",
+    gradient: "from-orange-500 to-red-500",
+    categoryKey: "housingTag",
+  },
+];
+
+export default function AffiliateSection() {
+  const dict = useDict();
+  const a = dict.affiliates;
+
+  const getDesc = (key: string): string => {
+    const descMap: Record<string, string> = {
+      bankingDesc: a.bankingDesc,
+      insuranceDesc: a.insuranceDesc,
+      mobileDesc: a.mobileDesc,
+      housingDesc: a.housingDesc,
+    };
+    return descMap[key] || "";
+  };
+
+  const getCategoryLabel = (key: string): string => {
+    return (a as any)[key] || "";
+  };
+
+  return (
+    <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+      <div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-4">
+        <h2 className="text-lg font-bold text-white">
+          {a.title}
+        </h2>
+        <p className="text-blue-100 text-xs mt-0.5">
+          {a.subtitle}
+        </p>
+      </div>
+
+      <div className="p-4 space-y-3">
+        {AFFILIATE_LINKS.map((link) => (
+          <a
+            key={link.name}
+            href={link.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group block rounded-xl border border-gray-100 hover:border-gray-200 hover:shadow-lg transition-all duration-300 overflow-hidden"
+          >
+            <div className="flex items-center gap-3 p-3">
+              <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${link.gradient} flex items-center justify-center text-xl shadow-sm flex-shrink-0`}>
+                {link.icon}
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 mb-0.5">
+                  <span className="font-semibold text-sm text-gray-900">{link.name}</span>
+                  <span className="text-[9px] px-1.5 py-0.5 bg-gray-100 text-gray-500 rounded-full font-medium uppercase tracking-wide">
+                    {getCategoryLabel(link.categoryKey)}
+                  </span>
+                </div>
+                <p className="text-xs text-gray-500 leading-relaxed line-clamp-2">
+                  {getDesc(link.descKey)}
+                </p>
+              </div>
+              <div className="flex-shrink-0">
+                <span className="inline-flex items-center text-[11px] font-semibold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
+                  {a.visitSite}
+                  <span className="ml-1 group-hover:translate-x-0.5 transition-transform duration-300">{"\u2192"}</span>
+                </span>
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+
+      <div className="px-6 py-3 bg-gray-50 border-t border-gray-100">
+        <p className="text-[10px] text-gray-400 text-center leading-relaxed">
+          {a.sponsored}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+========== src/components/i18n/LanguageSwitcher.tsx ==========
+'use client';
+
+import { useState, useRef, useEffect } from 'react';
+import { useI18n } from '@/lib/i18n/context';
+import { i18n, localeNames, localeFlags, getDirection } from '@/lib/i18n/config';
+import type { Locale } from '@/lib/i18n/config';
+
+export default function LanguageSwitcher({ compact = false }: { compact?: boolean }) {
+  const { locale, setLocale } = useI18n();
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleSelect = (newLocale: Locale) => {
+    setLocale(newLocale);
+    setOpen(false);
+  };
+
+  return (
+    <div className="relative" ref={ref}>
+      <button
+        onClick={() => setOpen(!open)}
+        className="flex items-center gap-1.5 px-2 py-1.5 text-sm rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors"
+        aria-label="Change language"
+        type="button"
+      >
+        <span className="text-base">{localeFlags[locale]}</span>
+        {!compact && (
+          <span className="hidden sm:inline text-gray-700">
+            {localeNames[locale]}
+          </span>
+        )}
+        <svg
+          className={'w-3 h-3 text-gray-500 transition-transform ' + (open ? 'rotate-180' : '')}
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+
+      {open && (
+        <div className="absolute right-0 top-full mt-1 z-50 bg-white border border-gray-200 rounded-xl shadow-lg py-1 min-w-[180px] max-h-[320px] overflow-y-auto">
+          {i18n.locales.map((loc) => {
+            const isActive = loc === locale;
+            const dir = getDirection(loc);
+            let cls = 'text-gray-700 hover:bg-gray-50';
+            if (isActive) cls = 'bg-blue-50 text-blue-700 font-medium';
+            return (
+              <button
+                key={loc}
+                onClick={() => handleSelect(loc)}
+                className={'w-full flex items-center gap-2.5 px-3 py-2 text-sm transition-colors ' + cls}
+                dir={dir}
+                type="button"
+              >
+                <span className="text-base">{localeFlags[loc]}</span>
+                <span className="flex-1 text-left" dir={dir}>
+                  {localeNames[loc]}
+                </span>
+                {isActive && (
+                  <svg className="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                )}
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
+========== src/app/layout.tsx ==========
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "./globals.css";
+import I18nClientProvider from "@/components/i18n/I18nClientProvider";
+
+const inter = Inter({ subsets: ["latin"] });
+
+export const metadata: Metadata = {
+  title: {
+    default: "Germany Guide - Navigate German Bureaucracy with Confidence",
+    template: "%s | Germany Guide",
+  },
+  description:
+    "Step-by-step guidance for visas, city registration, health insurance, and settling in Germany. Available in 11 languages. Free for migrants and international students.",
+  keywords: [
+    "Germany visa guide",
+    "German bureaucracy",
+    "Anmeldung",
+    "city registration Germany",
+    "student visa Germany",
+    "Blue Card Germany",
+    "health insurance Germany",
+    "settle in Germany",
+    "migrant guide Germany",
+    "international students Germany",
+  ],
+  authors: [{ name: "Germany Guide" }],
+  creator: "Germany Guide",
+  publisher: "Germany Guide",
+  metadataBase: new URL("https://my-germany-guide.vercel.app"),
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: "Germany Guide - Navigate German Bureaucracy with Confidence",
+    description:
+      "Step-by-step guidance for visas, registration, and settling in Germany. Available in 11 languages.",
+    url: "https://my-germany-guide.vercel.app",
+    siteName: "Germany Guide",
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Germany Guide - Navigate German Bureaucracy with Confidence",
+    description:
+      "Step-by-step guidance for visas, registration, and settling in Germany. Available in 11 languages.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+};
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en" className="light">
+      <head>
+        <meta
+          name="google-adsense-account"
+          content="ca-pub-3388930204483365"
+        />
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3388930204483365"
+          crossOrigin="anonymous"
+        />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+      </head>
+      <body className={inter.className}>
+        <I18nClientProvider>{children}</I18nClientProvider>
+      </body>
+    </html>
+  );
+}
+
+========== src/app/page.tsx ==========
+"use client";
+
+import Link from "next/link";
+import { useState } from "react";
+import { useDict } from "@/lib/i18n/context";
+import LanguageSwitcher from "@/components/i18n/LanguageSwitcher";
+import LegalFooter from "@/components/layout/LegalFooter";
+import StructuredData from "@/components/StructuredData";
+
+export default function LandingPage() {
+  const dict = useDict();
+  const l = dict.landing;
+  const p = dict.premium;
+  const [yearly, setYearly] = useState(false);
+
+  return (
+    <>
+      <StructuredData />
+      <div className="min-h-screen bg-white">
+        <nav className="border-b border-gray-200 bg-white/80 backdrop-blur sticky top-0 z-50">
+          <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+            <span className="text-xl font-bold text-blue-700">
+              {dict.common?.appName || "Germany Guide"}
+            </span>
+            <div className="flex items-center gap-3">
+              <LanguageSwitcher />
+              <Link href="/login" className="text-sm text-gray-600 hover:text-blue-700 font-medium">
+                {dict.auth?.signIn || "Sign In"}
+              </Link>
+              <Link href="/register" className="bg-blue-600 text-white text-sm px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors">
+                {l?.getStarted || "Get Started Free"}
+              </Link>
+            </div>
+          </div>
+        </nav>
+
+        <section className="py-20 px-4">
+          <div className="max-w-4xl mx-auto text-center">
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+              {l?.heroTitle || "Navigate German Bureaucracy with Confidence"}
+            </h1>
+            <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+              {l?.heroSubtitle || "Step-by-step guidance for visas, registration, and settling in Germany. Available in 11 languages."}
+            </p>
+            <div className="flex justify-center gap-4">
+              <Link href="/register" className="bg-blue-600 text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-blue-700 transition-colors">
+                {l?.getStarted || "Get Started Free"}
+              </Link>
+              <a href="#features" className="bg-gray-100 text-gray-700 px-8 py-3 rounded-lg text-lg font-semibold hover:bg-gray-200 transition-colors">
+                {l?.learnMore || "Learn More"}
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <section id="features" className="py-16 px-4 bg-gray-50">
+          <div className="max-w-6xl mx-auto">
+            <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">
+              {l?.featuresTitle || "Everything you need to settle in Germany"}
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {[
+                { icon: "\u{1F4CB}", title: l?.feature1Title || "Visa Flow Engine", desc: l?.feature1Desc || "Personalized step-by-step guides based on your visa type." },
+                { icon: "\u{1F4C2}", title: l?.feature2Title || "Document Vault", desc: l?.feature2Desc || "Track all your important documents in one place." },
+                { icon: "\u{23F0}", title: l?.feature3Title || "Deadline Reminders", desc: l?.feature3Desc || "Never miss a visa renewal or appointment." },
+                { icon: "\u{1F310}", title: l?.feature4Title || "11 Languages", desc: l?.feature4Desc || "Available in 11 languages." },
+              ].map((f, i) => (
+                <div key={i} className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                  <div className="text-3xl mb-4">{f.icon}</div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">{f.title}</h3>
+                  <p className="text-gray-600 text-sm">{f.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="py-16 px-4">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">
+              {l?.howItWorksTitle || "How It Works"}
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {[
+                { step: "1", title: l?.step1Title || "Create Your Account", desc: l?.step1Desc || "Sign up for free and tell us about your visa type." },
+                { step: "2", title: l?.step2Title || "Follow Your Flow", desc: l?.step2Desc || "Get a personalized checklist of steps." },
+                { step: "3", title: l?.step3Title || "Track Progress", desc: l?.step3Desc || "Mark steps as done and never miss a deadline." },
+              ].map((s, i) => (
+                <div key={i} className="text-center">
+                  <div className="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-4">{s.step}</div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">{s.title}</h3>
+                  <p className="text-gray-600 text-sm">{s.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="py-16 px-4 bg-gray-50">
+          <div className="max-w-5xl mx-auto">
+            <h2 className="text-3xl font-bold text-center text-gray-900 mb-3">
+              {l?.pricingTitle || "Simple, Transparent Pricing"}
+            </h2>
+            <p className="text-center text-gray-600 mb-8">
+              {l?.pricingSubtitle || "Start for free. Upgrade when you need more."}
+            </p>
+            <div className="flex justify-center mb-8">
+              <div className="bg-gray-200 rounded-full p-1 flex">
+                <button onClick={() => setYearly(false)} className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${!yearly ? "bg-white text-gray-900 shadow-sm" : "text-gray-600"}`}>
+                  {l?.premiumMonthly || "Monthly"}
+                </button>
+                <button onClick={() => setYearly(true)} className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${yearly ? "bg-white text-gray-900 shadow-sm" : "text-gray-600"}`}>
+                  {l?.premiumYearly || "Yearly"}
+                </button>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto">
+              <div className="bg-white rounded-2xl border border-gray-200 p-8">
+                <h3 className="text-xl font-bold text-gray-900 mb-2">{l?.freeTier || "Free"}</h3>
+                <p className="text-3xl font-bold text-gray-900 mb-1">{"\u20AC"}0</p>
+                <p className="text-sm text-gray-500 mb-6">{l?.freePriceLabel || "Free forever"}</p>
+                <ul className="space-y-3 mb-8">
+                  {[l?.freeFeature1 || "Up to 3 active flows", l?.freeFeature2 || "Up to 10 documents", l?.freeFeature3 || "Basic deadline tracking", l?.freeFeature4 || "All 11 languages"].map((f, i) => (
+                    <li key={i} className="flex items-center gap-2 text-sm text-gray-700">
+                      <svg className="w-5 h-5 text-green-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+                <Link href="/register" className="block text-center w-full bg-gray-100 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-200 transition-colors">
+                  {l?.getStarted || "Get Started Free"}
+                </Link>
+              </div>
+              <div className="bg-white rounded-2xl border-2 border-blue-600 p-8 relative">
+                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                  <span className="bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full">{p?.mostPopular || "Most Popular"}</span>
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">{l?.premiumTier || "Premium"}</h3>
+                <p className="text-3xl font-bold text-gray-900 mb-1">{"\u20AC"}{yearly ? (p?.yearlyPrice || "39.99") : (p?.monthlyPrice || "4.99")}</p>
+                <p className="text-sm text-gray-500 mb-6">
+                  {yearly ? (p?.billedYearly || "Billed yearly") : (p?.billedMonthly || "Billed monthly")}
+                  {yearly && <span className="ml-2 text-green-600 font-medium">{p?.savePercent || "Save 33%"}</span>}
+                </p>
+                <ul className="space-y-3 mb-8">
+                  {[p?.feature1 || "Unlimited flows", p?.feature2 || "Unlimited documents", p?.feature3 || "Priority reminders", p?.feature4 || "Ad-free experience", p?.feature5 || "PDF export", p?.feature6 || "Priority support"].map((f, i) => (
+                    <li key={i} className="flex items-center gap-2 text-sm text-gray-700">
+                      <svg className="w-5 h-5 text-blue-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+                <Link href="/premium" className="block text-center w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+                  {p?.subscribe || "Subscribe Now"}
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-16 px-4">
+          <div className="max-w-3xl mx-auto text-center">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">{l?.ctaTitle || "Ready to simplify your move to Germany?"}</h2>
+            <p className="text-lg text-gray-600 mb-8">{l?.ctaSubtitle || "Join thousands of migrants and students who use Germany Guide."}</p>
+            <Link href="/register" className="bg-blue-600 text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-blue-700 transition-colors">
+              {l?.ctaButton || "Create Free Account"}
+            </Link>
+          </div>
+        </section>
+
+        <LegalFooter />
+      </div>
+    </>
+  );
+}
+
+========== src/app/(auth)/layout.tsx ==========
+'use client';
+
+import LanguageSwitcher from '@/components/i18n/LanguageSwitcher';
+
+export default function AuthLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 flex flex-col">
+      <header className="w-full flex items-center justify-between px-6 py-4">
+        <div className="flex items-center gap-2">
+          <span className="text-2xl">{'\uD83C\uDDE9\uD83C\uDDEA'}</span>
+          <span className="font-bold text-lg text-gray-900">Germany Guide</span>
+        </div>
+        <LanguageSwitcher />
+      </header>
+      <main className="flex-1 flex items-center justify-center px-4 py-8">
+        {children}
+      </main>
+    </div>
+  );
+}
+
+========== src/app/(auth)/login/page.tsx ==========
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { createClient } from "@/lib/supabase/client";
+import { useDict } from "@/lib/i18n/context";
+
+export default function LoginPage() {
+  const dict = useDict();
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+
+    const supabase = createClient();
+    const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+
+    if (signInError) {
+      setError(signInError.message);
+      setLoading(false);
+      return;
+    }
+
+    router.push("/dashboard");
+    router.refresh();
+  };
+
+  return (
+    <div className="w-full max-w-md">
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+        <div className="text-center mb-8">
+          <h1 className="text-2xl font-bold text-gray-900">{dict.auth.loginTitle}</h1>
+          <p className="text-gray-600 mt-2">{dict.auth.loginSubtitle}</p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {error && (
+            <div className="bg-red-50 text-red-600 text-sm rounded-lg p-3">{error}</div>
+          )}
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">{dict.auth.email}</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">{dict.auth.password}</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+              required
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full py-2.5 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-colors disabled:opacity-50"
+          >
+            {loading ? dict.common.loading : dict.auth.signIn}
+          </button>
+        </form>
+
+        <p className="mt-6 text-center text-sm text-gray-600">
+          {dict.auth.noAccount}{" "}
+          <Link href="/register" className="text-blue-600 hover:text-blue-700 font-medium">
+            {dict.auth.createOne}
+          </Link>
+        </p>
+      </div>
+    </div>
+  );
+}
+
+========== src/app/(auth)/register/page.tsx ==========
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { createClient } from "@/lib/supabase/client";
+import { useDict } from "@/lib/i18n/context";
+
+export default function RegisterPage() {
+  const dict = useDict();
+  const router = useRouter();
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+
+    if (password.length < 6) {
+      setError(dict.auth.passwordTooShort);
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError(dict.auth.passwordMismatch);
+      return;
+    }
+
+    setLoading(true);
+
+    const supabase = createClient();
+    const { error: signUpError } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { full_name: fullName },
+      },
+    });
+
+    if (signUpError) {
+      setError(signUpError.message);
+      setLoading(false);
+      return;
+    }
+
+    router.push("/onboarding");
+    router.refresh();
+  };
+
+  return (
+    <div className="w-full max-w-md">
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+        <div className="text-center mb-8">
+          <h1 className="text-2xl font-bold text-gray-900">{dict.auth.registerTitle}</h1>
+          <p className="text-gray-600 mt-2">{dict.auth.registerDesc}</p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {error && (
+            <div className="bg-red-50 text-red-600 text-sm rounded-lg p-3">{error}</div>
+          )}
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">{dict.auth.fullName}</label>
+            <input
+              type="text"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">{dict.auth.email}</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">{dict.auth.password}</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+              required
+            />
+            <p className="text-xs text-gray-400 mt-1">{dict.auth.passwordHint}</p>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">{dict.auth.confirmPassword}</label>
+            <input
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+              required
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full py-2.5 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-colors disabled:opacity-50"
+          >
+            {loading ? dict.common.loading : dict.auth.signUp}
+          </button>
+        </form>
+
+        <p className="mt-6 text-center text-sm text-gray-600">
+          {dict.auth.hasAccount}{" "}
+          <Link href="/login" className="text-blue-600 hover:text-blue-700 font-medium">
+            {dict.auth.signInLink}
+          </Link>
+        </p>
+      </div>
+    </div>
+  );
+}
+
+========== src/app/(legal)/layout.tsx ==========
+"use client";
+
+import Link from "next/link";
+import LanguageSwitcher from "@/components/i18n/LanguageSwitcher";
+import { useDict } from "@/lib/i18n/context";
+
+export default function LegalLayout({ children }: { children: React.ReactNode }) {
+  const dict = useDict();
+
+  return (
+    <div className="min-h-screen bg-gray-50 flex flex-col">
+      <nav className="bg-white border-b border-gray-200 px-4 py-3">
+        <div className="max-w-4xl mx-auto flex items-center justify-between">
+          <Link href="/" className="text-xl font-bold text-blue-700">
+            {dict.common?.appName || "Germany Guide"}
+          </Link>
+          <div className="flex items-center gap-4">
+            <div className="flex gap-4 text-sm">
+              <Link href="/privacy" className="text-gray-600 hover:text-blue-700">
+                {dict.privacy?.title || "Privacy"}
+              </Link>
+              <Link href="/terms" className="text-gray-600 hover:text-blue-700">
+                {dict.terms?.title || "Terms"}
+              </Link>
+              <Link href="/about" className="text-gray-600 hover:text-blue-700">
+                {dict.about?.title || "About"}
+              </Link>
+            </div>
+            <LanguageSwitcher />
+          </div>
+        </div>
+      </nav>
+      <main className="max-w-4xl mx-auto px-4 py-8 flex-1">
+        {children}
+      </main>
+      <footer className="bg-white border-t border-gray-200 px-4 py-6">
+        <div className="max-w-4xl mx-auto text-center text-sm text-gray-500">
+          <div className="flex justify-center gap-4 mb-2">
+            <Link href="/privacy" className="hover:text-blue-700">
+              {dict.privacy?.title || "Privacy Policy"}
+            </Link>
+            <Link href="/terms" className="hover:text-blue-700">
+              {dict.terms?.title || "Terms of Service"}
+            </Link>
+            <Link href="/about" className="hover:text-blue-700">
+              {dict.about?.title || "About"}
+            </Link>
+          </div>
+          <p>{"\u00A9"} {new Date().getFullYear()} {dict.common?.appName || "Germany Guide"}. All rights reserved.</p>
+        </div>
+      </footer>
+    </div>
+  );
+}
+
+========== src/app/(legal)/privacy/page.tsx ==========
+"use client";
+
+import { useDict } from "@/lib/i18n/context";
+
+export default function PrivacyPage() {
+  const dict = useDict();
+  const p = dict.privacy;
+
+  const sections = [
+    { title: p?.section1Title, content: p?.section1Content },
+    { title: p?.section2Title, content: p?.section2Content },
+    { title: p?.section3Title, content: p?.section3Content },
+    { title: p?.section4Title, content: p?.section4Content },
+    { title: p?.section5Title, content: p?.section5Content },
+    { title: p?.section6Title, content: p?.section6Content },
+    { title: p?.section7Title, content: p?.section7Content },
+    { title: p?.section8Title, content: p?.section8Content },
+    { title: p?.section9Title, content: p?.section9Content },
+    { title: p?.section10Title, content: p?.section10Content },
+  ];
+
+  return (
+    <div className="prose prose-blue max-w-none">
+      <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        {p?.title || "Privacy Policy"}
+      </h1>
+      <p className="text-sm text-gray-500 mb-8">
+        {p?.lastUpdated || "Last updated: July 2025"}
+      </p>
+      <p className="text-gray-700 mb-8 text-lg leading-relaxed">
+        {p?.intro || "Your privacy is important to us."}
+      </p>
+
+      {sections.map((section, index) => (
+        <div key={index} className="mb-8">
+          <h2 className="text-xl font-semibold text-gray-900 mb-3">
+            {index + 1}. {section.title}
+          </h2>
+          <p className="text-gray-700 leading-relaxed">{section.content}</p>
+        </div>
+      ))}
+
+      <div className="mt-8 p-4 bg-blue-50 rounded-lg">
+        <p className="text-gray-700">
+          {p?.contactEmail || "support@my-germany-guide.vercel.app"}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+========== src/app/(dashboard)/layout.tsx ==========
+import Navbar from "@/components/layout/Navbar";
+import LegalFooter from "@/components/layout/LegalFooter";
+
+export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="min-h-screen bg-gray-50 flex flex-col">
+      <Navbar />
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex-1">
+        {children}
+      </main>
+      <LegalFooter />
+    </div>
+  );
+}
+
+========== src/app/(dashboard)/dashboard/page.tsx ==========
+"use client";
+
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
+import { useDict } from "@/lib/i18n/context";
+import { useSubscription } from "@/hooks/useSubscription";
+import { useUsageLimits } from "@/hooks/useUsageLimits";
+import AdBanner from "@/components/AdBanner";
+import AffiliateSection from "@/components/AffiliateSection";
+import UsageBar from "@/components/ui/UsageBar";
+import Link from "next/link";
+
+interface Profile {
+  full_name: string;
+  visa_type: string;
+  city: string;
+  onboarding_complete: boolean;
+}
+
+interface FlowInstance {
+  id: string;
+  status: string;
+  progress: number;
+  flow_variant_id: string;
+}
+
+interface Deadline {
+  id: string;
+  title: string;
+  due_date: string;
+  is_done: boolean;
+}
+
+export default function DashboardPage() {
+  const dict = useDict();
+  const d = dict.dashboard;
+  const router = useRouter();
+  const { isPremium } = useSubscription();
+  const { flowCount, documentCount, maxFlows, maxDocuments } = useUsageLimits();
+
+  const [profile, setProfile] = useState<Profile | null>(null);
+  const [flows, setFlows] = useState<FlowInstance[]>([]);
+  const [deadlines, setDeadlines] = useState<Deadline[]>([]);
+  const [docCount, setDocCount] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function load() {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const [profileRes, flowRes, deadlineRes, docRes] = await Promise.all([
+        supabase.from("profiles").select("full_name, visa_type, city, onboarding_complete").eq("id", user.id).single(),
+        supabase.from("flow_instances").select("id, status, progress, flow_variant_id").eq("user_id", user.id).order("updated_at", { ascending: false }).limit(5),
+        supabase.from("deadlines").select("id, title, due_date, is_done").eq("user_id", user.id).eq("is_done", false).order("due_date").limit(5),
+        supabase.from("documents").select("id", { count: "exact", head: true }).eq("user_id", user.id),
+      ]);
+
+      if (profileRes.data) {
+        setProfile(profileRes.data);
+        if (!profileRes.data.onboarding_complete) {
+          router.push("/onboarding");
+          return;
+        }
+      }
+      if (flowRes.data) setFlows(flowRes.data);
+      if (deadlineRes.data) setDeadlines(deadlineRes.data);
+      setDocCount(docRes.count || 0);
+      setLoading(false);
+    }
+    load();
+  }, [router]);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="text-gray-500">{dict.common?.loading || "Loading..."}</div>
+      </div>
+    );
+  }
+
+  const activeFlows = flows.filter((f) => f.status === "in_progress").length;
+
+  return (
+    <div className="max-w-4xl mx-auto p-4 space-y-6">
+      <div>
+        <h1 className="text-2xl font-bold text-gray-900">
+          {d?.welcome || "Welcome back"}{profile?.full_name ? `, ${profile.full_name}` : ""}
+        </h1>
+        <p className="text-gray-500 text-sm mt-1">{d?.overview || "Overview"}</p>
+      </div>
+
+      {!isPremium && (
+        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl p-6 text-white">
+          <h2 className="text-lg font-bold mb-1">{d?.premiumBanner || "Upgrade to Premium"}</h2>
+          <p className="text-blue-100 text-sm mb-4">{d?.premiumBannerDesc || "Get unlimited flows, documents, ad-free experience, and more."}</p>
+          <Link href="/premium" className="inline-block bg-white text-blue-700 px-5 py-2 rounded-lg text-sm font-semibold hover:bg-blue-50 transition-colors">
+            {d?.premiumBannerCta || "Upgrade Now"}
+          </Link>
+        </div>
+      )}
+
+      {!isPremium && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <UsageBar label={dict.flows?.title || "Flows"} current={flowCount} max={maxFlows as number} isPremium={isPremium} />
+          <UsageBar label={dict.docs?.title || "Documents"} current={documentCount} max={maxDocuments as number} isPremium={isPremium} />
+        </div>
+      )}
+
+      <div className="grid grid-cols-3 gap-4">
+        <div className="bg-white rounded-xl border border-gray-200 p-5 text-center">
+          <p className="text-2xl font-bold text-blue-600">{activeFlows}</p>
+          <p className="text-sm text-gray-500 mt-1">{d?.activeFlows || "Active Flows"}</p>
+        </div>
+        <div className="bg-white rounded-xl border border-gray-200 p-5 text-center">
+          <p className="text-2xl font-bold text-green-600">{docCount}</p>
+          <p className="text-sm text-gray-500 mt-1">{d?.totalDocuments || "Documents"}</p>
+        </div>
+        <div className="bg-white rounded-xl border border-gray-200 p-5 text-center">
+          <p className="text-2xl font-bold text-purple-600">{deadlines.length}</p>
+          <p className="text-sm text-gray-500 mt-1">{d?.upcomingDeadlines || "Deadlines"}</p>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <button onClick={() => router.push("/flow")} className="bg-white rounded-xl border border-gray-200 p-4 text-center hover:shadow-md transition-shadow">
+          <div className="text-2xl mb-2">{"\u{1F4CB}"}</div>
+          <p className="text-sm font-medium text-gray-700">{dict.nav?.flows || "Flows"}</p>
+        </button>
+        <button onClick={() => router.push("/documents")} className="bg-white rounded-xl border border-gray-200 p-4 text-center hover:shadow-md transition-shadow">
+          <div className="text-2xl mb-2">{"\u{1F4C2}"}</div>
+          <p className="text-sm font-medium text-gray-700">{dict.nav?.documents || "Documents"}</p>
+        </button>
+        <button onClick={() => router.push("/deadlines")} className="bg-white rounded-xl border border-gray-200 p-4 text-center hover:shadow-md transition-shadow">
+          <div className="text-2xl mb-2">{"\u{23F0}"}</div>
+          <p className="text-sm font-medium text-gray-700">{dict.nav?.deadlines || "Deadlines"}</p>
+        </button>
+        <button onClick={() => router.push("/support")} className="bg-white rounded-xl border border-gray-200 p-4 text-center hover:shadow-md transition-shadow">
+          <div className="text-2xl mb-2">{"\u{2764}"}</div>
+          <p className="text-sm font-medium text-gray-700">{d?.tipCardCta || "Leave a Tip"}</p>
+        </button>
+      </div>
+
+      {flows.length > 0 && (
+        <section>
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-lg font-semibold text-gray-800">{d?.recentFlows || "Recent Flows"}</h2>
+            <button onClick={() => router.push("/flow")} className="text-sm text-blue-600 hover:text-blue-800 font-medium">{d?.viewAll || "View All"}</button>
+          </div>
+          <div className="space-y-3">
+            {flows.slice(0, 3).map((flow) => (
+              <div key={flow.id} className="bg-white rounded-lg border border-gray-200 p-4 flex items-center justify-between cursor-pointer hover:shadow-sm transition-shadow" onClick={() => router.push(`/flow/${flow.id}`)}>
+                <div>
+                  <p className="font-medium text-gray-900 text-sm">Flow</p>
+                  <p className="text-xs text-gray-500">{flow.status === "completed" ? dict.flows?.completed || "Completed" : dict.flows?.inProgress || "In Progress"}</p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-medium text-blue-600">{flow.progress}%</span>
+                  <div className="w-16 bg-gray-200 rounded-full h-1.5">
+                    <div className="bg-blue-600 h-1.5 rounded-full" style={{ width: `${flow.progress}%` }} />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {deadlines.length > 0 && (
+        <section>
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-lg font-semibold text-gray-800">{d?.upcomingDeadlines || "Upcoming Deadlines"}</h2>
+            <button onClick={() => router.push("/deadlines")} className="text-sm text-blue-600 hover:text-blue-800 font-medium">{d?.viewAll || "View All"}</button>
+          </div>
+          <div className="space-y-3">
+            {deadlines.map((dl) => {
+              const daysLeft = Math.ceil((new Date(dl.due_date).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+              return (
+                <div key={dl.id} className="bg-white rounded-lg border border-gray-200 p-4 flex items-center justify-between">
+                  <p className="font-medium text-gray-900 text-sm">{dl.title}</p>
+                  <span className={`text-xs font-medium px-2 py-1 rounded-full ${daysLeft <= 7 ? "bg-red-100 text-red-700" : daysLeft <= 30 ? "bg-amber-100 text-amber-700" : "bg-green-100 text-green-700"}`}>
+                    {daysLeft > 0 ? `${daysLeft} ${dict.deadlines?.daysLeft || "days left"}` : dict.deadlines?.overdue || "Overdue"}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+      )}
+
+      <div className="bg-white rounded-xl border border-gray-200 p-6">
+        <h3 className="font-semibold text-gray-900 mb-1">{d?.tipCard || "Support Germany Guide"}</h3>
+        <p className="text-sm text-gray-500 mb-4">{d?.tipCardDesc || "Help us keep the service running and improving."}</p>
+        <Link href="/support" className="inline-block bg-pink-50 text-pink-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-pink-100 transition-colors">
+          {"\u2764"} {d?.tipCardCta || "Leave a Tip"}
+        </Link>
+      </div>
+
+      <AdBanner />
+      <AffiliateSection />
+    </div>
+  );
+}
+
+========== src/app/(dashboard)/onboarding/page.tsx ==========
+"use client";
+
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
+import { useDict } from "@/lib/i18n/context";
+import { VISA_TYPES, APPLICATION_TYPES, GERMAN_CITIES } from "@/lib/constants";
+
+export default function OnboardingPage() {
+  const dict = useDict();
+  const router = useRouter();
+  const [step, setStep] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [isUpdate, setIsUpdate] = useState(false);
+  const [error, setError] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [visaType, setVisaType] = useState("");
+  const [applicationType, setApplicationType] = useState("");
+  const [city, setCity] = useState("");
+  const [zipCode, setZipCode] = useState("");
+  const [visaExpiry, setVisaExpiry] = useState("");
+
+  useEffect(() => {
+    async function loadProfile() {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+      const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).single();
+      if (profile && profile.onboarding_complete) {
+        setIsUpdate(true);
+        setFullName(profile.full_name || "");
+        setVisaType(profile.visa_type || "");
+        setApplicationType(profile.first_vs_renewal || "");
+        setCity(profile.city || "");
+        setZipCode(profile.zip_code || "");
+        setVisaExpiry(profile.visa_expiry_date || "");
+      }
+    }
+    loadProfile();
+  }, []);
+
+  const getVisaLabel = (key: string) => (dict.visa as any)[key] || key;
+
+  const handleSubmit = async () => {
+    if (!fullName || !visaType || !applicationType) { setError("Please fill in all required fields"); return; }
+    if (!city) { setError(dict.onboarding.selectCity); return; }
+    setLoading(true);
+    setError("");
+    const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+    const { error: updateError } = await supabase.from("profiles").update({
+      full_name: fullName, visa_type: visaType, first_vs_renewal: applicationType,
+      city, zip_code: zipCode || null, visa_expiry_date: visaExpiry || null, onboarding_complete: true,
+    }).eq("id", user.id);
+    if (updateError) { setError(updateError.message); setLoading(false); return; }
+    router.push("/dashboard");
+    router.refresh();
+  };
+
+  return (
+    <div className="max-w-lg mx-auto py-8">
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+        <h1 className="text-2xl font-bold text-gray-900 mb-2">
+          {isUpdate ? dict.onboarding.title : dict.onboarding.welcome}
+        </h1>
+        <div className="flex items-center gap-2 mb-6">
+          <span className="text-sm text-gray-500">
+            {dict.onboarding.progress?.replace("{current}", String(step)).replace("{total}", "3") || `Step ${step} of 3`}
+          </span>
+          <div className="flex-1 flex gap-1">
+            {[1, 2, 3].map((s) => (
+              <div key={s} className={"h-1.5 flex-1 rounded-full " + (s <= step ? "bg-blue-600" : "bg-gray-200")} />
+            ))}
+          </div>
+        </div>
+        {error && <div className="bg-red-50 text-red-600 text-sm rounded-lg p-3 mb-4">{error}</div>}
+
+        {step === 1 && (
+          <div className="space-y-4">
+            <h2 className="text-lg font-semibold text-gray-900">{dict.onboarding.aboutYou}</h2>
+            <p className="text-sm text-gray-600">{dict.onboarding.step1Desc}</p>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{dict.auth.fullName}</label>
+              <input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} placeholder="Your full name" className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{dict.onboarding.visaType}</label>
+              <select value={visaType} onChange={(e) => setVisaType(e.target.value)} className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none bg-white">
+                <option value="">{dict.onboarding.visaPlaceholder || "Choose your visa type"}</option>
+                {VISA_TYPES.map((v) => <option key={v} value={v}>{getVisaLabel(v)}</option>)}
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{dict.onboarding.applicationType}</label>
+              <select value={applicationType} onChange={(e) => setApplicationType(e.target.value)} className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none bg-white">
+                <option value="">{dict.onboarding.selectVisaType}</option>
+                <option value="first">{dict.onboarding.firstApplication}</option>
+                <option value="renewal">{dict.onboarding.renewal}</option>
+              </select>
+            </div>
+            <button onClick={() => setStep(2)} className="w-full py-2.5 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-colors">{dict.common.next}</button>
+          </div>
+        )}
+
+        {step === 2 && (
+          <div className="space-y-4">
+            <h2 className="text-lg font-semibold text-gray-900">{dict.onboarding.location}</h2>
+            <p className="text-sm text-gray-600">{dict.onboarding.step2Desc}</p>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{dict.onboarding.city}</label>
+              <select value={city} onChange={(e) => setCity(e.target.value)} className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none bg-white">
+                <option value="">{dict.onboarding.cityPlaceholder || "Choose your city"}</option>
+                {GERMAN_CITIES.map((c) => <option key={c} value={c}>{c}</option>)}
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{dict.onboarding.zipCode}</label>
+              <input type="text" value={zipCode} onChange={(e) => setZipCode(e.target.value)} placeholder={dict.onboarding.zipPlaceholder || "e.g. 10115"} maxLength={5} className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none" />
+              <p className="text-xs text-gray-500 mt-1">{dict.onboarding.expiryHint}</p>
+            </div>
+            <div className="flex gap-3">
+              <button onClick={() => setStep(1)} className="flex-1 py-2.5 bg-gray-100 text-gray-700 rounded-xl font-medium hover:bg-gray-200 transition-colors">{dict.common.back}</button>
+              <button onClick={() => setStep(3)} className="flex-1 py-2.5 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-colors">{dict.common.next}</button>
+            </div>
+          </div>
+        )}
+
+        {step === 3 && (
+          <div className="space-y-4">
+            <h2 className="text-lg font-semibold text-gray-900">{dict.onboarding.step3Title}</h2>
+            <p className="text-sm text-gray-600">{dict.onboarding.step3Desc}</p>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{dict.onboarding.visaExpiry}</label>
+              <input type="date" value={visaExpiry} onChange={(e) => setVisaExpiry(e.target.value)} className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none" />
+              <p className="text-xs text-gray-500 mt-1">{dict.onboarding.expiryHint}</p>
+            </div>
+            <div className="flex gap-3">
+              <button onClick={() => setStep(2)} className="flex-1 py-2.5 bg-gray-100 text-gray-700 rounded-xl font-medium hover:bg-gray-200 transition-colors">{dict.common.back}</button>
+              <button onClick={handleSubmit} disabled={loading} className="flex-1 py-2.5 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-colors disabled:opacity-50">
+                {loading ? dict.common.loading : isUpdate ? dict.onboarding.saveChanges : dict.onboarding.completeSetup}
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+========== src/app/(dashboard)/flow/page.tsx ==========
+"use client";
+
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
+import { useDict } from "@/lib/i18n/context";
+import { useUsageLimits } from "@/hooks/useUsageLimits";
+import LimitModal from "@/components/ui/LimitModal";
+import UsageBar from "@/components/ui/UsageBar";
+
+interface BaseFlow {
+  id: string;
+  title: string;
+  description: string;
+  icon: string;
+  category: string;
+}
+
+interface FlowVariant {
+  id: string;
+  base_flow_id: string;
+  visa_type: string;
+  first_vs_renewal: string;
+}
+
+interface FlowInstance {
+  id: string;
+  user_id: string;
+  flow_variant_id: string;
+  status: string;
+  progress: number;
+  created_at: string;
+}
+
+export default function FlowPage() {
+  const dict = useDict();
+  const router = useRouter();
+  const { canCreateFlow, flowCount, maxFlows, isPremium, loading: limitsLoading } = useUsageLimits();
+
+  const [baseFlows, setBaseFlows] = useState<BaseFlow[]>([]);
+  const [variants, setVariants] = useState<FlowVariant[]>([]);
+  const [instances, setInstances] = useState<FlowInstance[]>([]);
+  const [profile, setProfile] = useState<{ visa_type: string; first_vs_renewal: string } | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [showLimitModal, setShowLimitModal] = useState(false);
+
+  useEffect(() => {
+    async function load() {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const [profileRes, baseRes, variantRes, instanceRes] = await Promise.all([
+        supabase.from("profiles").select("visa_type, first_vs_renewal").eq("id", user.id).single(),
+        supabase.from("base_flows").select("*"),
+        supabase.from("flow_variants").select("*"),
+        supabase.from("flow_instances").select("*").eq("user_id", user.id),
+      ]);
+
+      if (profileRes.data) setProfile(profileRes.data);
+      if (baseRes.data) setBaseFlows(baseRes.data);
+      if (variantRes.data) setVariants(variantRes.data);
+      if (instanceRes.data) setInstances(instanceRes.data);
+      setLoading(false);
+    }
+    load();
+  }, []);
+
+  const startFlow = async (variantId: string) => {
+    if (!canCreateFlow) {
+      setShowLimitModal(true);
+      return;
+    }
+
+    const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+
+    const { data: steps } = await supabase
+      .from("flow_steps")
+      .select("*")
+      .eq("flow_variant_id", variantId)
+      .order("step_order");
+
+    const snapshot = (steps || []).map((s) => ({
+      ...s,
+      is_done: false,
+      user_notes: "",
+    }));
+
+    const { data: instance } = await supabase
+      .from("flow_instances")
+      .insert({
+        user_id: user.id,
+        flow_variant_id: variantId,
+        status: "in_progress",
+        progress: 0,
+        step_snapshot: snapshot,
+      })
+      .select()
+      .single();
+
+    if (instance) {
+      router.push(`/flow/${instance.id}`);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="text-gray-500">{dict.common?.loading || "Loading..."}</div>
+      </div>
+    );
+  }
+
+  const myInstances = instances;
+  const recommendedVariants = variants.filter(
+    (v) =>
+      profile &&
+      v.visa_type === profile.visa_type &&
+      v.first_vs_renewal === profile.first_vs_renewal &&
+      !instances.some((i) => i.flow_variant_id === v.id)
+  );
+  const otherVariants = variants.filter(
+    (v) => !recommendedVariants.includes(v) && !instances.some((i) => i.flow_variant_id === v.id)
+  );
+
+  const getBaseFlow = (variantId: string) => {
+    const variant = variants.find((vr) => vr.id === variantId);
+    return baseFlows.find((b) => b.id === variant?.base_flow_id);
+  };
+
+  return (
+    <div className="max-w-4xl mx-auto p-4 space-y-8">
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold text-gray-900">
+          {dict.flows?.title || "Your Flows"}
+        </h1>
+      </div>
+
+      {!isPremium && !limitsLoading && (
+        <UsageBar
+          label={dict.flows?.title || "Flows"}
+          current={flowCount}
+          max={maxFlows as number}
+          isPremium={isPremium}
+        />
+      )}
+
+      {myInstances.length > 0 && (
+        <section>
+          <h2 className="text-lg font-semibold text-gray-800 mb-4">
+            {dict.flows?.myFlows || "My Flows"}
+          </h2>
+          <div className="grid gap-4">
+            {myInstances.map((instance) => {
+              const base = getBaseFlow(instance.flow_variant_id);
+              return (
+                <div
+                  key={instance.id}
+                  className="bg-white rounded-xl border border-gray-200 p-5 hover:shadow-md transition-shadow cursor-pointer"
+                  onClick={() => router.push(`/flow/${instance.id}`)}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <span className="text-2xl">{base?.icon || ""}</span>
+                      <div>
+                        <h3 className="font-semibold text-gray-900">
+                          {base?.title || "Flow"}
+                        </h3>
+                        <p className="text-sm text-gray-500">{base?.description}</p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-sm font-medium text-blue-600">
+                        {instance.progress}%
+                      </div>
+                      <div className="w-24 bg-gray-200 rounded-full h-2 mt-1">
+                        <div
+                          className="bg-blue-600 h-2 rounded-full"
+                          style={{ width: `${instance.progress}%` }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+      )}
+
+      {recommendedVariants.length > 0 && (
+        <section>
+          <h2 className="text-lg font-semibold text-gray-800 mb-2">
+            {dict.flows?.recommendedForYou || "Recommended for You"}
+          </h2>
+          <p className="text-sm text-gray-500 mb-4">
+            {dict.flows?.basedOnVisa || "Based on your visa type and situation"}
+          </p>
+          <div className="grid gap-4">
+            {recommendedVariants.map((variant) => {
+              const base = getBaseFlow(variant.id);
+              return (
+                <div
+                  key={variant.id}
+                  className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-200 p-5"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <span className="text-2xl">{base?.icon || ""}</span>
+                      <div>
+                        <h3 className="font-semibold text-gray-900">
+                          {base?.title || "Flow"}
+                        </h3>
+                        <p className="text-sm text-gray-500">{base?.description}</p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => startFlow(variant.id)}
+                      className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+                    >
+                      {dict.flows?.startNew || "Start"}
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+      )}
+
+      {otherVariants.length > 0 && (
+        <section>
+          <h2 className="text-lg font-semibold text-gray-800 mb-4">
+            {dict.flows?.otherFlows || "Other Flows"}
+          </h2>
+          <div className="grid gap-4">
+            {otherVariants.map((variant) => {
+              const base = getBaseFlow(variant.id);
+              return (
+                <div
+                  key={variant.id}
+                  className="bg-white rounded-xl border border-gray-200 p-5"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <span className="text-2xl">{base?.icon || ""}</span>
+                      <div>
+                        <h3 className="font-semibold text-gray-900">
+                          {base?.title || "Flow"}
+                        </h3>
+                        <p className="text-sm text-gray-500">{base?.description}</p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => startFlow(variant.id)}
+                      className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors"
+                    >
+                      {dict.flows?.startNew || "Start"}
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+      )}
+
+      {myInstances.length === 0 && recommendedVariants.length === 0 && otherVariants.length === 0 && (
+        <div className="text-center py-12">
+          <p className="text-gray-500">{dict.dashboard?.noFlows || "No flows available"}</p>
+        </div>
+      )}
+
+      <LimitModal
+        type="flow"
+        current={flowCount}
+        max={maxFlows as number}
+        isOpen={showLimitModal}
+        onClose={() => setShowLimitModal(false)}
+      />
+    </div>
+  );
+}
+
+========== src/app/(dashboard)/flow/[flowInstanceId]/page.tsx (NOT FOUND) ==========
+
+
+========== src/app/(dashboard)/documents/page.tsx ==========
+"use client";
+
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
+import { useDict } from "@/lib/i18n/context";
+import { useSubscription } from "@/hooks/useSubscription";
+import { useUsageLimits } from "@/hooks/useUsageLimits";
+import { exportDocumentsToPDF } from "@/lib/pdf-export";
+import UsageBar from "@/components/ui/UsageBar";
+
+interface Doc {
+  id: string;
+  doc_type: string;
+  doc_name: string;
+  issue_date: string | null;
+  expiry_date: string | null;
+  status: string;
+  notes: string | null;
+  created_at: string;
+}
+
+export default function DocumentsPage() {
+  const dict = useDict();
+  const d = dict.docs;
+  const router = useRouter();
+  const { isPremium } = useSubscription();
+  const { documentCount, maxDocuments, canCreateDocument } = useUsageLimits();
+
+  const [documents, setDocuments] = useState<Doc[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function load() {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data } = await supabase
+        .from("documents")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false });
+
+      if (data) setDocuments(data);
+      setLoading(false);
+    }
+    load();
+  }, []);
+
+  const handleDelete = async (docId: string) => {
+    const supabase = createClient();
+    await supabase.from("documents").delete().eq("id", docId);
+    setDocuments((prev) => prev.filter((doc) => doc.id !== docId));
+  };
+
+  const handleExportPDF = () => {
+    exportDocumentsToPDF(
+      documents.map((doc) => ({
+        doc_type: doc.doc_type,
+        doc_name: doc.doc_name,
+        issue_date: doc.issue_date,
+        expiry_date: doc.expiry_date,
+        status: doc.status,
+        notes: doc.notes,
+      }))
+    );
+  };
+
+  const getStatusBadge = (status: string) => {
+    const styles: Record<string, string> = {
+      valid: "bg-green-100 text-green-700",
+      pending: "bg-yellow-100 text-yellow-700",
+      expired: "bg-red-100 text-red-700",
+      notUploaded: "bg-gray-100 text-gray-600",
+    };
+    const labels: Record<string, string> = {
+      valid: d?.valid || "Valid",
+      pending: d?.pending || "Pending",
+      expired: d?.expired || "Expired",
+      notUploaded: d?.notUploaded || "Not Uploaded",
+    };
+    return (
+      <span className={`text-xs px-2 py-1 rounded-full font-medium ${styles[status] || styles.pending}`}>
+        {labels[status] || status}
+      </span>
+    );
+  };
+
+  const isExpiringSoon = (expiryDate: string | null) => {
+    if (!expiryDate) return false;
+    const diff = new Date(expiryDate).getTime() - Date.now();
+    return diff > 0 && diff < 30 * 24 * 60 * 60 * 1000;
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="text-gray-500">{dict.common?.loading || "Loading..."}</div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="max-w-4xl mx-auto p-4 space-y-6">
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold text-gray-900">
+          {d?.documentVault || "Document Vault"}
+        </h1>
+        <div className="flex items-center gap-3">
+          {isPremium && documents.length > 0 && (
+            <button
+              onClick={handleExportPDF}
+              className="bg-amber-100 text-amber-800 px-4 py-2 rounded-lg text-sm font-medium hover:bg-amber-200 transition-colors"
+            >
+              Export PDF
+            </button>
+          )}
+          <button
+            onClick={() => {
+              if (!canCreateDocument) {
+                alert("You have reached the free plan limit. Upgrade to Premium for unlimited documents.");
+                router.push("/premium");
+                return;
+              }
+              router.push("/documents/new");
+            }}
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+          >
+            + {d?.addNewDocument || "Add Document"}
+          </button>
+        </div>
+      </div>
+
+      {!isPremium && (
+        <UsageBar
+          label={d?.title || "Documents"}
+          current={documentCount}
+          max={maxDocuments as number}
+          isPremium={isPremium}
+        />
+      )}
+
+      {documents.length === 0 ? (
+        <div className="text-center py-16">
+          <div className="text-5xl mb-4">{"\u{1F4C4}"}</div>
+          <h2 className="text-lg font-semibold text-gray-900 mb-2">
+            {d?.noDocuments || "No documents added yet"}
+          </h2>
+          <p className="text-gray-500 mb-6">
+            {d?.addFirst || "Add your first document to start tracking"}
+          </p>
+          <button
+            onClick={() => router.push("/documents/new")}
+            className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+          >
+            + {d?.addNewDocument || "Add Document"}
+          </button>
+        </div>
+      ) : (
+        <div className="grid gap-4">
+          {documents.map((doc) => (
+            <div
+              key={doc.id}
+              className="bg-white rounded-xl border border-gray-200 p-5 hover:shadow-sm transition-shadow"
+            >
+              <div className="flex items-start justify-between">
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-1">
+                    <h3 className="font-semibold text-gray-900">{doc.doc_name}</h3>
+                    {getStatusBadge(doc.status)}
+                    {isExpiringSoon(doc.expiry_date) && (
+                      <span className="text-xs px-2 py-1 rounded-full font-medium bg-orange-100 text-orange-700">
+                        {d?.expiringSoon || "Expiring Soon"}
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-sm text-gray-500">{doc.doc_type}</p>
+                  <div className="flex gap-4 mt-2 text-xs text-gray-400">
+                    {doc.issue_date && (
+                      <span>
+                        {d?.issued || "Issued"}: {new Date(doc.issue_date).toLocaleDateString()}
+                      </span>
+                    )}
+                    {doc.expiry_date && (
+                      <span>
+                        {d?.expires || "Expires"}: {new Date(doc.expiry_date).toLocaleDateString()}
+                      </span>
+                    )}
+                  </div>
+                  {doc.notes && (
+                    <p className="text-sm text-gray-500 mt-2 italic">{doc.notes}</p>
+                  )}
+                </div>
+                <button
+                  onClick={() => {
+                    if (confirm(d?.deleteConfirm || "Are you sure you want to delete this document?")) {
+                      handleDelete(doc.id);
+                    }
+                  }}
+                  className="text-gray-400 hover:text-red-500 transition-colors ml-4"
+                >
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+========== src/app/(dashboard)/documents/new/page.tsx ==========
+"use client";
+
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
+import { useDict } from "@/lib/i18n/context";
+import { DOCUMENT_TYPES } from "@/lib/constants";
+import { useUsageLimits } from "@/hooks/useUsageLimits";
+import LimitModal from "@/components/ui/LimitModal";
+
+export default function NewDocumentPage() {
+  const dict = useDict();
+  const router = useRouter();
+  const { canCreateDocument, documentCount, maxDocuments } = useUsageLimits();
+
+  const [docType, setDocType] = useState("");
+  const [docName, setDocName] = useState("");
+  const [issueDate, setIssueDate] = useState("");
+  const [expiryDate, setExpiryDate] = useState("");
+  const [status, setStatus] = useState("pending");
+  const [notes, setNotes] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [showLimitModal, setShowLimitModal] = useState(false);
+
+  useEffect(() => {
+    if (!canCreateDocument && documentCount > 0) {
+      setShowLimitModal(true);
+    }
+  }, [canCreateDocument, documentCount]);
+
+  const handleSave = async () => {
+    if (!canCreateDocument) {
+      setShowLimitModal(true);
+      return;
+    }
+
+    if (!docType || !docName) return;
+    setSaving(true);
+
+    const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+
+    await supabase.from("documents").insert({
+      user_id: user.id,
+      doc_type: docType,
+      doc_name: docName,
+      issue_date: issueDate || null,
+      expiry_date: expiryDate || null,
+      status,
+      notes: notes || null,
+    });
+
+    router.push("/documents");
+  };
+
+  return (
+    <div className="max-w-2xl mx-auto p-4">
+      <button
+        onClick={() => router.push("/documents")}
+        className="text-sm text-blue-600 hover:text-blue-800 mb-4 inline-block"
+      >
+        {'\u2190'} {dict.docs?.backToDocuments || "Back to Documents"}
+      </button>
+
+      <h1 className="text-2xl font-bold text-gray-900 mb-6">
+        {dict.docs?.addNewDocument || "Add New Document"}
+      </h1>
+
+      <div className="bg-white rounded-xl border border-gray-200 p-6 space-y-5">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            {dict.docs?.docType || "Document Type"}
+          </label>
+          <select
+            value={docType}
+            onChange={(e) => setDocType(e.target.value)}
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          >
+            <option value="">{dict.docs?.selectDocType || "Select document type"}</option>
+            {DOCUMENT_TYPES.map((t) => (
+              <option key={t} value={t}>{t}</option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            {dict.docs?.docName || "Document Name"}
+          </label>
+          <input
+            type="text"
+            value={docName}
+            onChange={(e) => setDocName(e.target.value)}
+            placeholder={dict.docs?.enterDocName || "Enter document name"}
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          />
+        </div>
+
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              {dict.docs?.issueDate || "Issue Date"}
+            </label>
+            <input
+              type="date"
+              value={issueDate}
+              onChange={(e) => setIssueDate(e.target.value)}
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              {dict.docs?.expiryDate || "Expiry Date"}
+            </label>
+            <input
+              type="date"
+              value={expiryDate}
+              onChange={(e) => setExpiryDate(e.target.value)}
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            {dict.docs?.status || "Status"}
+          </label>
+          <select
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          >
+            <option value="valid">{dict.docs?.valid || "Valid"}</option>
+            <option value="pending">{dict.docs?.pending || "Pending"}</option>
+            <option value="expired">{dict.docs?.expired || "Expired"}</option>
+            <option value="notUploaded">{dict.docs?.notUploaded || "Not Uploaded"}</option>
+          </select>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Notes
+          </label>
+          <textarea
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+            placeholder={dict.docs?.notesPlaceholder || "Add notes about this document..."}
+            rows={3}
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          />
+        </div>
+
+        <button
+          onClick={handleSave}
+          disabled={!docType || !docName || saving}
+          className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {saving
+            ? dict.common?.loading || "Saving..."
+            : dict.docs?.saveDocument || "Save Document"}
+        </button>
+      </div>
+
+      <LimitModal
+        type="document"
+        current={documentCount}
+        max={maxDocuments as number}
+        isOpen={showLimitModal}
+        onClose={() => {
+          setShowLimitModal(false);
+          if (!canCreateDocument) router.push("/documents");
+        }}
+      />
+    </div>
+  );
+}
+
+========== src/app/(dashboard)/deadlines/page.tsx ==========
+"use client";
+
+import { useEffect, useState } from "react";
+import { createClient } from "@/lib/supabase/client";
+import { useDict } from "@/lib/i18n/context";
+
+export default function DeadlinesPage() {
+  const dict = useDict();
+  const [deadlines, setDeadlines] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [dueDate, setDueDate] = useState("");
+  const [remindAt, setRemindAt] = useState("");
+  const [formError, setFormError] = useState("");
+  const [saving, setSaving] = useState(false);
+
+  const loadDeadlines = async () => {
+    const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+    const { data } = await supabase.from("deadlines").select("*").eq("user_id", user.id).order("due_date", { ascending: true });
+    if (data) setDeadlines(data);
+    setLoading(false);
+  };
+
+  useEffect(() => { loadDeadlines(); }, []);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!title || !dueDate) { setFormError(dict.deadlines.titleAndDateRequired); return; }
+    setSaving(true);
+    const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+    await supabase.from("deadlines").insert({ user_id: user.id, title, description: description || null, due_date: dueDate, remind_at: remindAt || null });
+    setTitle(""); setDescription(""); setDueDate(""); setRemindAt("");
+    setShowForm(false); setSaving(false);
+    loadDeadlines();
+  };
+
+  const toggleDone = async (id: string, isDone: boolean) => {
+    const supabase = createClient();
+    await supabase.from("deadlines").update({ is_done: !isDone }).eq("id", id);
+    loadDeadlines();
+  };
+
+  if (loading) {
+    return <div className="flex items-center justify-center py-20"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" /></div>;
+  }
+
+  const pending = deadlines.filter((d) => !d.is_done);
+  const completed = deadlines.filter((d) => d.is_done);
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">{dict.deadlines.title}</h1>
+          <p className="text-gray-600 mt-1">{dict.deadlines.titleDesc}</p>
+        </div>
+        <button onClick={() => setShowForm(!showForm)} className="px-4 py-2 bg-blue-600 text-white text-sm rounded-xl font-medium hover:bg-blue-700 transition-colors">
+          {dict.deadlines.addNew}
+        </button>
+      </div>
+
+      {showForm && (
+        <div className="bg-white rounded-xl border border-gray-100 p-6">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">{dict.deadlines.addNewDeadline}</h2>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {formError && <div className="bg-red-50 text-red-600 text-sm rounded-lg p-3">{formError}</div>}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{dict.deadlines.deadlineTitle}</label>
+              <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder={dict.deadlines.titlePlaceholder || "e.g. Visa Renewal"} className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{dict.deadlines.description}</label>
+              <input type="text" value={description} onChange={(e) => setDescription(e.target.value)} placeholder={dict.deadlines.descPlaceholder || "Add details about this deadline..."} className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none" />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{dict.deadlines.dueDate}</label>
+                <input type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{dict.deadlines.startReminding}</label>
+                <input type="date" value={remindAt} onChange={(e) => setRemindAt(e.target.value)} className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none" />
+              </div>
+            </div>
+            <div className="flex gap-3">
+              <button type="button" onClick={() => setShowForm(false)} className="flex-1 py-2.5 bg-gray-100 text-gray-700 rounded-xl font-medium hover:bg-gray-200 transition-colors">{dict.common.cancel}</button>
+              <button type="submit" disabled={saving} className="flex-1 py-2.5 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-colors disabled:opacity-50">{saving ? dict.common.loading : dict.common.save}</button>
+            </div>
+          </form>
+        </div>
+      )}
+
+      <div>
+        <h2 className="text-lg font-semibold text-gray-900 mb-3">{dict.deadlines.pending || "Pending"}</h2>
+        {pending.length === 0 ? (
+          <div className="bg-white rounded-xl border border-gray-100 p-8 text-center">
+            <p className="text-xl mb-2">{"\u{1F389}"}</p>
+            <h3 className="font-medium text-gray-900">{dict.deadlines.noPending}</h3>
+            <p className="text-sm text-gray-500 mt-1">{dict.deadlines.addFirst}</p>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {pending.map((dl) => {
+              const days = Math.ceil((new Date(dl.due_date).getTime() - Date.now()) / 86400000);
+              let bc = "bg-green-50 text-green-700";
+              let bt = days + " " + (dict.deadlines.daysLeft || "days left");
+              if (days < 0) { bc = "bg-red-100 text-red-700"; bt = Math.abs(days) + "d " + dict.deadlines.overdue; }
+              else if (days === 0) { bc = "bg-amber-100 text-amber-700"; bt = "Today"; }
+              else if (days <= 7) { bc = "bg-amber-50 text-amber-600"; }
+              return (
+                <div key={dl.id} className="bg-white rounded-xl border border-gray-100 p-4 flex items-center gap-4">
+                  <button onClick={() => toggleDone(dl.id, dl.is_done)} className="w-6 h-6 rounded-full border-2 border-gray-300 hover:border-blue-500 transition-colors flex-shrink-0" />
+                  <div className="flex-1">
+                    <h3 className="font-medium text-gray-900">{dl.title}</h3>
+                    {dl.description && <p className="text-sm text-gray-500 mt-0.5">{dl.description}</p>}
+                    <p className="text-xs text-gray-400 mt-1">{dict.deadlines.due || "Due"} {new Date(dl.due_date).toLocaleDateString()}</p>
+                  </div>
+                  <span className={"text-xs font-medium px-2 py-1 rounded-full flex-shrink-0 " + bc}>{bt}</span>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
+
+      {completed.length > 0 && (
+        <div>
+          <h2 className="text-lg font-semibold text-gray-900 mb-3">{dict.deadlines.completedSection}</h2>
+          <div className="space-y-2">
+            {completed.map((dl) => (
+              <div key={dl.id} className="bg-gray-50 rounded-xl p-4 flex items-center gap-4">
+                <button onClick={() => toggleDone(dl.id, dl.is_done)} className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center flex-shrink-0 text-xs">{"\u2713"}</button>
+                <div className="flex-1">
+                  <h3 className="font-medium text-gray-500 line-through">{dl.title}</h3>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+========== src/app/(dashboard)/premium/page.tsx ==========
+"use client";
+
+import { useState } from "react";
+import { useDict } from "@/lib/i18n/context";
+import { useSubscription } from "@/hooks/useSubscription";
+
+export default function PremiumPage() {
+  const dict = useDict();
+  const { subscription, isPremium, loading } = useSubscription();
+  const [billingInterval, setBillingInterval] = useState<"monthly" | "yearly">("monthly");
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
+
+  const handleCheckout = async () => {
+    setCheckoutLoading(true);
+    try {
+      const res = await fetch("/api/stripe/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ plan: billingInterval }),
+      });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        alert(data.error || "Something went wrong");
+      }
+    } catch {
+      alert("Failed to start checkout");
+    } finally {
+      setCheckoutLoading(false);
+    }
+  };
+
+  const handleManage = async () => {
+    try {
+      const res = await fetch("/api/stripe/portal", { method: "POST" });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      }
+    } catch {
+      alert("Failed to open portal");
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
+      </div>
+    );
+  }
+
+  const features = [
+    dict.premium.feature1,
+    dict.premium.feature2,
+    dict.premium.feature3,
+    dict.premium.feature4,
+    dict.premium.feature5,
+    dict.premium.feature6,
+  ];
+
+  return (
+    <div className="max-w-4xl mx-auto px-4 py-8">
+      <div className="text-center mb-10">
+        <h1 className="text-3xl font-bold text-gray-900 mb-3">
+          {dict.premium.title}
+        </h1>
+        <p className="text-gray-600 text-lg">
+          {dict.premium.subtitle}
+        </p>
+      </div>
+
+      {isPremium && subscription ? (
+        <div className="bg-gradient-to-r from-yellow-50 to-amber-50 border border-yellow-200 rounded-2xl p-8 text-center">
+          <div className="text-5xl mb-4">{"\u{1F451}"}</div>
+          <h2 className="text-2xl font-bold text-yellow-800 mb-2">
+            {dict.premium.successTitle}
+          </h2>
+          <p className="text-yellow-700 mb-2">
+            {dict.premium.successDesc}
+          </p>
+          <div className="mt-4 space-y-1 text-sm text-yellow-600">
+            <p>
+              {dict.premium.currentPlan}: {subscription.plan === "monthly" ? dict.premium.billedMonthly : dict.premium.billedYearly}
+            </p>
+            {subscription.current_period_end && (
+              <p>
+                {subscription.status === "cancelled" ? "Expires" : "Renews"}:{" "}
+                {new Date(subscription.current_period_end).toLocaleDateString()}
+              </p>
+            )}
+          </div>
+          <button
+            onClick={handleManage}
+            className="mt-6 px-6 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition"
+          >
+            {dict.premium.managePlan}
+          </button>
+        </div>
+      ) : (
+        <>
+          <div className="flex items-center justify-center gap-4 mb-8">
+            <button
+              onClick={() => setBillingInterval("monthly")}
+              className={`px-4 py-2 rounded-lg font-medium transition ${
+                billingInterval === "monthly"
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-100 text-gray-700"
+              }`}
+            >
+              {dict.premium.monthly}
+            </button>
+            <button
+              onClick={() => setBillingInterval("yearly")}
+              className={`px-4 py-2 rounded-lg font-medium transition ${
+                billingInterval === "yearly"
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-100 text-gray-700"
+              }`}
+            >
+              {dict.premium.yearly}
+              <span className="ml-2 text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">
+                {dict.premium.savePercent}
+              </span>
+            </button>
+          </div>
+
+          <div className="max-w-md mx-auto bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden">
+            <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-6 text-center text-white">
+              <h3 className="text-xl font-bold">{dict.premium.premiumBadge}</h3>
+              <div className="mt-2">
+                <span className="text-4xl font-bold">
+                  {"\u20AC"}{billingInterval === "monthly" ? dict.premium.monthlyPrice : dict.premium.yearlyPrice}
+                </span>
+                <span className="text-blue-200">
+                  {billingInterval === "monthly" ? dict.premium.perMonth : dict.premium.perYear}
+                </span>
+              </div>
+            </div>
+
+            <div className="p-6">
+              <ul className="space-y-3">
+                {features.map((feature, i) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <svg className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span className="text-gray-700">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <p className="text-center text-sm text-gray-500 mt-4">
+                {dict.premium.cancelAnytime}
+              </p>
+
+              <button
+                onClick={handleCheckout}
+                disabled={checkoutLoading}
+                className="mt-4 w-full py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition disabled:opacity-50"
+              >
+                {checkoutLoading ? dict.common.loading : dict.premium.subscribe}
+              </button>
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+========== src/app/(dashboard)/support/page.tsx ==========
+"use client";
+
+import { useState } from "react";
+import { useDict } from "@/lib/i18n/context";
+
+const TIP_AMOUNTS = [
+  { label: "\u20AC2", value: 200 },
+  { label: "\u20AC5", value: 500 },
+  { label: "\u20AC10", value: 1000 },
+  { label: "\u20AC25", value: 2500 },
+];
+
+export default function SupportPage() {
+  const dict = useDict();
+  const [selectedAmount, setSelectedAmount] = useState<number>(500);
+  const [customAmount, setCustomAmount] = useState("");
+  const [isCustom, setIsCustom] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const handleTip = async () => {
+    setLoading(true);
+    const amount = isCustom ? Math.round(parseFloat(customAmount) * 100) : selectedAmount;
+
+    if (!amount || amount < 100) {
+      alert("Minimum tip is \u20AC1.00");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/stripe/tip", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount }),
+      });
+
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        alert(data.error || "Something went wrong");
+      }
+    } catch {
+      alert("Failed to process tip");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="max-w-lg mx-auto px-4 py-8">
+      <div className="text-center mb-8">
+        <div className="text-5xl mb-4">{"\u2615"}</div>
+        <h1 className="text-2xl font-bold text-gray-900 mb-2">
+          {dict.support.title}
+        </h1>
+        <p className="text-gray-600">
+          {dict.support.subtitle}
+        </p>
+      </div>
+
+      <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6">
+        <p className="text-sm font-medium text-gray-700 mb-4">
+          {dict.support.tipAmount}
+        </p>
+
+        <div className="grid grid-cols-2 gap-3 mb-4">
+          {TIP_AMOUNTS.map((tip) => (
+            <button
+              key={tip.value}
+              onClick={() => {
+                setSelectedAmount(tip.value);
+                setIsCustom(false);
+              }}
+              className={`py-3 rounded-lg font-medium transition ${
+                !isCustom && selectedAmount === tip.value
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+              }`}
+            >
+              {tip.label}
+            </button>
+          ))}
+        </div>
+
+        <button
+          onClick={() => setIsCustom(true)}
+          className={`w-full py-2 mb-3 rounded-lg text-sm font-medium transition ${
+            isCustom
+              ? "bg-blue-100 text-blue-700"
+              : "bg-gray-50 text-gray-600"
+          }`}
+        >
+          {dict.support.customAmount}
+        </button>
+
+        {isCustom && (
+          <div className="mb-4">
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">{"\u20AC"}</span>
+              <input
+                type="number"
+                min="1"
+                step="0.01"
+                value={customAmount}
+                onChange={(e) => setCustomAmount(e.target.value)}
+                placeholder="5.00"
+                className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-900"
+              />
+            </div>
+          </div>
+        )}
+
+        <button
+          onClick={handleTip}
+          disabled={loading}
+          className="w-full py-3 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition disabled:opacity-50"
+        >
+          {loading ? dict.common.loading : dict.support.sendTip}
+        </button>
+
+        <p className="text-xs text-gray-500 text-center mt-4">
+          One-time payment. No recurring charges.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+========== src/app/(dashboard)/admin/page.tsx ==========
+"use client";
+
+import { useEffect, useState } from "react";
+
+interface AdminData {
+  totalUsers: number;
+  activeSubscriptions: number;
+  monthlySubscribers: number;
+  yearlySubscribers: number;
+  mrr: number;
+  totalTipRevenue: number;
+  totalFlows: number;
+  totalDocuments: number;
+  recentUsers: Array<{
+    id: string;
+    full_name: string;
+    visa_type: string;
+    city: string;
+    is_premium: boolean;
+    created_at: string;
+  }>;
+  recentTips: Array<{
+    amount: number;
+    status: string;
+    created_at: string;
+  }>;
+}
+
+export default function AdminPage() {
+  const [data, setData] = useState<AdminData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    async function load() {
+      try {
+        const res = await fetch("/api/admin");
+        if (!res.ok) {
+          setError("Unauthorized or error loading admin data");
+          setLoading(false);
+          return;
+        }
+        const json = await res.json();
+        setData(json);
+      } catch {
+        setError("Failed to load admin data");
+      }
+      setLoading(false);
+    }
+    load();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="text-gray-500">Loading admin dashboard...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="text-red-500 text-center">
+          <p className="text-xl font-bold mb-2">Access Denied</p>
+          <p>{error}</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!data) return null;
+
+  const statCards = [
+    { label: "Total Users", value: data.totalUsers, color: "bg-blue-50 text-blue-700" },
+    { label: "Active Subscriptions", value: data.activeSubscriptions, color: "bg-green-50 text-green-700" },
+    { label: "Monthly Subscribers", value: data.monthlySubscribers, color: "bg-purple-50 text-purple-700" },
+    { label: "Yearly Subscribers", value: data.yearlySubscribers, color: "bg-indigo-50 text-indigo-700" },
+    {
+      label: "MRR (Monthly Recurring)",
+      value: `\u20AC${(data.mrr / 100).toFixed(2)}`,
+      color: "bg-emerald-50 text-emerald-700",
+    },
+    {
+      label: "Total Tips",
+      value: `\u20AC${(data.totalTipRevenue / 100).toFixed(2)}`,
+      color: "bg-amber-50 text-amber-700",
+    },
+    { label: "Total Flows", value: data.totalFlows, color: "bg-cyan-50 text-cyan-700" },
+    { label: "Total Documents", value: data.totalDocuments, color: "bg-rose-50 text-rose-700" },
+  ];
+
+  return (
+    <div className="max-w-6xl mx-auto p-4 space-y-8">
+      <h1 className="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
+
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {statCards.map((card) => (
+          <div key={card.label} className={`rounded-xl p-5 ${card.color}`}>
+            <p className="text-sm font-medium opacity-80">{card.label}</p>
+            <p className="text-2xl font-bold mt-1">{card.value}</p>
+          </div>
+        ))}
+      </div>
+
+      <div className="bg-white rounded-xl border border-gray-200 p-6">
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">Recent Users</h2>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-200">
+                <th className="text-left py-2 px-3 font-medium text-gray-600">Name</th>
+                <th className="text-left py-2 px-3 font-medium text-gray-600">Visa Type</th>
+                <th className="text-left py-2 px-3 font-medium text-gray-600">City</th>
+                <th className="text-left py-2 px-3 font-medium text-gray-600">Premium</th>
+                <th className="text-left py-2 px-3 font-medium text-gray-600">Joined</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.recentUsers.map((user) => (
+                <tr key={user.id} className="border-b border-gray-100 hover:bg-gray-50">
+                  <td className="py-2 px-3">{user.full_name || "N/A"}</td>
+                  <td className="py-2 px-3">{user.visa_type || "N/A"}</td>
+                  <td className="py-2 px-3">{user.city || "N/A"}</td>
+                  <td className="py-2 px-3">
+                    {user.is_premium ? (
+                      <span className="bg-amber-100 text-amber-800 text-xs px-2 py-1 rounded-full font-medium">
+                        Premium
+                      </span>
+                    ) : (
+                      <span className="bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded-full">
+                        Free
+                      </span>
+                    )}
+                  </td>
+                  <td className="py-2 px-3 text-gray-500">
+                    {new Date(user.created_at).toLocaleDateString()}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {data.recentTips.length > 0 && (
+        <div className="bg-white rounded-xl border border-gray-200 p-6">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Recent Tips</h2>
+          <div className="space-y-2">
+            {data.recentTips.map((tip, i) => (
+              <div
+                key={i}
+                className="flex items-center justify-between py-2 border-b border-gray-100"
+              >
+                <span className="text-gray-700 font-medium">
+                  {"\u20AC"}{(tip.amount / 100).toFixed(2)}
+                </span>
+                <span className="text-sm text-gray-500">
+                  {new Date(tip.created_at).toLocaleDateString()}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+========== src/app/globals.css ==========
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+========== tailwind.config.ts ==========
+import type { Config } from "tailwindcss";
+
+const config: Config = {
+  darkMode: 'class',
+  content: [
+    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+};
+
+export default config;

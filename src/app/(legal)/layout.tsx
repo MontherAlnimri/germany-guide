@@ -10,12 +10,12 @@ export default function LegalLayout({ children }: { children: React.ReactNode })
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <nav className="bg-white border-b border-gray-200 px-4 py-3">
-        <div className="max-w-4xl mx-auto flex items-center justify-between">
-          <Link href="/" className="text-xl font-bold text-blue-700">
+        <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0">
+          <Link href="/" className="text-lg sm:text-xl font-bold text-blue-700">
             {dict.common?.appName || "Germany Guide"}
           </Link>
-          <div className="flex items-center gap-4">
-            <div className="flex gap-4 text-sm">
+          <div className="flex items-center gap-3 sm:gap-4 flex-wrap">
+            <div className="flex gap-3 sm:gap-4 text-sm">
               <Link href="/privacy" className="text-gray-600 hover:text-blue-700">
                 {dict.privacy?.title || "Privacy"}
               </Link>
@@ -26,16 +26,16 @@ export default function LegalLayout({ children }: { children: React.ReactNode })
                 {dict.about?.title || "About"}
               </Link>
             </div>
-            <LanguageSwitcher />
+            <LanguageSwitcher compact />
           </div>
         </div>
       </nav>
-      <main className="max-w-4xl mx-auto px-4 py-8 flex-1">
+      <main className="max-w-4xl mx-auto w-full px-4 py-6 sm:py-8 flex-1">
         {children}
       </main>
       <footer className="bg-white border-t border-gray-200 px-4 py-6">
         <div className="max-w-4xl mx-auto text-center text-sm text-gray-500">
-          <div className="flex justify-center gap-4 mb-2">
+          <div className="flex flex-wrap justify-center gap-3 sm:gap-4 mb-2">
             <Link href="/privacy" className="hover:text-blue-700">
               {dict.privacy?.title || "Privacy Policy"}
             </Link>

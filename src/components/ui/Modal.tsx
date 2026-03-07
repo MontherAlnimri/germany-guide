@@ -14,16 +14,16 @@ export function Modal({ isOpen, onClose, title, children, size = "md" }: ModalPr
   }, [isOpen, onClose]);
   if (!isOpen) return null;
   return (
-    <div ref={overlayRef} className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+    <div ref={overlayRef} className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/50 backdrop-blur-sm"
       onClick={(e) => { if (e.target === overlayRef.current) onClose(); }}>
-      <div className={cn("w-full bg-white rounded-xl shadow-xl", sizeStyles[size])}>
+      <div className={cn("w-full bg-white shadow-xl sm:rounded-xl rounded-t-xl max-h-[90vh] flex flex-col", sizeStyles[size])}>
         {title && (
-          <div className="flex items-center justify-between px-6 py-4 border-b">
+          <div className="flex items-center justify-between px-4 sm:px-6 py-4 border-b flex-shrink-0">
             <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
-            <button onClick={onClose} className="p-1 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100">X</button>
+            <button onClick={onClose} className="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 min-w-[40px] min-h-[40px] flex items-center justify-center">X</button>
           </div>
         )}
-        <div className="p-6">{children}</div>
+        <div className="p-4 sm:p-6 overflow-y-auto flex-1">{children}</div>
       </div>
     </div>
   );

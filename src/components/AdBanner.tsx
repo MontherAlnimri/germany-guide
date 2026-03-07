@@ -16,9 +16,9 @@ export default function AdBanner({ slot, format = "horizontal", className = "" }
   if (loading || isPremium) return null;
 
   const sizeClasses = {
-    horizontal: "h-[90px] w-full max-w-[728px]",
-    vertical: "w-[160px] h-[600px]",
-    rectangle: "w-[300px] h-[250px]",
+    horizontal: "h-[60px] sm:h-[90px] w-full",
+    vertical: "w-full sm:w-[160px] h-[200px] sm:h-[600px]",
+    rectangle: "w-full sm:w-[300px] h-[200px] sm:h-[250px]",
   };
 
   return (
@@ -28,7 +28,7 @@ export default function AdBanner({ slot, format = "horizontal", className = "" }
       >
         <div className="text-center p-4">
           <p className="text-xs text-gray-400 mb-1">{dict.ads.placeholder}</p>
-          <p className="text-sm text-gray-500">
+          <p className="text-xs sm:text-sm text-gray-500">
             {dict.ads.hiddenForPremium}
           </p>
         </div>

@@ -73,91 +73,74 @@ export default function AdminPage() {
 
   const statCards = [
     { label: "Total Users", value: data.totalUsers, color: "bg-blue-50 text-blue-700" },
-    { label: "Active Subscriptions", value: data.activeSubscriptions, color: "bg-green-50 text-green-700" },
-    { label: "Monthly Subscribers", value: data.monthlySubscribers, color: "bg-purple-50 text-purple-700" },
-    { label: "Yearly Subscribers", value: data.yearlySubscribers, color: "bg-indigo-50 text-indigo-700" },
-    {
-      label: "MRR (Monthly Recurring)",
-      value: `\u20AC${(data.mrr / 100).toFixed(2)}`,
-      color: "bg-emerald-50 text-emerald-700",
-    },
-    {
-      label: "Total Tips",
-      value: `\u20AC${(data.totalTipRevenue / 100).toFixed(2)}`,
-      color: "bg-amber-50 text-amber-700",
-    },
-    { label: "Total Flows", value: data.totalFlows, color: "bg-cyan-50 text-cyan-700" },
-    { label: "Total Documents", value: data.totalDocuments, color: "bg-rose-50 text-rose-700" },
+    { label: "Active Subs", value: data.activeSubscriptions, color: "bg-green-50 text-green-700" },
+    { label: "Monthly", value: data.monthlySubscribers, color: "bg-purple-50 text-purple-700" },
+    { label: "Yearly", value: data.yearlySubscribers, color: "bg-indigo-50 text-indigo-700" },
+    { label: "MRR", value: `\u20AC${(data.mrr / 100).toFixed(2)}`, color: "bg-emerald-50 text-emerald-700" },
+    { label: "Total Tips", value: `\u20AC${(data.totalTipRevenue / 100).toFixed(2)}`, color: "bg-amber-50 text-amber-700" },
+    { label: "Flows", value: data.totalFlows, color: "bg-cyan-50 text-cyan-700" },
+    { label: "Documents", value: data.totalDocuments, color: "bg-rose-50 text-rose-700" },
   ];
 
   return (
-    <div className="max-w-6xl mx-auto p-4 space-y-8">
-      <h1 className="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
+    <div className="max-w-6xl mx-auto space-y-6 sm:space-y-8">
+      <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Admin Dashboard</h1>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4">
         {statCards.map((card) => (
-          <div key={card.label} className={`rounded-xl p-5 ${card.color}`}>
-            <p className="text-sm font-medium opacity-80">{card.label}</p>
-            <p className="text-2xl font-bold mt-1">{card.value}</p>
+          <div key={card.label} className={`rounded-xl p-3 sm:p-5 ${card.color}`}>
+            <p className="text-xs sm:text-sm font-medium opacity-80 truncate">{card.label}</p>
+            <p className="text-lg sm:text-2xl font-bold mt-1">{card.value}</p>
           </div>
         ))}
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Recent Users</h2>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-gray-200">
-                <th className="text-left py-2 px-3 font-medium text-gray-600">Name</th>
-                <th className="text-left py-2 px-3 font-medium text-gray-600">Visa Type</th>
-                <th className="text-left py-2 px-3 font-medium text-gray-600">City</th>
-                <th className="text-left py-2 px-3 font-medium text-gray-600">Premium</th>
-                <th className="text-left py-2 px-3 font-medium text-gray-600">Joined</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.recentUsers.map((user) => (
-                <tr key={user.id} className="border-b border-gray-100 hover:bg-gray-50">
-                  <td className="py-2 px-3">{user.full_name || "N/A"}</td>
-                  <td className="py-2 px-3">{user.visa_type || "N/A"}</td>
-                  <td className="py-2 px-3">{user.city || "N/A"}</td>
-                  <td className="py-2 px-3">
-                    {user.is_premium ? (
-                      <span className="bg-amber-100 text-amber-800 text-xs px-2 py-1 rounded-full font-medium">
-                        Premium
-                      </span>
-                    ) : (
-                      <span className="bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded-full">
-                        Free
-                      </span>
-                    )}
-                  </td>
-                  <td className="py-2 px-3 text-gray-500">
-                    {new Date(user.created_at).toLocaleDateString()}
-                  </td>
+      <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6">
+        <h2 className="text-base sm:text-lg font-semibold text-gray-900 mb-4">Recent Users</h2>
+        <div className="overflow-x-auto -mx-4 sm:mx-0">
+          <div className="min-w-[600px] px-4 sm:px-0">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-gray-200">
+                  <th className="text-left py-2 px-3 font-medium text-gray-600">Name</th>
+                  <th className="text-left py-2 px-3 font-medium text-gray-600">Visa</th>
+                  <th className="text-left py-2 px-3 font-medium text-gray-600">City</th>
+                  <th className="text-left py-2 px-3 font-medium text-gray-600">Plan</th>
+                  <th className="text-left py-2 px-3 font-medium text-gray-600">Joined</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {data.recentUsers.map((user) => (
+                  <tr key={user.id} className="border-b border-gray-100 hover:bg-gray-50">
+                    <td className="py-2 px-3 whitespace-nowrap">{user.full_name || "N/A"}</td>
+                    <td className="py-2 px-3 whitespace-nowrap">{user.visa_type || "N/A"}</td>
+                    <td className="py-2 px-3 whitespace-nowrap">{user.city || "N/A"}</td>
+                    <td className="py-2 px-3">
+                      {user.is_premium ? (
+                        <span className="bg-amber-100 text-amber-800 text-xs px-2 py-1 rounded-full font-medium">Premium</span>
+                      ) : (
+                        <span className="bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded-full">Free</span>
+                      )}
+                    </td>
+                    <td className="py-2 px-3 text-gray-500 whitespace-nowrap">
+                      {new Date(user.created_at).toLocaleDateString()}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
 
       {data.recentTips.length > 0 && (
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Recent Tips</h2>
+        <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6">
+          <h2 className="text-base sm:text-lg font-semibold text-gray-900 mb-4">Recent Tips</h2>
           <div className="space-y-2">
             {data.recentTips.map((tip, i) => (
-              <div
-                key={i}
-                className="flex items-center justify-between py-2 border-b border-gray-100"
-              >
-                <span className="text-gray-700 font-medium">
-                  {"\u20AC"}{(tip.amount / 100).toFixed(2)}
-                </span>
-                <span className="text-sm text-gray-500">
-                  {new Date(tip.created_at).toLocaleDateString()}
-                </span>
+              <div key={i} className="flex items-center justify-between py-2 border-b border-gray-100">
+                <span className="text-gray-700 font-medium">{"\u20AC"}{(tip.amount / 100).toFixed(2)}</span>
+                <span className="text-sm text-gray-500">{new Date(tip.created_at).toLocaleDateString()}</span>
               </div>
             ))}
           </div>

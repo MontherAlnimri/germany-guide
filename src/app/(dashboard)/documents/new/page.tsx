@@ -55,19 +55,19 @@ export default function NewDocumentPage() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-4">
+    <div className="max-w-2xl mx-auto">
       <button
         onClick={() => router.push("/documents")}
-        className="text-sm text-blue-600 hover:text-blue-800 mb-4 inline-block"
+        className="text-sm text-blue-600 hover:text-blue-800 mb-4 inline-flex items-center gap-1 min-h-[44px]"
       >
-        {'\u2190'} {dict.docs?.backToDocuments || "Back to Documents"}
+        {"\u2190"} {dict.docs?.backToDocuments || "Back to Documents"}
       </button>
 
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">
+      <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6">
         {dict.docs?.addNewDocument || "Add New Document"}
       </h1>
 
-      <div className="bg-white rounded-xl border border-gray-200 p-6 space-y-5">
+      <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6 space-y-5">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             {dict.docs?.docType || "Document Type"}
@@ -75,7 +75,7 @@ export default function NewDocumentPage() {
           <select
             value={docType}
             onChange={(e) => setDocType(e.target.value)}
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white min-h-[44px]"
           >
             <option value="">{dict.docs?.selectDocType || "Select document type"}</option>
             {DOCUMENT_TYPES.map((t) => (
@@ -93,11 +93,11 @@ export default function NewDocumentPage() {
             value={docName}
             onChange={(e) => setDocName(e.target.value)}
             placeholder={dict.docs?.enterDocName || "Enter document name"}
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 min-h-[44px]"
           />
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               {dict.docs?.issueDate || "Issue Date"}
@@ -106,7 +106,7 @@ export default function NewDocumentPage() {
               type="date"
               value={issueDate}
               onChange={(e) => setIssueDate(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 min-h-[44px]"
             />
           </div>
           <div>
@@ -117,7 +117,7 @@ export default function NewDocumentPage() {
               type="date"
               value={expiryDate}
               onChange={(e) => setExpiryDate(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 min-h-[44px]"
             />
           </div>
         </div>
@@ -129,7 +129,7 @@ export default function NewDocumentPage() {
           <select
             value={status}
             onChange={(e) => setStatus(e.target.value)}
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white min-h-[44px]"
           >
             <option value="valid">{dict.docs?.valid || "Valid"}</option>
             <option value="pending">{dict.docs?.pending || "Pending"}</option>
@@ -147,14 +147,14 @@ export default function NewDocumentPage() {
             onChange={(e) => setNotes(e.target.value)}
             placeholder={dict.docs?.notesPlaceholder || "Add notes about this document..."}
             rows={3}
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           />
         </div>
 
         <button
           onClick={handleSave}
           disabled={!docType || !docName || saving}
-          className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed min-h-[48px]"
         >
           {saving
             ? dict.common?.loading || "Saving..."
