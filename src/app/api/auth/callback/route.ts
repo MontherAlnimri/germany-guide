@@ -8,19 +8,8 @@ export async function GET(request: Request) {
 
   if (code) {
     const supabase = await createClient();
-    const { data, error } = await supabase.auth.exchangeCodeForSession(code);
-
+    const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
-      const session = data?.session;
-      if (session) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const raw = session as any;
-        const amr = raw?.user?.amr as { method: string }[] | undefined;
-        const isRecovery = amr?.some((a) => a.method === "otp" || a.method === "recovery");
-        if (isRecovery && next === "/dashboard") {
-          return NextResponse.redirect(origin + "/reset-password");
-        }
-      }
       return NextResponse.redirect(origin + next);
     }
   }
