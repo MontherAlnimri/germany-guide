@@ -34,10 +34,10 @@ export default function LoginPage() {
 
   return (
     <div className="w-full max-w-md">
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
-        <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">{dict.auth.loginTitle}</h1>
-          <p className="text-gray-600 mt-2">{dict.auth.loginSubtitle}</p>
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8">
+        <div className="text-center mb-6 sm:mb-8">
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">{dict.auth.loginTitle}</h1>
+          <p className="text-gray-600 mt-2 text-sm sm:text-base">{dict.auth.loginSubtitle}</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -51,18 +51,26 @@ export default function LoginPage() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition min-h-[44px]"
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">{dict.auth.password}</label>
+            <div className="flex items-center justify-between mb-1">
+              <label className="block text-sm font-medium text-gray-700">{dict.auth.password}</label>
+              <Link
+                href="/forgot-password"
+                className="text-xs text-blue-600 hover:text-blue-700 font-medium"
+              >
+                {dict.auth.forgotPassword}
+              </Link>
+            </div>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition min-h-[44px]"
               required
             />
           </div>
@@ -70,7 +78,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2.5 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-colors disabled:opacity-50"
+            className="w-full py-2.5 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 min-h-[48px]"
           >
             {loading ? dict.common.loading : dict.auth.signIn}
           </button>

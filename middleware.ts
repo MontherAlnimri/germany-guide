@@ -1,7 +1,7 @@
 ﻿import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-const PUBLIC_ROUTES = ["/", "/login", "/register", "/api/reminders"];
+const PUBLIC_ROUTES = ["/", "/login", "/register", "/forgot-password", "/reset-password", "/api/reminders"];
 const AUTH_ROUTES = ["/login", "/register"];
 
 export async function middleware(request: NextRequest) {
@@ -25,7 +25,7 @@ export async function middleware(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser();
   const { pathname } = request.nextUrl;
 
-  if (!user && !PUBLIC_ROUTES.some((route) => pathname === route) && !pathname.startsWith("/api/")) {
+  if (!user && !PUBLIC_ROUTES.some((route) => pathname === route) && !pathname.startsWith("/api/") && !pathname.startsWith("/privacy") && !pathname.startsWith("/terms") && !pathname.startsWith("/about")) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     url.searchParams.set("redirectTo", pathname);
