@@ -11,14 +11,13 @@ export async function GET(request: Request) {
     const { data, error } = await supabase.auth.exchangeCodeForSession(code);
 
     if (!error) {
-      // Check if this is a recovery flow
-      // Supabase sets the session user with a recovery AMR claim
       const session = data?.session;
       if (session) {
-        const amr = session.user?.amr;
-        const isRecovery = amr?.some((a: { method: string }) => a.method === "otp" || a.method === "recovery");
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const raw = session as any;
+        const amr = raw?.user?.amr as { method: string }[] | undefined;
+        const isRecovery = amr?.some((a) => a.method === "otp" || a.method === "recovery");
         if (isRecovery && next === "/dashboard") {
-          // User came from password reset email, redirect to reset page
           return NextResponse.redirect(origin + "/reset-password");
         }
       }
