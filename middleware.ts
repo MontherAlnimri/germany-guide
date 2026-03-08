@@ -5,6 +5,17 @@ const PUBLIC_ROUTES = ["/", "/login", "/register", "/forgot-password", "/reset-p
 const AUTH_ROUTES = ["/login", "/register"];
 
 export async function middleware(request: NextRequest) {
+  const { pathname, searchParams } = request.nextUrl;
+
+  // Handle Supabase PKCE code redirect on root
+  const code = searchParams.get("code");
+  if (code && pathname === "/") {
+    const url = request.nextUrl.clone();
+    url.pathname = "/api/auth/callback";
+    // Preserve all search params including code
+    return NextResponse.redirect(url);
+  }
+
   let supabaseResponse = NextResponse.next({ request });
 
   const supabase = createServerClient(
@@ -23,7 +34,6 @@ export async function middleware(request: NextRequest) {
   );
 
   const { data: { user } } = await supabase.auth.getUser();
-  const { pathname } = request.nextUrl;
 
   if (!user && !PUBLIC_ROUTES.some((route) => pathname === route) && !pathname.startsWith("/api/") && !pathname.startsWith("/privacy") && !pathname.startsWith("/terms") && !pathname.startsWith("/about")) {
     const url = request.nextUrl.clone();
