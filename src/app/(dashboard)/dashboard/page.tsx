@@ -312,7 +312,7 @@ export default function DashboardPage() {
                       <p className="text-sm font-medium text-gray-900 truncate">{d.title}</p>
                       <p className="text-xs text-gray-500">{d.due_date}</p>
                     </div>
-                    <Badge variant={daysUntil <= 3 ? 'error' : daysUntil <= 7 ? 'warning' : 'success'} className="flex-shrink-0">
+                    <Badge variant={daysUntil <= 3 ? 'danger' : daysUntil <= 7 ? 'warning' : 'success'} className="flex-shrink-0">
                       {daysUntil}d
                     </Badge>
                   </div>
