@@ -249,7 +249,7 @@ export default function DashboardPage() {
             />
             <UsageBar
               isPremium={isPremium}
-              label={dict.dashboard?.documents ?? 'Documents'}
+              label={dict.dashboard?.totalDocuments ?? 'Documents'}
               current={stats.totalDocuments}
               max={10}
             />
