@@ -89,5 +89,17 @@ const de = {
     ctaContent: "Schlie\u00dfen Sie sich Tausenden an, die sicher durch ihren Weg in Deutschland navigieren.",
     ctaButton: "Kostenlos starten"
   },
-} as unknown as Dictionary;
+
+  verification: {
+    bannerTitle: 'E-Mail nicht verifiziert',
+    bannerDesc: 'Bitte verifizieren Sie Ihre E-Mail-Adresse, um alle Funktionen nutzen zu können. Prüfen Sie Ihren Posteingang.',
+    resendButton: 'E-Mail erneut senden',
+    sentButton: 'Gesendet',
+    resent: 'Bestätigungs-E-Mail gesendet! Prüfen Sie Ihren Posteingang.',
+    checkEmailTitle: 'Prüfen Sie Ihre E-Mail',
+    checkEmailDesc: 'Wir haben einen Bestätigungslink gesendet an:',
+    checkEmailHint: 'Klicken Sie auf den Link in der E-Mail, um Ihr Konto zu verifizieren, und melden Sie sich dann an.',
+    verified: 'E-Mail verifiziert',
+    notVerified: 'E-Mail nicht verifiziert',
+  },} as unknown as Dictionary;
 export default de;

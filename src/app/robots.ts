@@ -1,12 +1,14 @@
-﻿import type { MetadataRoute } from "next";
+import { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: {
-      userAgent: "*",
-      allow: "/",
-      disallow: ["/dashboard/", "/flow/", "/documents/", "/deadlines/", "/onboarding/", "/api/"],
-    },
+    rules: [
+      {
+        userAgent: "*",
+        allow: "/",
+        disallow: ["/api/", "/dashboard/", "/admin/", "/onboarding/"],
+      },
+    ],
     sitemap: "https://my-germany-guide.vercel.app/sitemap.xml",
   };
 }

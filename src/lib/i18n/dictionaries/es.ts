@@ -89,5 +89,17 @@ const es = {
     ctaContent: "\u00danase a miles de usuarios que navegan con confianza por su camino en Alemania.",
     ctaButton: "Comenzar gratis"
   },
-} as unknown as Dictionary;
+
+  verification: {
+    bannerTitle: 'Correo no verificado',
+    bannerDesc: 'Verifique su correo electrónico para acceder a todas las funciones. Revise su bandeja de entrada.',
+    resendButton: 'Reenviar correo',
+    sentButton: 'Enviado',
+    resent: 'Correo de verificación enviado. Revise su bandeja de entrada.',
+    checkEmailTitle: 'Revise su correo',
+    checkEmailDesc: 'Hemos enviado un enlace de verificación a:',
+    checkEmailHint: 'Haga clic en el enlace del correo para verificar su cuenta y luego inicie sesión.',
+    verified: 'Correo verificado',
+    notVerified: 'Correo no verificado',
+  },} as unknown as Dictionary;
 export default es;

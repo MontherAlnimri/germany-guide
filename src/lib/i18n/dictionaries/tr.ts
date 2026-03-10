@@ -89,5 +89,17 @@ const tr = {
     ctaContent: "Almanya yolculu\u011funda g\u00fcvenle ilerleyen binlerce kullan\u0131c\u0131ya kat\u0131l\u0131n.",
     ctaButton: "\u00dccretsiz Ba\u015flay\u0131n"
   },
-} as unknown as Dictionary;
+
+  verification: {
+    bannerTitle: 'E-posta dogrulanmadi',
+    bannerDesc: 'Tüm özelliklere erismek için e-posta adresinizi dogrulayin. Gelen kutunuzu kontrol edin.',
+    resendButton: 'Tekrar Gönder',
+    sentButton: 'Gönderildi',
+    resent: 'Dogrulama e-postasi gönderildi! Gelen kutunuzu kontrol edin.',
+    checkEmailTitle: 'E-postanizi kontrol edin',
+    checkEmailDesc: 'Dogrulama baglantisinizi su adrese gönderdik:',
+    checkEmailHint: 'Hesabinizi dogrulamak için e-postadaki baglantiya tiklayin, ardindan giris yapin.',
+    verified: 'E-posta dogrulandi',
+    notVerified: 'E-posta dogrulanmadi',
+  },} as unknown as Dictionary;
 export default tr;

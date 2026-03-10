@@ -89,5 +89,17 @@ const hu = {
     ctaContent: "Csatlakozzon azokhoz az ezrekhez, akik magabiztosan navig\u00e1lnak n\u00e9metorsz\u00e1gi \u00fatjukon.",
     ctaButton: "Kezdje ingyenesen"
   },
-} as unknown as Dictionary;
+
+  verification: {
+    bannerTitle: 'E-mail nincs megerősítve',
+    bannerDesc: 'Kérjük, erősítse meg e-mail címét az összes funkció eléréséhez.',
+    resendButton: 'Újraküldés',
+    sentButton: 'Elküldve',
+    resent: 'Megerősítő e-mail elküldve! Ellenőrizze bejövő üzeneteit.',
+    checkEmailTitle: 'Ellenőrizze e-mailjét',
+    checkEmailDesc: 'Megerősítő linket küldtünk:',
+    checkEmailHint: 'Kattintson a linkre a megerősítéshez, majd jelentkezzen be.',
+    verified: 'E-mail megerősítve',
+    notVerified: 'E-mail nincs megerősítve',
+  },} as unknown as Dictionary;
 export default hu;

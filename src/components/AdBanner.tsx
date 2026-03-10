@@ -1,38 +1,56 @@
-﻿"use client";
+"use client";
 
+import { useEffect, useState } from "react";
 import { useSubscription } from "@/hooks/useSubscription";
-import { useDict } from "@/lib/i18n/context";
+import { usePathname } from "next/navigation";
+
+// Only show ads on these content-rich paths
+const ALLOWED_AD_PATHS = [
+  "/dashboard",
+  "/flow",
+  "/documents",
+  "/deadlines",
+];
 
 interface AdBannerProps {
   slot?: string;
-  format?: "horizontal" | "vertical" | "rectangle";
+  format?: "auto" | "horizontal" | "vertical" | "rectangle";
   className?: string;
 }
 
-export default function AdBanner({ slot, format = "horizontal", className = "" }: AdBannerProps) {
-  const { isPremium, loading } = useSubscription();
-  const dict = useDict();
+export default function AdBanner({
+  slot = "auto",
+  format = "auto",
+  className = "",
+}: AdBannerProps) {
+  const { isPremium } = useSubscription();
+  const pathname = usePathname();
+  const [shouldShow, setShouldShow] = useState(false);
 
-  if (loading || isPremium) return null;
+  useEffect(() => {
+    // Check if current path is allowed for ads
+    const isAllowed = ALLOWED_AD_PATHS.some(
+      (p) => pathname === p || pathname.startsWith(p + "/")
+    );
+    setShouldShow(isAllowed);
+  }, [pathname]);
 
-  const sizeClasses = {
-    horizontal: "h-[60px] sm:h-[90px] w-full",
-    vertical: "w-full sm:w-[160px] h-[200px] sm:h-[600px]",
-    rectangle: "w-full sm:w-[300px] h-[200px] sm:h-[250px]",
-  };
+  // Never show ads to premium users
+  if (isPremium) return null;
+
+  // Never show ads on non-content pages
+  if (!shouldShow) return null;
 
   return (
-    <div className={`flex flex-col items-center ${className}`}>
-      <div
-        className={`${sizeClasses[format]} bg-gradient-to-r from-gray-100 to-gray-50 border border-gray-200 rounded-lg flex items-center justify-center`}
-      >
-        <div className="text-center p-4">
-          <p className="text-xs text-gray-400 mb-1">{dict.ads.placeholder}</p>
-          <p className="text-xs sm:text-sm text-gray-500">
-            {dict.ads.hiddenForPremium}
-          </p>
-        </div>
-      </div>
+    <div className={`ad-container w-full flex justify-center my-4 ${className}`}>
+      <ins
+        className="adsbygoogle"
+        style={{ display: "block", width: "100%" }}
+        data-ad-client="ca-pub-3388930204483365"
+        data-ad-slot={slot}
+        data-ad-format={format}
+        data-full-width-responsive="true"
+      />
     </div>
   );
 }

@@ -416,6 +416,19 @@
     ctaContent: "Create your free account and let us guide you through the process.",
     ctaButton: "Get Started Free",
   },
+
+  verification: {
+    bannerTitle: 'Email not verified',
+    bannerDesc: 'Please verify your email address to access all features. Check your inbox for the verification link.',
+    resendButton: 'Resend Email',
+    sentButton: 'Sent',
+    resent: 'Verification email sent! Check your inbox.',
+    checkEmailTitle: 'Check your email',
+    checkEmailDesc: 'We sent a verification link to:',
+    checkEmailHint: 'Click the link in the email to verify your account, then sign in.',
+    verified: 'Email verified',
+    notVerified: 'Email not verified',
+  },
 };
 
 export type Dictionary = typeof en;

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { useState, Suspense } from "react";
@@ -7,6 +7,7 @@ import { useDict } from "@/lib/i18n/context";
 import LanguageSwitcher from "@/components/i18n/LanguageSwitcher";
 import LegalFooter from "@/components/layout/LegalFooter";
 import StructuredData from "@/components/StructuredData";
+import { FeaturedGuides, FAQSection } from "@/components/FeaturedGuidesAndFAQ";
 
 export default function LandingPage() {
   const dict = useDict();
@@ -196,6 +197,8 @@ export default function LandingPage() {
           </div>
         </section>
 
+        <FeaturedGuides />
+        <FAQSection />
         <LegalFooter />
       </div>
     </>

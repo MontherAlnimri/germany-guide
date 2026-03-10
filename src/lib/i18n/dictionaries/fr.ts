@@ -89,5 +89,17 @@ const fr = {
     ctaContent: "Rejoignez des milliers d\u2019utilisateurs qui naviguent en toute confiance dans leur parcours en Allemagne.",
     ctaButton: "Commencer gratuitement"
   },
-} as unknown as Dictionary;
+
+  verification: {
+    bannerTitle: 'E-mail non vérifié',
+    bannerDesc: 'Veuillez vérifier votre adresse e-mail pour accéder à toutes les fonctionnalités.',
+    resendButton: 'Renvoyer',
+    sentButton: 'Envoyé',
+    resent: 'E-mail de vérification envoyé ! Consultez votre boîte de réception.',
+    checkEmailTitle: 'Vérifiez votre e-mail',
+    checkEmailDesc: 'Nous avons envoyé un lien de vérification à :',
+    checkEmailHint: 'Cliquez sur le lien pour vérifier votre compte, puis connectez-vous.',
+    verified: 'E-mail vérifié',
+    notVerified: 'E-mail non vérifié',
+  },} as unknown as Dictionary;
 export default fr;
