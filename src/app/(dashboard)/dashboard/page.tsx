@@ -77,12 +77,7 @@ export default function DashboardPage() {
       const [flowsRes, docsRes, deadlinesRes] = await Promise.all([
         supabase
           .from('flow_instances')
-          .select(`
-            id, status, progress, created_at, step_snapshot,
-            flow_variant:flow_variants(
-              base_flow:base_flows(title, icon)
-            )
-          `)
+          .select('id, status, progress, created_at, step_snapshot, flow_variant:flow_variants(base_flow:base_flows(title, icon))')
           .eq('user_id', user!.id)
           .order('updated_at', { ascending: false })
           .limit(5),
@@ -172,10 +167,10 @@ export default function DashboardPage() {
 
       <div>
         <h1 className="text-xl sm:text-2xl font-bold text-gray-900 truncate">
-          {dict.dashboard?.welcome ?? 'Welcome'}{profile?.full_name ? `, ${profile.full_name}` : ''}!
+          {dict.dashboard?.welcome ?? 'Welcome back'}{profile?.full_name ? `, ${profile.full_name}` : ''}!
         </h1>
         <p className="text-gray-600 text-sm mt-1">
-          {dict.dashboard?.overview ?? 'Your progress overview'}
+          {dict.dashboard?.yourProgress ?? 'Your progress overview'}
         </p>
       </div>
 
@@ -236,21 +231,25 @@ export default function DashboardPage() {
               {stats.completedSteps}/{stats.totalSteps} {dict.dashboard?.completedSteps ?? 'steps completed'}
             </span>
           </div>
-          <ProgressBar value={overallProgress} />
+          <ProgressBar value={overallProgress} showLabel={false} />
         </Card>
       )}
 
       {!isPremium && (
         <Card className="p-4 sm:p-6">
           <h2 className="text-base sm:text-lg font-semibold text-gray-900 mb-3">
-            {dict.dashboard?.overview ?? 'Usage Limits'}
+            {dict.dashboard?.overview ?? 'Usage'}
           </h2>
           <div className="space-y-3">
-            <UsageBar`n              isPremium={isPremium}`n              label={dict.dashboard?.activeFlows ?? 'Flows used'}
+            <UsageBar
+              isPremium={isPremium}
+              label={dict.dashboard?.activeFlows ?? 'Flows used'}
               current={stats.activeFlows}
               max={3}
             />
-            <UsageBar`n              isPremium={isPremium}`n              label={dict.dashboard?.totalDocuments ?? 'Documents used'}
+            <UsageBar
+              isPremium={isPremium}
+              label={dict.dashboard?.documents ?? 'Documents'}
               current={stats.totalDocuments}
               max={10}
             />
@@ -347,12 +346,12 @@ export default function DashboardPage() {
                     <p className="text-xs text-gray-500 truncate">
                       {flow.status === 'completed'
                         ? (dict.flows?.completed ?? 'Completed')
-                        : `${flow.progress}% ${dict.flows?.complete ?? 'complete'}`}
+                        : `${flow.progress}% ${dict.flows?.inProgress ?? 'complete'}`}
                     </p>
                   </div>
                 </div>
                 <div className="flex-shrink-0 w-16 sm:w-24">
-                  <ProgressBar value={flow.progress} />
+                  <ProgressBar value={flow.progress} showLabel={false} size="sm" />
                 </div>
               </button>
             ))}
