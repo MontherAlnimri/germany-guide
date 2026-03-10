@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -246,13 +246,11 @@ export default function DashboardPage() {
             {dict.dashboard?.overview ?? 'Usage Limits'}
           </h2>
           <div className="space-y-3">
-            <UsageBar
-              label={dict.dashboard?.activeFlows ?? 'Flows used'}
+            <UsageBar`n              isPremium={isPremium}`n              label={dict.dashboard?.activeFlows ?? 'Flows used'}
               current={stats.activeFlows}
               max={3}
             />
-            <UsageBar
-              label={dict.dashboard?.totalDocuments ?? 'Documents used'}
+            <UsageBar`n              isPremium={isPremium}`n              label={dict.dashboard?.totalDocuments ?? 'Documents used'}
               current={stats.totalDocuments}
               max={10}
             />
