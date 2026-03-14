@@ -201,7 +201,7 @@ export default function SettingsPage() {
               {isPremium ? (
                 <Badge variant="warning">{"\u2B50"} {dict?.premium?.premiumBadge ?? "Premium"}</Badge>
               ) : (
-                <Badge variant="default">{dict?.premium?.free ?? "Free"}</Badge>
+                <Badge variant="neutral">{dict?.premium?.free ?? "Free"}</Badge>
               )}
               {isPremium ? (
                 <button
