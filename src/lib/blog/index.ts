@@ -1,4 +1,4 @@
-import { BlogPost } from "./types";
+﻿import { BlogPost } from "./types";
 import postAnmeldung from "./post-anmeldung";
 import postHealthInsurance from "./post-health-insurance";
 import postBankAccount from "./post-bank-account";
@@ -28,7 +28,7 @@ export function getBlogPostsByCategory(category: string): BlogPost[] {
 }
 
 export function getAllCategories(): string[] {
-  return [...new Set(blogPosts.map((p) => p.category))];
+  return Array.from(new Set(blogPosts.map((p) => p.category)));
 }
 
 export function getRelatedPosts(slug: string, limit = 3): BlogPost[] {
