@@ -1,8 +1,8 @@
 ﻿"use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { useDict } from "@/lib/i18n/context";
 
@@ -13,23 +13,59 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showVerificationMessage, setShowVerificationMessage] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    setShowVerificationMessage(false);
     setLoading(true);
 
     const supabase = createClient();
-    const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+    const { data, error: signInError } = await supabase.auth.signInWithPassword({ email, password });
 
     if (signInError) {
-      setError(signInError.message);
+      // Supabase returns "Email not confirmed" when user has not verified
+      if (signInError.message.toLowerCase().includes("email not confirmed")) {
+        setShowVerificationMessage(true);
+      } else {
+        setError(signInError.message);
+      }
+      setLoading(false);
+      return;
+    }
+
+    // Double-check: if sign-in succeeded but email is not confirmed
+    // (this can happen if Supabase settings allow sign-in before confirmation)
+    if (data.user && !data.user.email_confirmed_at) {
+      setShowVerificationMessage(true);
+      await supabase.auth.signOut();
       setLoading(false);
       return;
     }
 
     router.push("/dashboard");
     router.refresh();
+  };
+
+  const handleResendVerification = async () => {
+    if (!email) return;
+    setLoading(true);
+    const supabase = createClient();
+    const { error: resendError } = await supabase.auth.resend({
+      type: "signup",
+      email,
+      options: {
+        emailRedirectTo: `${window.location.origin}/api/auth/callback?next=/dashboard`,
+      },
+    });
+    setLoading(false);
+    if (resendError) {
+      setError(resendError.message);
+    } else {
+      setError("");
+      setShowVerificationMessage(true);
+    }
   };
 
   return (
@@ -39,6 +75,34 @@ export default function LoginPage() {
           <h1 className="text-xl sm:text-2xl font-bold text-gray-900">{dict.auth.loginTitle}</h1>
           <p className="text-gray-600 mt-2 text-sm sm:text-base">{dict.auth.loginSubtitle}</p>
         </div>
+
+        {showVerificationMessage && (
+          <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-4">
+            <div className="flex items-start gap-3">
+              <span className="text-amber-500 text-xl flex-shrink-0">{"\uD83D\uDCE7"}</span>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-semibold text-amber-800">
+                  {dict.verification?.checkEmailTitle ?? "Check your email"}
+                </p>
+                <p className="text-sm text-amber-700 mt-1">
+                  {dict.verification?.checkEmailDesc ?? "We sent a verification link to:"}
+                </p>
+                <p className="text-sm font-medium text-amber-900 mt-1">{email}</p>
+                <p className="text-xs text-amber-600 mt-2">
+                  {dict.verification?.checkEmailHint ?? "Click the link in the email to verify your account, then sign in."}
+                </p>
+                <button
+                  type="button"
+                  onClick={handleResendVerification}
+                  disabled={loading}
+                  className="mt-3 text-sm text-blue-600 hover:text-blue-700 font-medium disabled:opacity-50"
+                >
+                  {dict.verification?.resendButton ?? "Resend verification email"}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {error && (

@@ -93,7 +93,7 @@ export default function Navbar() {
                   onClick={() => router.push('/premium')}
                   className="text-xs sm:text-sm font-medium text-blue-600 hover:text-blue-700 min-h-[44px] flex items-center"
                 >
-                  {dict.premium?.upgrade ?? 'Upgrade'}
+                  {dict.premium?.upgradeNow ?? 'Upgrade'}
                 </button>
               )}
 
@@ -138,14 +138,14 @@ export default function Navbar() {
                   onClick={() => { router.push('/premium'); setMobileMenuOpen(false); }}
                   className="w-full text-left px-3 py-2 text-sm text-blue-600 font-medium rounded-lg hover:bg-blue-50 min-h-[44px]"
                 >
-                  {"\u2B50"} {dict.premium?.upgrade ?? 'Upgrade to Premium'}
+                  {"\u2B50"} {dict.premium?.upgradeNow ?? 'Upgrade to Premium'}
                 </button>
               )}
               <button
                 onClick={() => { router.push('/support'); setMobileMenuOpen(false); }}
                 className="w-full text-left px-3 py-2 text-sm text-gray-600 rounded-lg hover:bg-gray-50 min-h-[44px]"
               >
-                {"\uD83D\uDC9D"} {dict.nav?.support ?? 'Support Us'}
+                {"\uD83D\uDC9D"} {dict.support?.title ?? 'Support Us'}
               </button>
               <button
                 onClick={handleSignOut}
