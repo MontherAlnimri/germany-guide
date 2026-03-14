@@ -44,9 +44,68 @@ export default function OnboardingPage() {
     return visaDict?.[key] || key;
   };
 
+  const autoStartFlow = async (userId: string, userVisaType: string, userAppType: string) => {
+    try {
+      const supabase = createClient();
+
+      // Find matching flow variant for this user's visa type + application type
+      const { data: matchingVariants } = await supabase
+        .from("flow_variants")
+        .select("id")
+        .eq("visa_type", userVisaType)
+        .eq("first_vs_renewal", userAppType);
+
+      if (!matchingVariants || matchingVariants.length === 0) return null;
+
+      // Check if user already has an instance for this variant
+      const variantId = matchingVariants[0].id;
+      const { data: existingInstances } = await supabase
+        .from("flow_instances")
+        .select("id")
+        .eq("user_id", userId)
+        .eq("flow_variant_id", variantId);
+
+      if (existingInstances && existingInstances.length > 0) {
+        // Already started — go to that flow
+        return existingInstances[0].id;
+      }
+
+      // Fetch the steps for this variant
+      const { data: steps } = await supabase
+        .from("flow_steps")
+        .select("*")
+        .eq("flow_variant_id", variantId)
+        .order("step_order");
+
+      const snapshot = (steps || []).map((s) => ({
+        ...s,
+        is_done: false,
+        user_notes: "",
+      }));
+
+      // Create the flow instance
+      const { data: instance } = await supabase
+        .from("flow_instances")
+        .insert({
+          user_id: userId,
+          flow_variant_id: variantId,
+          status: "in_progress",
+          progress: 0,
+          step_snapshot: snapshot,
+        })
+        .select("id")
+        .single();
+
+      return instance?.id || null;
+    } catch (err) {
+      console.error("Auto-start flow error:", err);
+      return null;
+    }
+  };
+
   const handleSubmit = async () => {
     if (!fullName || !visaType || !applicationType) {
-      setError("Please fill in all required fields");
+      setError(dict?.onboarding?.step1Desc ?? "Please fill in all required fields");
       return;
     }
     if (!city) {
@@ -58,6 +117,7 @@ export default function OnboardingPage() {
     const supabase = createClient();
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
+
     const { error: updateError } = await supabase.from("profiles").update({
       full_name: fullName,
       visa_type: visaType,
@@ -67,11 +127,24 @@ export default function OnboardingPage() {
       visa_expiry_date: visaExpiry || null,
       onboarding_complete: true,
     }).eq("id", user.id);
+
     if (updateError) {
       setError(updateError.message);
       setLoading(false);
       return;
     }
+
+    // If this is the first onboarding (not an update), auto-start the first flow
+    if (!isUpdate) {
+      const flowInstanceId = await autoStartFlow(user.id, visaType, applicationType);
+      if (flowInstanceId) {
+        router.push(`/flow/${flowInstanceId}`);
+        router.refresh();
+        return;
+      }
+    }
+
+    // Fallback: go to dashboard
     router.push("/dashboard");
     router.refresh();
   };
