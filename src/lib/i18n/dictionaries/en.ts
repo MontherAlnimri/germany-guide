@@ -90,6 +90,18 @@
     resendConfirmation: string;
     confirmationResent: string;
     backToLogin: string;
+    loginSubtitle: string;
+    signIn: string;
+    createOne: string;
+    forgotPasswordSubtitle: string;
+    sendResetLink: string;
+    resetLinkSent: string;
+    resetLinkSentDesc: string;
+    resetPasswordSubtitle: string;
+    resetPassword: string;
+    passwordHint: string;
+    passwordResetSuccess: string;
+    passwordResetSuccessDesc: string;
     errors: {
       invalidCredentials: string;
       emailInUse: string;
@@ -589,6 +601,18 @@ const en: Dictionary = {
     resendConfirmation: "Resend verification email",
     confirmationResent: "Verification email sent!",
     backToLogin: "Back to login",
+    loginSubtitle: "Sign in to your account to continue",
+    signIn: "Sign In",
+    createOne: "Create one",
+    forgotPasswordSubtitle: "Enter your email and we will send you a reset link.",
+    sendResetLink: "Send Reset Link",
+    resetLinkSent: "Check Your Email",
+    resetLinkSentDesc: "We sent a password reset link to your email. Click the link to set a new password.",
+    resetPasswordSubtitle: "Enter your new password below.",
+    resetPassword: "Reset Password",
+    passwordHint: "Must be at least 6 characters",
+    passwordResetSuccess: "Password Updated!",
+    passwordResetSuccessDesc: "Your password has been successfully updated. You can now sign in with your new password.",
     errors: {
       invalidCredentials: "Invalid email or password",
       emailInUse: "This email is already registered",
