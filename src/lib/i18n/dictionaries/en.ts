@@ -69,6 +69,22 @@
     ctaTitle: string;
     ctaSubtitle: string;
     ctaButton: string;
+    feature1Title: string;
+    feature1Desc: string;
+    feature2Title: string;
+    feature2Desc: string;
+    feature3Title: string;
+    feature3Desc: string;
+    feature4Title: string;
+    feature4Desc: string;
+    learnMore: string;
+    featuresTitle: string;
+    step1Title: string;
+    step1Desc: string;
+    step2Title: string;
+    step2Desc: string;
+    step3Title: string;
+    step3Desc: string;
   };
   auth: {
     loginTitle: string;
@@ -174,6 +190,8 @@
     selectVisaType: string;
     visaPlaceholder: string;
     zipPlaceholder: string;
+    title: string;
+    progress: string;
   };
   dashboard: {
     title: string;
@@ -400,6 +418,12 @@
     managePlan: string;
     premiumBadge: string;
     free: string;
+    feature1: string;
+    feature2: string;
+    feature3: string;
+    feature4: string;
+    perMonth: string;
+    perYear: string;
   };
   affiliates: {
     title: string;
@@ -457,6 +481,9 @@
     section9Content: string;
     section10Title: string;
     section10Content: string;
+    section6Title: string;
+    section6Content: string;
+    contactEmail: string;
   };
   terms: {
     title: string;
@@ -482,6 +509,9 @@
     section10Content: string;
     section6Title: string;
     section6Content: string;
+    contactEmail: string;
+    section6Title: string;
+    section6Content: string;
     terms: string;
     section7Title: string;
     section7Content: string;
@@ -491,6 +521,9 @@
     section9Content: string;
     section10Title: string;
     section10Content: string;
+    section6Title: string;
+    section6Content: string;
+    contactEmail: string;
     section11Title: string;
     section11Content: string;
     section12Title: string;
@@ -518,6 +551,22 @@
     ctaTitle: string;
     ctaContent: string;
     ctaButton: string;
+    feature1Title: string;
+    feature1Desc: string;
+    feature2Title: string;
+    feature2Desc: string;
+    feature3Title: string;
+    feature3Desc: string;
+    feature4Title: string;
+    feature4Desc: string;
+    learnMore: string;
+    featuresTitle: string;
+    step1Title: string;
+    step1Desc: string;
+    step2Title: string;
+    step2Desc: string;
+    step3Title: string;
+    step3Desc: string;
   };
   settings: {
     title: string;
@@ -692,6 +741,14 @@ const en: Dictionary = {
     ctaTitle: "Ready to Start Your Journey?",
     ctaSubtitle: "Join thousands of migrants and students navigating German bureaucracy with confidence.",
     ctaButton: "Get Started Free",
+    learnMore: "Learn More",
+    featuresTitle: "Key Features",
+    step1Title: "Create Your Profile",
+    step1Desc: "Tell us about your visa type and location so we can personalize your experience.",
+    step2Title: "Follow Step-by-Step Guides",
+    step2Desc: "Get clear instructions for every bureaucratic process, tailored to your situation.",
+    step3Title: "Track Everything",
+    step3Desc: "Keep your documents organized and never miss a deadline with smart reminders.",
   },
   auth: {
     loginTitle: "Welcome Back",
@@ -797,6 +854,8 @@ const en: Dictionary = {
     selectVisaType: "Select visa type",
     visaPlaceholder: "Select visa type",
     zipPlaceholder: "e.g. 10115",
+    title: "Update Your Profile",
+    progress: "Progress",
   },
   dashboard: {
     title: "Dashboard",
@@ -1034,6 +1093,12 @@ const en: Dictionary = {
     managePlan: "Manage Plan",
     premiumBadge: "Premium",
     free: "Free",
+    feature1: "Unlimited guides",
+    feature2: "Unlimited documents",
+    feature3: "PDF export",
+    feature4: "Priority support",
+    perMonth: "/month",
+    perYear: "/year",
   },
   affiliates: {
     title: "Recommended Services",
@@ -1091,6 +1156,9 @@ const en: Dictionary = {
     section9Content: "We retain your data for as long as your account is active. When you delete your account, all personal data is permanently removed within 30 days.",
     section10Title: "Changes to This Policy",
     section10Content: "We may update this privacy policy from time to time. We will notify you of any significant changes via email or in-app notification.",
+    section6Title: "Your Choices",
+    section6Content: "You can update your personal information, change your language preference, or delete your account at any time from the Settings page.",
+    contactEmail: "privacy@germany-guide.app",
   },
   terms: {
     title: "Terms of Service",
@@ -1144,6 +1212,22 @@ const en: Dictionary = {
     ctaTitle: "Start Your Journey",
     ctaContent: "Join thousands of migrants and students who are navigating German bureaucracy with confidence.",
     ctaButton: "Get Started Free",
+    feature1Title: "Step-by-Step Guides",
+    feature1Desc: "Clear instructions for every bureaucratic process",
+    feature2Title: "Document Tracking",
+    feature2Desc: "Keep all your important documents organized",
+    feature3Title: "Deadline Reminders",
+    feature3Desc: "Never miss an important date or appointment",
+    feature4Title: "11 Languages",
+    feature4Desc: "Use the app in your native language",
+    learnMore: "Learn More",
+    featuresTitle: "Key Features",
+    step1Title: "Create Your Profile",
+    step1Desc: "Tell us about your visa type and location so we can personalize your experience.",
+    step2Title: "Follow Step-by-Step Guides",
+    step2Desc: "Get clear instructions for every bureaucratic process, tailored to your situation.",
+    step3Title: "Track Everything",
+    step3Desc: "Keep your documents organized and never miss a deadline with smart reminders.",
   },
   settings: {
     title: "Settings",
