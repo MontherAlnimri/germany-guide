@@ -47,8 +47,6 @@ export default function OnboardingPage() {
   const autoStartFlow = async (userId: string, userVisaType: string, userAppType: string) => {
     try {
       const supabase = createClient();
-
-      // Find matching flow variant for this user's visa type + application type
       const { data: matchingVariants } = await supabase
         .from("flow_variants")
         .select("id")
@@ -57,7 +55,6 @@ export default function OnboardingPage() {
 
       if (!matchingVariants || matchingVariants.length === 0) return null;
 
-      // Check if user already has an instance for this variant
       const variantId = matchingVariants[0].id;
       const { data: existingInstances } = await supabase
         .from("flow_instances")
@@ -66,11 +63,9 @@ export default function OnboardingPage() {
         .eq("flow_variant_id", variantId);
 
       if (existingInstances && existingInstances.length > 0) {
-        // Already started — go to that flow
         return existingInstances[0].id;
       }
 
-      // Fetch the steps for this variant
       const { data: steps } = await supabase
         .from("flow_steps")
         .select("*")
@@ -83,7 +78,6 @@ export default function OnboardingPage() {
         user_notes: "",
       }));
 
-      // Create the flow instance
       const { data: instance } = await supabase
         .from("flow_instances")
         .insert({
@@ -100,6 +94,18 @@ export default function OnboardingPage() {
     } catch (err) {
       console.error("Auto-start flow error:", err);
       return null;
+    }
+  };
+
+  const sendWelcomeEmail = async (userId: string) => {
+    try {
+      await fetch("/api/email/welcome", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId }),
+      });
+    } catch (err) {
+      console.error("Welcome email error:", err);
     }
   };
 
@@ -134,8 +140,11 @@ export default function OnboardingPage() {
       return;
     }
 
-    // If this is the first onboarding (not an update), auto-start the first flow
     if (!isUpdate) {
+      // Send welcome email (fire and forget)
+      sendWelcomeEmail(user.id);
+
+      // Auto-start first flow
       const flowInstanceId = await autoStartFlow(user.id, visaType, applicationType);
       if (flowInstanceId) {
         router.push(`/flow/${flowInstanceId}`);
@@ -144,7 +153,6 @@ export default function OnboardingPage() {
       }
     }
 
-    // Fallback: go to dashboard
     router.push("/dashboard");
     router.refresh();
   };

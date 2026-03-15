@@ -1,50 +1,128 @@
 ﻿import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { resend, EMAIL_FROM } from "@/lib/email/resend";
+import { deadlineReminderEmail, visaExpiryEmail } from "@/lib/email/templates";
 
 export const dynamic = "force-dynamic";
+export const maxDuration = 30;
 
 export async function GET(request: NextRequest) {
   const authHeader = request.headers.get("authorization");
   const cronSecret = process.env.CRON_SECRET;
-  if (!cronSecret || authHeader !== "Bearer " + cronSecret) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!cronSecret || authHeader !== "Bearer " + cronSecret) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
   const supabase = createAdminClient();
   const today = new Date().toISOString().split("T")[0];
-  const reminders: any[] = [];
+  const emailsSent: string[] = [];
+  const errors: string[] = [];
 
   try {
-    const { data: profiles } = await supabase.from("profiles").select("id, email, full_name, visa_expiry_date").not("visa_expiry_date", "is", null);
+    // === VISA EXPIRY REMINDERS ===
+    const { data: profiles } = await supabase
+      .from("profiles")
+      .select("id, email, full_name, visa_expiry_date")
+      .not("visa_expiry_date", "is", null);
+
     if (profiles) {
       for (const p of profiles) {
-        const days = Math.ceil((new Date(p.visa_expiry_date!).getTime() - Date.now()) / 86400000);
+        if (!p.email || !p.visa_expiry_date) continue;
+        const days = Math.ceil(
+          (new Date(p.visa_expiry_date).getTime() - Date.now()) / 86400000
+        );
+
         if ([90, 60, 30, 14, 7, 3, 1, 0].includes(days)) {
-          const { data: existing } = await supabase.from("reminders").select("id").eq("user_id", p.id).eq("reminder_type", "visa_expiry").eq("scheduled_for", today).limit(1);
-          if (!existing || existing.length === 0) {
-            const title = days === 0 ? "Your visa expires TODAY!" : "Your visa expires in " + days + " days";
-            const { data: r } = await supabase.from("reminders").insert({ user_id: p.id, reminder_type: "visa_expiry", title, message: "Start renewal process.", status: "pending", scheduled_for: today }).select().single();
-            if (r) reminders.push({ ...r, user_email: p.email });
+          try {
+            const template = visaExpiryEmail(
+              p.full_name || "",
+              days,
+              new Date(p.visa_expiry_date).toLocaleDateString("en-DE", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })
+            );
+
+            const { error: sendError } = await resend.emails.send({
+              from: EMAIL_FROM,
+              to: p.email,
+              subject: template.subject,
+              html: template.html,
+            });
+
+            if (sendError) {
+              errors.push(`Visa email to ${p.email}: ${sendError.message}`);
+            } else {
+              emailsSent.push(`visa-expiry:${p.email}:${days}d`);
+            }
+          } catch (err) {
+            errors.push(`Visa email to ${p.email}: ${String(err)}`);
           }
         }
       }
     }
 
-    const { data: dls } = await supabase.from("deadlines").select("*").eq("is_completed", false).lte("remind_at", today);
-    if (dls) {
-      for (const dl of dls) {
-        const days = Math.ceil((new Date(dl.due_date).getTime() - Date.now()) / 86400000);
+    // === DEADLINE REMINDERS ===
+    const { data: deadlines } = await supabase
+      .from("deadlines")
+      .select("*, profiles!inner(email, full_name)")
+      .eq("is_done", false)
+      .not("remind_at", "is", null)
+      .lte("remind_at", today);
+
+    if (deadlines) {
+      for (const dl of deadlines) {
+        const profile = (dl as any).profiles;
+        if (!profile?.email) continue;
+
+        const days = Math.ceil(
+          (new Date(dl.due_date).getTime() - Date.now()) / 86400000
+        );
+
         if ([14, 7, 3, 1, 0].includes(days) || days < 0) {
-          const { data: existing } = await supabase.from("reminders").select("id").eq("user_id", dl.user_id).eq("deadline_id", dl.id).eq("scheduled_for", today).limit(1);
-          if (!existing || existing.length === 0) {
-            const title = days < 0 ? "OVERDUE: " + dl.title : days === 0 ? "Due TODAY: " + dl.title : dl.title + " - " + days + " days left";
-            const { data: r } = await supabase.from("reminders").insert({ user_id: dl.user_id, deadline_id: dl.id, reminder_type: "deadline", title, message: dl.description, status: "pending", scheduled_for: today }).select().single();
-            if (r) reminders.push(r);
+          try {
+            const template = deadlineReminderEmail(
+              profile.full_name || "",
+              dl.title,
+              new Date(dl.due_date).toLocaleDateString("en-DE", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              }),
+              days
+            );
+
+            const { error: sendError } = await resend.emails.send({
+              from: EMAIL_FROM,
+              to: profile.email,
+              subject: template.subject,
+              html: template.html,
+            });
+
+            if (sendError) {
+              errors.push(`Deadline email to ${profile.email}: ${sendError.message}`);
+            } else {
+              emailsSent.push(`deadline:${profile.email}:${dl.title}`);
+            }
+          } catch (err) {
+            errors.push(`Deadline email to ${profile.email}: ${String(err)}`);
           }
         }
       }
     }
 
-    return NextResponse.json({ success: true, date: today, reminders_generated: reminders.length, reminders });
+    return NextResponse.json({
+      success: true,
+      date: today,
+      emails_sent: emailsSent.length,
+      emails: emailsSent,
+      errors: errors.length > 0 ? errors : undefined,
+    });
   } catch (error) {
-    return NextResponse.json({ success: false, error: "Failed to generate reminders" }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: "Failed to send reminders" },
+      { status: 500 }
+    );
   }
 }
