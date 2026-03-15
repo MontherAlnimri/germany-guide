@@ -102,6 +102,9 @@
     passwordHint: string;
     passwordResetSuccess: string;
     passwordResetSuccessDesc: string;
+    registerDesc: string;
+    signInLink: string;
+    signUp: string;
     errors: {
       invalidCredentials: string;
       emailInUse: string;
@@ -148,6 +151,15 @@
     };
     profileSaved: string;
     profileSavedDesc: string;
+    aboutYou: string;
+    cityPlaceholder: string;
+    expiryHint: string;
+    firstApplication: string;
+    location: string;
+    saveChanges: string;
+    selectVisaType: string;
+    visaPlaceholder: string;
+    zipPlaceholder: string;
   };
   dashboard: {
     title: string;
@@ -171,6 +183,11 @@
     overdue: string;
     complete: string;
     recentActivity: string;
+    completedSteps: string;
+    overview: string;
+    recentFlows: string;
+    totalDocuments: string;
+    yourProgress: string;
   };
   flows: {
     title: string;
@@ -205,6 +222,11 @@
     backToFlows: string;
     limitReached: string;
     limitReachedDesc: string;
+    basedOnVisa: string;
+    myFlows: string;
+    otherFlows: string;
+    recommendedForYou: string;
+    startNew: string;
   };
   docs: {
     title: string;
@@ -229,6 +251,12 @@
     exportPDF: string;
     limitReached: string;
     limitReachedDesc: string;
+    addNewDocument: string;
+    backToDocuments: string;
+    enterDocName: string;
+    notesPlaceholder: string;
+    saveDocument: string;
+    selectDocType: string;
     docTypes: {
       passport: string;
       visa: string;
@@ -275,6 +303,16 @@
     noReminder: string;
     dueToday: string;
     tomorrow: string;
+    addFirst: string;
+    addNew: string;
+    addNewDeadline: string;
+    completedSection: string;
+    descPlaceholder: string;
+    noPending: string;
+    startReminding: string;
+    titleAndDateRequired: string;
+    titleDesc: string;
+    titlePlaceholder: string;
   };
   nav: {
     dashboard: string;
@@ -327,6 +365,13 @@
     billingPortal: string;
     premiumFeature: string;
     premiumRequired: string;
+    billedMonthly: string;
+    billedYearly: string;
+    cancelAnytime: string;
+    feature5: string;
+    feature6: string;
+    managePlan: string;
+    premiumBadge: string;
   };
   affiliates: {
     title: string;
@@ -613,6 +658,9 @@ const en: Dictionary = {
     passwordHint: "Must be at least 6 characters",
     passwordResetSuccess: "Password Updated!",
     passwordResetSuccessDesc: "Your password has been successfully updated. You can now sign in with your new password.",
+    registerDesc: "Create your account to start your journey in Germany",
+    signInLink: "Sign in",
+    signUp: "Sign Up",
     errors: {
       invalidCredentials: "Invalid email or password",
       emailInUse: "This email is already registered",
@@ -659,6 +707,15 @@ const en: Dictionary = {
     },
     profileSaved: "Profile Saved!",
     profileSavedDesc: "Your profile has been updated successfully.",
+    aboutYou: "About You",
+    cityPlaceholder: "Select your city",
+    expiryHint: "Leave blank if not applicable",
+    firstApplication: "First Application",
+    location: "Location",
+    saveChanges: "Save Changes",
+    selectVisaType: "Select visa type",
+    visaPlaceholder: "Select visa type",
+    zipPlaceholder: "e.g. 10115",
   },
   dashboard: {
     title: "Dashboard",
@@ -682,6 +739,11 @@ const en: Dictionary = {
     overdue: "Overdue",
     complete: "Complete",
     recentActivity: "Recent Activity",
+    completedSteps: "Completed Steps",
+    overview: "Overview",
+    recentFlows: "Recent Guides",
+    totalDocuments: "Total Documents",
+    yourProgress: "Your Progress",
   },
   flows: {
     title: "Bureaucratic Guides",
@@ -716,6 +778,11 @@ const en: Dictionary = {
     backToFlows: "Back to Guides",
     limitReached: "Guide Limit Reached",
     limitReachedDesc: "Free users can have up to 3 active guides. Upgrade to Premium for unlimited guides.",
+    basedOnVisa: "Based on your visa type",
+    myFlows: "My Guides",
+    otherFlows: "Other Guides",
+    recommendedForYou: "Recommended for You",
+    startNew: "Start New Guide",
   },
   docs: {
     title: "Document Tracker",
@@ -740,6 +807,18 @@ const en: Dictionary = {
     exportPDF: "Export as PDF",
     limitReached: "Document Limit Reached",
     limitReachedDesc: "Free users can track up to 10 documents. Upgrade to Premium for unlimited documents.",
+    addNewDocument: "Add New Document",
+    backToDocuments: "Back to Documents",
+    enterDocName: "Enter document name",
+    notesPlaceholder: "Optional notes about this document...",
+    saveDocument: "Save Document",
+    selectDocType: "Select document type",
+    addNewDocument: "Add New Document",
+    backToDocuments: "Back to Documents",
+    enterDocName: "Enter document name",
+    notesPlaceholder: "Optional notes about this document...",
+    saveDocument: "Save Document",
+    selectDocType: "Select document type",
     docTypes: {
       passport: "Passport",
       visa: "Visa / Residence Permit",
@@ -786,6 +865,16 @@ const en: Dictionary = {
     noReminder: "No reminder",
     dueToday: "Due today",
     tomorrow: "Tomorrow",
+    addFirst: "Add your first deadline",
+    addNew: "Add New",
+    addNewDeadline: "Add New Deadline",
+    completedSection: "Completed",
+    descPlaceholder: "Optional description...",
+    noPending: "No pending deadlines",
+    startReminding: "Start reminding me",
+    titleAndDateRequired: "Title and due date are required",
+    titleDesc: "Deadline Details",
+    titlePlaceholder: "e.g. Visa appointment, Document submission...",
   },
   nav: {
     dashboard: "Dashboard",
@@ -838,6 +927,13 @@ const en: Dictionary = {
     billingPortal: "Manage Billing",
     premiumFeature: "Premium Feature",
     premiumRequired: "This feature requires a Premium subscription.",
+    billedMonthly: "Billed monthly",
+    billedYearly: "Billed yearly",
+    cancelAnytime: "Cancel anytime",
+    feature5: "Ad-free experience",
+    feature6: "Visa expiry alerts",
+    managePlan: "Manage Plan",
+    premiumBadge: "Premium",
   },
   affiliates: {
     title: "Recommended Services",
