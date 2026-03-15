@@ -1,71 +1,90 @@
-﻿import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import I18nClientProvider from "@/components/i18n/I18nClientProvider";
+import StructuredData from "@/components/StructuredData";
 
 const inter = Inter({ subsets: ["latin"] });
 
+const siteUrl = "https://my-germany-guide.vercel.app";
+const description = "Your complete step-by-step guide for navigating German bureaucracy. Get help with visas, city registration, health insurance, bank accounts, and more. Available in 11 languages including English, German, Arabic, Turkish, and Ukrainian.";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: {
     default: "Germany Guide - Navigate German Bureaucracy with Confidence",
     template: "%s | Germany Guide",
   },
-  description:
-    "Step-by-step guidance for visas, city registration, health insurance, and settling in Germany. Available in 11 languages. Free for migrants and international students.",
+  description,
   keywords: [
-    "Germany visa guide",
+    "Germany guide",
     "German bureaucracy",
+    "visa application Germany",
     "Anmeldung",
     "city registration Germany",
-    "student visa Germany",
     "Blue Card Germany",
+    "student visa Germany",
     "health insurance Germany",
-    "settle in Germany",
     "migrant guide Germany",
-    "international students Germany",
+    "expat Germany",
+    "settle in Germany",
+    "German residence permit",
     "Aufenthaltstitel",
-    "residence permit Germany",
     "work permit Germany",
-    "family reunion visa Germany",
-    "freelance visa Germany",
+    "international students Germany",
   ],
   authors: [{ name: "Germany Guide" }],
   creator: "Germany Guide",
   publisher: "Germany Guide",
-  metadataBase: new URL("https://my-germany-guide.vercel.app"),
-  alternates: {
-    canonical: "/",
-  },
-  manifest: "/manifest.json",
   openGraph: {
-    title: "Germany Guide - Navigate German Bureaucracy with Confidence",
-    description:
-      "Step-by-step guidance for visas, registration, and settling in Germany. Available in 11 languages.",
-    url: "https://my-germany-guide.vercel.app",
-    siteName: "Germany Guide",
-    locale: "en_US",
     type: "website",
+    locale: "en_US",
+    url: siteUrl,
+    siteName: "Germany Guide",
+    title: "Germany Guide - Navigate German Bureaucracy with Confidence",
+    description,
+    images: [
+      {
+        url: `${siteUrl}/opengraph-image`,
+        width: 1200,
+        height: 630,
+        alt: "Germany Guide - Navigate German Bureaucracy with Confidence",
+        type: "image/png",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Germany Guide - Navigate German Bureaucracy with Confidence",
-    description:
-      "Step-by-step guidance for visas, registration, and settling in Germany. Available in 11 languages.",
+    description,
+    images: [
+      {
+        url: `${siteUrl}/twitter-image`,
+        width: 1200,
+        height: 630,
+        alt: "Germany Guide - Navigate German Bureaucracy with Confidence",
+        type: "image/png",
+      },
+    ],
   },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
+  icons: {
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/icon", type: "image/png", sizes: "32x32" },
+    ],
+    apple: [{ url: "/apple-icon", type: "image/png", sizes: "180x180" }],
   },
+  manifest: "/manifest.json",
   other: {
     "google-adsense-account": "ca-pub-3388930204483365",
   },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: "#2563eb",
 };
 
 export default function RootLayout({
@@ -74,19 +93,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="light">
+    <html lang="en" className="light" suppressHydrationWarning>
       <head>
-        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-        <link rel="icon" href="/icon" type="image/png" sizes="32x32" />
-        <link rel="apple-touch-icon" href="/apple-icon" />
         <script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3388930204483365"
           crossOrigin="anonymous"
         />
+        <script
+          async
+          src="https://fundingchoicesmessages.google.com/i/pub-3388930204483365?ers=1"
+        />
       </head>
-      <body className={inter.className}>
-        <I18nClientProvider>{children}</I18nClientProvider>
+      <body className={`${inter.className} bg-white text-gray-900 antialiased`}>
+        <I18nClientProvider>
+          <StructuredData />
+          {children}
+        </I18nClientProvider>
       </body>
     </html>
   );
