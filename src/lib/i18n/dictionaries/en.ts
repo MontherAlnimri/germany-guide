@@ -55,6 +55,20 @@
     footerAbout: string;
     perMonth: string;
     perYear: string;
+    howItWorksTitle: string;
+    pricingSubtitle: string;
+    premiumMonthly: string;
+    premiumYearly: string;
+    freeTier: string;
+    freePriceLabel: string;
+    freeFeature1: string;
+    freeFeature2: string;
+    freeFeature3: string;
+    freeFeature4: string;
+    premiumTier: string;
+    ctaTitle: string;
+    ctaSubtitle: string;
+    ctaButton: string;
   };
   auth: {
     loginTitle: string;
@@ -228,6 +242,11 @@
     otherFlows: string;
     recommendedForYou: string;
     startNew: string;
+    flowCompleted: string;
+    allStepsDone: string;
+    yourNotes: string;
+    undo: string;
+    markAsDone: string;
   };
   docs: {
     title: string;
@@ -258,6 +277,10 @@
     notesPlaceholder: string;
     saveDocument: string;
     selectDocType: string;
+    documentVault: string;
+    expiringSoon: string;
+    issued: string;
+    expires: string;
     docTypes: {
       passport: string;
       visa: string;
@@ -374,6 +397,7 @@
     feature6: string;
     managePlan: string;
     premiumBadge: string;
+    free: string;
   };
   affiliates: {
     title: string;
@@ -393,6 +417,8 @@
     housingName: string;
     disclaimer: string;
     recommended: string;
+    visitSite: string;
+    sponsored: string;
   };
   support: {
     title: string;
@@ -421,6 +447,14 @@
     section4Content: string;
     section5Title: string;
     section5Content: string;
+    section7Title: string;
+    section7Content: string;
+    section8Title: string;
+    section8Content: string;
+    section9Title: string;
+    section9Content: string;
+    section10Title: string;
+    section10Content: string;
   };
   terms: {
     title: string;
@@ -436,8 +470,29 @@
     section4Content: string;
     section5Title: string;
     section5Content: string;
+    section7Title: string;
+    section7Content: string;
+    section8Title: string;
+    section8Content: string;
+    section9Title: string;
+    section9Content: string;
+    section10Title: string;
+    section10Content: string;
     section6Title: string;
     section6Content: string;
+    terms: string;
+    section7Title: string;
+    section7Content: string;
+    section8Title: string;
+    section8Content: string;
+    section9Title: string;
+    section9Content: string;
+    section10Title: string;
+    section10Content: string;
+    section11Title: string;
+    section11Content: string;
+    section12Title: string;
+    section12Content: string;
   };
   about: {
     title: string;
@@ -454,6 +509,13 @@
     contactTitle: string;
     contactContent: string;
     contactEmail: string;
+    whatWeDoTitle: string;
+    whatWeDoContent: string;
+    whoWeAreTitle: string;
+    whoWeAreContent: string;
+    ctaTitle: string;
+    ctaContent: string;
+    ctaButton: string;
   };
   settings: {
     title: string;
@@ -478,6 +540,7 @@
     confirmDelete: string;
     plan: string;
     memberSince: string;
+    ok: string;
   };
   verification: {
     bannerTitle: string;
@@ -613,6 +676,20 @@ const en: Dictionary = {
     footerAbout: "About",
     perMonth: "/month",
     perYear: "/year",
+    howItWorksTitle: "How It Works",
+    pricingSubtitle: "Choose the plan that works for you",
+    premiumMonthly: "Premium Monthly",
+    premiumYearly: "Premium Yearly",
+    freeTier: "Free",
+    freePriceLabel: "Free forever",
+    freeFeature1: "Up to 3 active guides",
+    freeFeature2: "Up to 10 documents",
+    freeFeature3: "Deadline reminders",
+    freeFeature4: "11 languages",
+    premiumTier: "Premium",
+    ctaTitle: "Ready to Start Your Journey?",
+    ctaSubtitle: "Join thousands of migrants and students navigating German bureaucracy with confidence.",
+    ctaButton: "Get Started Free",
   },
   auth: {
     loginTitle: "Welcome Back",
@@ -786,6 +863,11 @@ const en: Dictionary = {
     otherFlows: "Other Guides",
     recommendedForYou: "Recommended for You",
     startNew: "Start New Guide",
+    flowCompleted: "Guide Completed!",
+    allStepsDone: "All steps have been completed.",
+    yourNotes: "Your Notes",
+    undo: "Undo",
+    markAsDone: "Mark as Done",
   },
   docs: {
     title: "Document Tracker",
@@ -816,12 +898,20 @@ const en: Dictionary = {
     notesPlaceholder: "Optional notes about this document...",
     saveDocument: "Save Document",
     selectDocType: "Select document type",
+    documentVault: "Document Vault",
+    expiringSoon: "Expiring Soon",
+    issued: "Issued",
+    expires: "Expires",
     addNewDocument: "Add New Document",
     backToDocuments: "Back to Documents",
     enterDocName: "Enter document name",
     notesPlaceholder: "Optional notes about this document...",
     saveDocument: "Save Document",
     selectDocType: "Select document type",
+    documentVault: "Document Vault",
+    expiringSoon: "Expiring Soon",
+    issued: "Issued",
+    expires: "Expires",
     docTypes: {
       passport: "Passport",
       visa: "Visa / Residence Permit",
@@ -938,6 +1028,7 @@ const en: Dictionary = {
     feature6: "Visa expiry alerts",
     managePlan: "Manage Plan",
     premiumBadge: "Premium",
+    free: "Free",
   },
   affiliates: {
     title: "Recommended Services",
@@ -957,6 +1048,8 @@ const en: Dictionary = {
     housingName: "WG-Gesucht",
     disclaimer: "Some links may be affiliate links. We only recommend services we trust.",
     recommended: "Recommended",
+    visitSite: "Visit Site",
+    sponsored: "Sponsored",
   },
   support: {
     title: "Support Germany Guide",
@@ -985,6 +1078,14 @@ const en: Dictionary = {
     section4Content: "Under GDPR, you have the right to access, correct, delete, or export your data. You can delete your account at any time from the Settings page.",
     section5Title: "Contact",
     section5Content: "For privacy-related questions, contact us at privacy@germany-guide.app.",
+    section7Title: "Cookies",
+    section7Content: "We use essential cookies for authentication and preferences. We use Google AdSense which may set advertising cookies. You can manage cookie preferences through your browser settings.",
+    section8Title: "Third-Party Services",
+    section8Content: "We use Supabase for authentication and data storage, Stripe for payment processing, Resend for email notifications, and Google AdSense for advertising. Each service has its own privacy policy.",
+    section9Title: "Data Retention",
+    section9Content: "We retain your data for as long as your account is active. When you delete your account, all personal data is permanently removed within 30 days.",
+    section10Title: "Changes to This Policy",
+    section10Content: "We may update this privacy policy from time to time. We will notify you of any significant changes via email or in-app notification.",
   },
   terms: {
     title: "Terms of Service",
@@ -1002,6 +1103,19 @@ const en: Dictionary = {
     section5Content: "Germany Guide provides information as-is. We are not responsible for decisions made based on our guides. Always verify information with official sources.",
     section6Title: "Changes to Terms",
     section6Content: "We may update these terms from time to time. Continued use of the service constitutes acceptance of updated terms.",
+    terms: "Terms of Service",
+    section7Title: "Intellectual Property",
+    section7Content: "All content, design, and code of Germany Guide are protected by intellectual property laws. You may not copy, modify, or distribute our content without permission.",
+    section8Title: "Payment Terms",
+    section8Content: "Premium subscriptions are billed monthly or yearly via Stripe. You can cancel anytime. Refunds are handled on a case-by-case basis.",
+    section9Title: "Privacy",
+    section9Content: "Your use of Germany Guide is also governed by our Privacy Policy. By using our service, you consent to our data practices as described therein.",
+    section10Title: "Termination",
+    section10Content: "We reserve the right to suspend or terminate accounts that violate these terms. You may delete your account at any time from the Settings page.",
+    section11Title: "Governing Law",
+    section11Content: "These terms are governed by the laws of the Federal Republic of Germany. Any disputes shall be resolved in the courts of Berlin, Germany.",
+    section12Title: "Contact",
+    section12Content: "For questions about these terms, contact us at legal@germany-guide.app.",
   },
   about: {
     title: "About Germany Guide",
@@ -1018,6 +1132,13 @@ const en: Dictionary = {
     contactTitle: "Contact Us",
     contactContent: "Have questions, suggestions, or feedback? We would love to hear from you.",
     contactEmail: "contact@germany-guide.app",
+    whatWeDoTitle: "What We Do",
+    whatWeDoContent: "We provide step-by-step guides, document tracking, and deadline management tools to help you navigate every aspect of German bureaucracy.",
+    whoWeAreTitle: "Who We Are",
+    whoWeAreContent: "We are a team of former international students and migrants who experienced the challenges of German bureaucracy firsthand.",
+    ctaTitle: "Start Your Journey",
+    ctaContent: "Join thousands of migrants and students who are navigating German bureaucracy with confidence.",
+    ctaButton: "Get Started Free",
   },
   settings: {
     title: "Settings",
@@ -1042,6 +1163,7 @@ const en: Dictionary = {
     confirmDelete: "Permanently Delete Account",
     plan: "Plan",
     memberSince: "Member since",
+    ok: "OK",
   },
   verification: {
     bannerTitle: "Email not verified",
