@@ -247,6 +247,7 @@
     yourNotes: string;
     undo: string;
     markAsDone: string;
+    stepOf: string;
   };
   docs: {
     title: string;
@@ -869,6 +870,7 @@ const en: Dictionary = {
     yourNotes: "Your Notes",
     undo: "Undo",
     markAsDone: "Mark as Done",
+    stepOf: "Step {current} of {total}",
   },
   docs: {
     title: "Document Tracker",
