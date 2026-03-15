@@ -8,6 +8,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 const siteUrl = "https://my-germany-guide.vercel.app";
 const description = "Your complete step-by-step guide for navigating German bureaucracy. Get help with visas, city registration, health insurance, bank accounts, and more. Available in 11 languages including English, German, Arabic, Turkish, and Ukrainian.";
+const ogImageUrl = `${siteUrl}/api/og`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -45,7 +46,7 @@ export const metadata: Metadata = {
     description,
     images: [
       {
-        url: `${siteUrl}/opengraph-image`,
+        url: ogImageUrl,
         width: 1200,
         height: 630,
         alt: "Germany Guide - Navigate German Bureaucracy with Confidence",
@@ -59,7 +60,7 @@ export const metadata: Metadata = {
     description,
     images: [
       {
-        url: `${siteUrl}/twitter-image`,
+        url: ogImageUrl,
         width: 1200,
         height: 630,
         alt: "Germany Guide - Navigate German Bureaucracy with Confidence",

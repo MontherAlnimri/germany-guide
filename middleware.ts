@@ -14,6 +14,7 @@ const PUBLIC_ROUTES = [
   "/api/stripe/webhook",
   "/api/reminders",
   "/api/auth/callback",
+  "/api/og",
 ];
 
 export async function middleware(request: NextRequest) {
