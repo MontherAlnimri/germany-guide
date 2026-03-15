@@ -281,6 +281,7 @@
     expiringSoon: string;
     issued: string;
     expires: string;
+    addFirst: string;
     docTypes: {
       passport: string;
       visa: string;
@@ -902,6 +903,7 @@ const en: Dictionary = {
     expiringSoon: "Expiring Soon",
     issued: "Issued",
     expires: "Expires",
+    addFirst: "Add your first document to start tracking",
     addNewDocument: "Add New Document",
     backToDocuments: "Back to Documents",
     enterDocName: "Enter document name",
@@ -912,6 +914,7 @@ const en: Dictionary = {
     expiringSoon: "Expiring Soon",
     issued: "Issued",
     expires: "Expires",
+    addFirst: "Add your first document to start tracking",
     docTypes: {
       passport: "Passport",
       visa: "Visa / Residence Permit",
