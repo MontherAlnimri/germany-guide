@@ -69,14 +69,6 @@
     ctaTitle: string;
     ctaSubtitle: string;
     ctaButton: string;
-    feature1Title: string;
-    feature1Desc: string;
-    feature2Title: string;
-    feature2Desc: string;
-    feature3Title: string;
-    feature3Desc: string;
-    feature4Title: string;
-    feature4Desc: string;
     learnMore: string;
     featuresTitle: string;
     step1Title: string;
@@ -551,14 +543,6 @@
     ctaTitle: string;
     ctaContent: string;
     ctaButton: string;
-    feature1Title: string;
-    feature1Desc: string;
-    feature2Title: string;
-    feature2Desc: string;
-    feature3Title: string;
-    feature3Desc: string;
-    feature4Title: string;
-    feature4Desc: string;
     learnMore: string;
     featuresTitle: string;
     step1Title: string;
@@ -1212,14 +1196,6 @@ const en: Dictionary = {
     ctaTitle: "Start Your Journey",
     ctaContent: "Join thousands of migrants and students who are navigating German bureaucracy with confidence.",
     ctaButton: "Get Started Free",
-    feature1Title: "Step-by-Step Guides",
-    feature1Desc: "Clear instructions for every bureaucratic process",
-    feature2Title: "Document Tracking",
-    feature2Desc: "Keep all your important documents organized",
-    feature3Title: "Deadline Reminders",
-    feature3Desc: "Never miss an important date or appointment",
-    feature4Title: "11 Languages",
-    feature4Desc: "Use the app in your native language",
     learnMore: "Learn More",
     featuresTitle: "Key Features",
     step1Title: "Create Your Profile",
