@@ -1,0 +1,21 @@
+﻿{
+  "name": "Germany Guide",
+  "short_name": "Germany Guide",
+  "description": "Navigate German bureaucracy with step-by-step guides in 11 languages",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f3f4f6",
+  "theme_color": "#2563eb",
+  "icons": [
+    {
+      "src": "/icon",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/apple-icon",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}

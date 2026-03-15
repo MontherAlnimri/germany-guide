@@ -23,6 +23,11 @@ export const metadata: Metadata = {
     "settle in Germany",
     "migrant guide Germany",
     "international students Germany",
+    "Aufenthaltstitel",
+    "residence permit Germany",
+    "work permit Germany",
+    "family reunion visa Germany",
+    "freelance visa Germany",
   ],
   authors: [{ name: "Germany Guide" }],
   creator: "Germany Guide",
@@ -31,6 +36,7 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
+  manifest: "/manifest.json",
   openGraph: {
     title: "Germany Guide - Navigate German Bureaucracy with Confidence",
     description:
@@ -57,6 +63,9 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
+  other: {
+    "google-adsense-account": "ca-pub-3388930204483365",
+  },
 };
 
 export default function RootLayout({
@@ -67,16 +76,14 @@ export default function RootLayout({
   return (
     <html lang="en" className="light">
       <head>
-        <meta
-          name="google-adsense-account"
-          content="ca-pub-3388930204483365"
-        />
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <link rel="icon" href="/icon" type="image/png" sizes="32x32" />
+        <link rel="apple-touch-icon" href="/apple-icon" />
         <script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3388930204483365"
           crossOrigin="anonymous"
         />
-        <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
       <body className={inter.className}>
         <I18nClientProvider>{children}</I18nClientProvider>
