@@ -1,30 +1,45 @@
-import { createServerClient } from '@supabase/ssr';
-import { NextResponse, type NextRequest } from 'next/server';
+import { createServerClient } from "@supabase/ssr";
+import { NextResponse, type NextRequest } from "next/server";
 
 const PUBLIC_ROUTES = [
-  '/',
-  '/login',
-  '/register',
-  '/forgot-password',
-  '/reset-password',
-  '/auth/confirm',
-  '/privacy',
-  '/terms',
-  '/about',
-  '/api/stripe/webhook',
-  '/api/reminders',
-  '/api/auth/callback',
+  "/",
+  "/login",
+  "/register",
+  "/forgot-password",
+  "/reset-password",
+  "/auth/confirm",
+  "/privacy",
+  "/terms",
+  "/about",
+  "/api/stripe/webhook",
+  "/api/reminders",
+  "/api/auth/callback",
 ];
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  const isPublic = PUBLIC_ROUTES.some((route) => pathname === route || pathname.startsWith(route + '/'));
+  // Allow public routes
+  const isPublic = PUBLIC_ROUTES.some(
+    (route) => pathname === route || pathname.startsWith(route + "/")
+  );
   if (isPublic) {
     return NextResponse.next();
   }
 
-  if (pathname.startsWith('/_next') || pathname.startsWith('/favicon') || pathname === '/ads.txt' || pathname === '/sitemap.xml' || pathname === '/robots.txt') {
+  // Allow static files, images, metadata routes
+  if (
+    pathname.startsWith("/_next") ||
+    pathname.startsWith("/favicon") ||
+    pathname.startsWith("/icon") ||
+    pathname.startsWith("/apple-icon") ||
+    pathname.startsWith("/opengraph-image") ||
+    pathname.startsWith("/twitter-image") ||
+    pathname === "/ads.txt" ||
+    pathname === "/sitemap.xml" ||
+    pathname === "/robots.txt" ||
+    pathname === "/manifest.json"
+  ) {
     return NextResponse.next();
   }
 
@@ -55,11 +70,13 @@ export async function middleware(request: NextRequest) {
     }
   );
 
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   if (!user) {
     const url = request.nextUrl.clone();
-    url.pathname = '/login';
+    url.pathname = "/login";
     return NextResponse.redirect(url);
   }
 
@@ -67,5 +84,7 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico|ads.txt|sitemap.xml|robots.txt).*)'],
+  matcher: [
+    "/((?!_next/static|_next/image|favicon\\.ico|favicon\\.svg|ads\\.txt|sitemap\\.xml|robots\\.txt|manifest\\.json|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)",
+  ],
 };
