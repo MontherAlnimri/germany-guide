@@ -188,6 +188,7 @@
     recentFlows: string;
     totalDocuments: string;
     yourProgress: string;
+    startFlow: string;
   };
   flows: {
     title: string;
@@ -303,6 +304,7 @@
     noReminder: string;
     dueToday: string;
     tomorrow: string;
+    due: string;
     addFirst: string;
     addNew: string;
     addNewDeadline: string;
@@ -744,6 +746,7 @@ const en: Dictionary = {
     recentFlows: "Recent Guides",
     totalDocuments: "Total Documents",
     yourProgress: "Your Progress",
+    startFlow: "Start Guide",
   },
   flows: {
     title: "Bureaucratic Guides",
@@ -865,6 +868,7 @@ const en: Dictionary = {
     noReminder: "No reminder",
     dueToday: "Due today",
     tomorrow: "Tomorrow",
+    due: "Due",
     addFirst: "Add your first deadline",
     addNew: "Add New",
     addNewDeadline: "Add New Deadline",
