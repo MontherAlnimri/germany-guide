@@ -533,6 +533,14 @@
     feature2: string;
     feature3: string;
     feature4: string;
+    feature1Title: string;
+    feature1Desc: string;
+    feature2Title: string;
+    feature2Desc: string;
+    feature3Title: string;
+    feature3Desc: string;
+    feature4Title: string;
+    feature4Desc: string;
     contactTitle: string;
     contactContent: string;
     contactEmail: string;
@@ -543,14 +551,6 @@
     ctaTitle: string;
     ctaContent: string;
     ctaButton: string;
-    learnMore: string;
-    featuresTitle: string;
-    step1Title: string;
-    step1Desc: string;
-    step2Title: string;
-    step2Desc: string;
-    step3Title: string;
-    step3Desc: string;
   };
   settings: {
     title: string;
@@ -1186,6 +1186,14 @@ const en: Dictionary = {
     feature2: "Document tracking with expiry reminders",
     feature3: "Deadline management with email notifications",
     feature4: "Support in 11 languages with native-quality translations",
+    feature1Title: "Smart Flow Engine",
+    feature1Desc: "Personalized step-by-step guides based on your visa type.",
+    feature2Title: "Document Tracking",
+    feature2Desc: "Keep all your important documents organized with expiry alerts.",
+    feature3Title: "Deadline Reminders",
+    feature3Desc: "Never miss an important date or appointment.",
+    feature4Title: "11 Languages",
+    feature4Desc: "Use the app in your native language.",
     contactTitle: "Contact Us",
     contactContent: "Have questions, suggestions, or feedback? We would love to hear from you.",
     contactEmail: "contact@germany-guide.app",
@@ -1196,14 +1204,6 @@ const en: Dictionary = {
     ctaTitle: "Start Your Journey",
     ctaContent: "Join thousands of migrants and students who are navigating German bureaucracy with confidence.",
     ctaButton: "Get Started Free",
-    learnMore: "Learn More",
-    featuresTitle: "Key Features",
-    step1Title: "Create Your Profile",
-    step1Desc: "Tell us about your visa type and location so we can personalize your experience.",
-    step2Title: "Follow Step-by-Step Guides",
-    step2Desc: "Get clear instructions for every bureaucratic process, tailored to your situation.",
-    step3Title: "Track Everything",
-    step3Desc: "Keep your documents organized and never miss a deadline with smart reminders.",
   },
   settings: {
     title: "Settings",
