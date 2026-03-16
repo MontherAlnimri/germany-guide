@@ -405,15 +405,15 @@
     billedMonthly: string;
     billedYearly: string;
     cancelAnytime: string;
+    feature1: string;
+    feature2: string;
+    feature3: string;
+    feature4: string;
     feature5: string;
     feature6: string;
     managePlan: string;
     premiumBadge: string;
     free: string;
-    feature1: string;
-    feature2: string;
-    feature3: string;
-    feature4: string;
     perMonth: string;
     perYear: string;
   };
@@ -465,6 +465,8 @@
     section4Content: string;
     section5Title: string;
     section5Content: string;
+    section6Title: string;
+    section6Content: string;
     section7Title: string;
     section7Content: string;
     section8Title: string;
@@ -473,8 +475,6 @@
     section9Content: string;
     section10Title: string;
     section10Content: string;
-    section6Title: string;
-    section6Content: string;
     contactEmail: string;
   };
   terms: {
@@ -491,17 +491,6 @@
     section4Content: string;
     section5Title: string;
     section5Content: string;
-    section7Title: string;
-    section7Content: string;
-    section8Title: string;
-    section8Content: string;
-    section9Title: string;
-    section9Content: string;
-    section10Title: string;
-    section10Content: string;
-    section6Title: string;
-    section6Content: string;
-    contactEmail: string;
     section6Title: string;
     section6Content: string;
     terms: string;
@@ -513,9 +502,6 @@
     section9Content: string;
     section10Title: string;
     section10Content: string;
-    section6Title: string;
-    section6Content: string;
-    contactEmail: string;
     section11Title: string;
     section11Content: string;
     section12Title: string;
@@ -640,7 +626,6 @@
     a8: string;
   };
 }
-
 const en: Dictionary = {
   common: {
     appName: "Germany Guide",
