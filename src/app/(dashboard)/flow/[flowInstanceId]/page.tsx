@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/client";
 import { useDict } from "@/lib/i18n/context";
 import { useSubscription } from "@/hooks/useSubscription";
 import { exportFlowToPDF } from "@/lib/pdf-export";
+import { trackStepCompleted, trackFlowCompleted, trackPdfExported } from "@/lib/analytics-events";
 
 interface StepData {
   id: string;
@@ -78,8 +79,19 @@ export default function StepRunnerPage() {
   const toggleDone = async () => {
     if (!instance) return;
     const snapshot = [...(instance.step_snapshot as StepData[])];
-    snapshot[currentStepIndex] = { ...snapshot[currentStepIndex], is_done: !snapshot[currentStepIndex].is_done };
+    const wasNotDone = !snapshot[currentStepIndex].is_done;
+    snapshot[currentStepIndex] = { ...snapshot[currentStepIndex], is_done: wasNotDone };
     await updateSnapshot(snapshot);
+
+    // Track step completion
+    if (wasNotDone) {
+      trackStepCompleted(flowTitle, snapshot[currentStepIndex].title, snapshot[currentStepIndex].step_order);
+      // Check if flow is now complete
+      const allDone = snapshot.every((s) => s.is_done);
+      if (allDone) {
+        trackFlowCompleted(flowTitle);
+      }
+    }
   };
 
   const updateNotes = async (notes: string) => {
@@ -91,6 +103,7 @@ export default function StepRunnerPage() {
 
   const handleExportPDF = () => {
     if (!instance) return;
+    trackPdfExported("flow");
     const snapshot = instance.step_snapshot as StepData[];
     exportFlowToPDF({
       flowTitle: flowTitle || "Flow",

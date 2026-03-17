@@ -1,10 +1,11 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { useDict } from "@/lib/i18n/context";
 import { VISA_TYPES, GERMAN_CITIES } from "@/lib/constants";
+import { trackEvent, identifyUser } from "@/lib/analytics";
 
 export default function OnboardingPage() {
   const dict = useDict();
@@ -141,6 +142,19 @@ export default function OnboardingPage() {
     }
 
     if (!isUpdate) {
+      // Track onboarding completion
+      trackEvent("onboarding_completed", {
+        visa_type: visaType,
+        city: city,
+        first_vs_renewal: applicationType,
+      });
+      identifyUser(user.id, {
+        email: user.email ?? undefined,
+        name: fullName,
+        visa_type: visaType,
+        city: city,
+      });
+
       // Send welcome email (fire and forget)
       sendWelcomeEmail(user.id);
 

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
@@ -9,6 +9,7 @@ import { useEmailVerified } from "@/hooks/useEmailVerified";
 import { useDict } from "@/lib/i18n/context";
 import { Badge } from "@/components/ui/Badge";
 import LanguageSwitcher from "@/components/i18n/LanguageSwitcher";
+import { resetAnalytics } from "@/lib/analytics";
 
 const NAV_ITEMS = [
   { key: "dashboard", href: "/dashboard", icon: "\uD83C\uDFE0" },
@@ -29,6 +30,7 @@ export default function Navbar() {
   const isPremium = subscription?.plan === "monthly" || subscription?.plan === "yearly";
 
   const handleSignOut = async () => {
+    resetAnalytics();
     const supabase = createClient();
     await supabase.auth.signOut();
     router.push("/login");

@@ -1,9 +1,10 @@
-﻿"use client";
+"use client";
 
 import { useState, useRef, useEffect } from "react";
 import { useI18n } from "@/lib/i18n/context";
 import { i18n, localeNames, localeFlags, getDirection } from "@/lib/i18n/config";
 import type { Locale } from "@/lib/i18n/config";
+import { trackEvent } from "@/lib/analytics";
 
 export default function LanguageSwitcher({ compact = false }: { compact?: boolean }) {
   const { locale, setLocale } = useI18n();
@@ -21,6 +22,7 @@ export default function LanguageSwitcher({ compact = false }: { compact?: boolea
   }, []);
 
   const handleSelect = (newLocale: Locale) => {
+    trackEvent("language_changed", { from: locale, to: newLocale });
     setLocale(newLocale);
     setOpen(false);
   };

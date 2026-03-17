@@ -1,10 +1,11 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { useDict } from "@/lib/i18n/context";
+import { trackEvent, identifyUser } from "@/lib/analytics";
 
 export default function LoginPage() {
   const dict = useDict();
@@ -42,6 +43,12 @@ export default function LoginPage() {
       await supabase.auth.signOut();
       setLoading(false);
       return;
+    }
+
+    // Track login
+    if (data.user) {
+      trackEvent("user_logged_in", { method: "email" });
+      identifyUser(data.user.id, { email: data.user.email ?? undefined });
     }
 
     router.push("/dashboard");

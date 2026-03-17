@@ -3,6 +3,10 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import I18nClientProvider from "@/components/i18n/I18nClientProvider";
 import StructuredData from "@/components/StructuredData";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import PostHogProvider from "@/components/analytics/PostHogProvider";
+import { Suspense } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -104,10 +108,16 @@ export default function RootLayout({
         />
       </head>
       <body className={`${inter.className} bg-white text-gray-900 antialiased`}>
-        <I18nClientProvider>
-          <StructuredData />
-          {children}
-        </I18nClientProvider>
+        <Suspense fallback={null}>
+          <PostHogProvider>
+            <I18nClientProvider>
+              <StructuredData />
+              {children}
+            </I18nClientProvider>
+          </PostHogProvider>
+        </Suspense>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

@@ -1,8 +1,9 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useDict } from "@/lib/i18n/context";
+import { trackDeadlineAdded } from "@/lib/analytics-events";
 
 export default function DeadlinesPage() {
   const dict = useDict();
@@ -35,6 +36,7 @@ export default function DeadlinesPage() {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
     await supabase.from("deadlines").insert({ user_id: user.id, title, description: description || null, due_date: dueDate, remind_at: remindAt || null });
+    trackDeadlineAdded();
     setTitle(""); setDescription(""); setDueDate(""); setRemindAt("");
     setShowForm(false); setSaving(false);
     loadDeadlines();

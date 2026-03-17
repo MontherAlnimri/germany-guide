@@ -1,7 +1,8 @@
-﻿import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { stripe } from '@/lib/stripe/server';
 import { createAdminClient } from '@/lib/supabase/admin';
 import Stripe from 'stripe';
+import { trackServerEvent } from '@/lib/analytics-server';
 
 export async function POST(req: NextRequest) {
   const body = await req.text();
@@ -61,6 +62,9 @@ export async function POST(req: NextRequest) {
               .from('profiles')
               .update({ is_premium: true, updated_at: new Date().toISOString() })
               .eq('id', userId);
+
+            // Track subscription event
+            await trackServerEvent(userId, 'premium_subscribed', { plan });
           }
         }
 
@@ -73,6 +77,9 @@ export async function POST(req: NextRequest) {
             stripe_payment_intent_id: session.payment_intent as string,
             status: 'succeeded',
           });
+
+          // Track tip event
+          await trackServerEvent(userId || 'anonymous', 'tip_sent', { amount: (session.amount_total || 0) / 100 });
         }
         break;
       }

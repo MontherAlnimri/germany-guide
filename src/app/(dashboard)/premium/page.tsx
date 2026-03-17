@@ -1,8 +1,9 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 import { useDict } from "@/lib/i18n/context";
 import { useSubscription } from "@/hooks/useSubscription";
+import { trackEvent } from "@/lib/analytics";
 
 export default function PremiumPage() {
   const dict = useDict();
@@ -11,6 +12,7 @@ export default function PremiumPage() {
   const [checkoutLoading, setCheckoutLoading] = useState(false);
 
   const handleCheckout = async () => {
+    trackEvent("premium_checkout_started", { plan: billingInterval });
     setCheckoutLoading(true);
     try {
       const res = await fetch("/api/stripe/checkout", {

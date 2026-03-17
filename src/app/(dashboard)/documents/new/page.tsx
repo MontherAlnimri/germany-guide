@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -7,6 +7,7 @@ import { useDict } from "@/lib/i18n/context";
 import { DOCUMENT_TYPES } from "@/lib/constants";
 import { useUsageLimits } from "@/hooks/useUsageLimits";
 import LimitModal from "@/components/ui/LimitModal";
+import { trackDocumentAdded } from "@/lib/analytics-events";
 
 export default function NewDocumentPage() {
   const dict = useDict();
@@ -51,6 +52,7 @@ export default function NewDocumentPage() {
       notes: notes || null,
     });
 
+    trackDocumentAdded(docType);
     router.push("/documents");
   };
 

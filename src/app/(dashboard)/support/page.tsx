@@ -1,7 +1,8 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 import { useDict } from "@/lib/i18n/context";
+import { trackEvent } from "@/lib/analytics";
 
 const TIP_AMOUNTS = [
   { label: "\u20AC2", value: 200 },
@@ -26,6 +27,8 @@ export default function SupportPage() {
       setLoading(false);
       return;
     }
+
+    trackEvent("tip_sent", { amount: amount / 100 });
 
     try {
       const res = await fetch("/api/stripe/tip", {

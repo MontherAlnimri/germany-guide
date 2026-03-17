@@ -1,9 +1,10 @@
-﻿'use client';
+'use client';
 
 import { useState } from 'react';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 import { useDict } from '@/lib/i18n/context';
+import { trackEvent } from '@/lib/analytics';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Card } from '@/components/ui/Card';
@@ -59,6 +60,7 @@ export default function RegisterPage() {
       if (needsConfirmation) {
         // Sign out the unconfirmed session so useUser does not redirect
         await supabase.auth.signOut();
+        trackEvent("user_signed_up", { method: "email" });
         setRegistered(true);
       } else {
         // Email confirmation is OFF - user is auto-confirmed, let normal redirect happen
