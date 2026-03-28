@@ -51,19 +51,19 @@ export function FeaturedGuides() {
   ];
 
   return (
-    <section className="py-16 bg-white" id="guides">
+    <section className="py-16 bg-white dark:bg-gray-900" id="guides">
       <div className="max-w-6xl mx-auto px-4">
-        <h2 className="text-3xl font-bold text-center text-gray-900 mb-3">
+        <h2 className="text-3xl font-bold text-center text-gray-900 dark:text-white mb-3">
           {dict?.guides?.sectionTitle ?? "Free Germany Guides"}
         </h2>
-        <p className="text-center text-gray-600 mb-10 max-w-2xl mx-auto">
+        <p className="text-center text-gray-600 dark:text-gray-400 mb-10 max-w-2xl mx-auto">
           {dict?.guides?.sectionSubtitle ?? ""}
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {guides.map((g, i) => (
             <div
               key={i}
-              className="bg-gray-50 rounded-xl p-5 hover:shadow-md transition-shadow border group"
+              className="bg-gray-50 dark:bg-gray-800 rounded-xl p-5 hover:shadow-md transition-shadow border dark:border-gray-700 group"
             >
               <div className="flex items-center gap-2 mb-2">
                 <span>{g.icon}</span>
@@ -71,10 +71,10 @@ export function FeaturedGuides() {
                   {g.category}
                 </span>
               </div>
-              <h3 className="font-bold text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-2 mb-1">
+              <h3 className="font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2 mb-1">
                 {g.title}
               </h3>
-              <p className="text-sm text-gray-500 line-clamp-2">{g.desc}</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400 line-clamp-2">{g.desc}</p>
               <span className="text-xs text-gray-400 mt-2 block">
                 {g.time} {dict?.guides?.minRead ?? "min read"}
               </span>
@@ -106,27 +106,27 @@ export function FAQSection() {
   ];
 
   return (
-    <section className="py-16 bg-gray-50" id="faq">
+    <section className="py-16 bg-gray-50 dark:bg-gray-800/50" id="faq">
       <div className="max-w-3xl mx-auto px-4">
-        <h2 className="text-3xl font-bold text-center text-gray-900 mb-3">
+        <h2 className="text-3xl font-bold text-center text-gray-900 dark:text-white mb-3">
           {dict?.faq?.sectionTitle ?? "Frequently Asked Questions"}
         </h2>
-        <p className="text-center text-gray-600 mb-10">
+        <p className="text-center text-gray-600 dark:text-gray-400 mb-10">
           {dict?.faq?.sectionSubtitle ?? ""}
         </p>
         <div className="space-y-4">
           {faqItems.map((item, i) => (
             <details
               key={i}
-              className="bg-white rounded-xl border p-5 group"
+              className="bg-white dark:bg-gray-800 rounded-xl border dark:border-gray-700 p-5 group"
             >
-              <summary className="font-semibold text-gray-900 cursor-pointer list-none flex items-center justify-between">
+              <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer list-none flex items-center justify-between">
                 <span className="pr-4">{item.q}</span>
                 <span className="text-gray-400 group-open:rotate-180 transition-transform text-xl flex-shrink-0">
                   &#9662;
                 </span>
               </summary>
-              <p className="text-gray-600 mt-3 leading-relaxed">{item.a}</p>
+              <p className="text-gray-600 dark:text-gray-400 mt-3 leading-relaxed">{item.a}</p>
             </details>
           ))}
         </div>

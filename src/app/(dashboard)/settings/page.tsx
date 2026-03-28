@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -19,7 +19,7 @@ export default function SettingsPage() {
   const router = useRouter();
   const { user, loading: userLoading } = useUser();
   const { profile, loading: profileLoading, updateProfile } = useProfile();
-  const { subscription } = useSubscription();
+  const { isPremium, plan, isTrialing, trialDaysLeft } = useSubscription();
   const { verified } = useEmailVerified();
   const dict = useDict();
   const s = dict?.settings;
@@ -164,29 +164,29 @@ export default function SettingsPage() {
     );
   }
 
-  const isPremium = subscription?.plan === "monthly" || subscription?.plan === "yearly";
+
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">
       <div>
-        <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
           {s?.title ?? "Settings"}
         </h1>
-        <p className="text-gray-600 text-sm mt-1">
+        <p className="text-gray-600 dark:text-gray-400 text-sm mt-1">
           {s?.subtitle ?? "Manage your account and preferences"}
         </p>
       </div>
 
       {/* Account Info */}
       <Card className="p-4 sm:p-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
           {s?.accountInfo ?? "Account Information"}
         </h2>
         <div className="space-y-3">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
-            <span className="text-sm text-gray-600">{dict?.auth?.email ?? "Email"}</span>
+            <span className="text-sm text-gray-600 dark:text-gray-400">{dict?.auth?.email ?? "Email"}</span>
             <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-gray-900">{user?.email}</span>
+              <span className="text-sm font-medium text-gray-900 dark:text-white">{user?.email}</span>
               {verified === true && (
                 <Badge variant="success">{dict?.verification?.verified ?? "Verified"}</Badge>
               )}
@@ -196,7 +196,7 @@ export default function SettingsPage() {
             </div>
           </div>
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
-            <span className="text-sm text-gray-600">{s?.plan ?? "Plan"}</span>
+            <span className="text-sm text-gray-600 dark:text-gray-400">{s?.plan ?? "Plan"}</span>
             <div className="flex items-center gap-2">
               {isPremium ? (
                 <Badge variant="warning">{"\u2B50"} {dict?.premium?.premiumBadge ?? "Premium"}</Badge>
@@ -231,7 +231,7 @@ export default function SettingsPage() {
             </div>
           </div>
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
-            <span className="text-sm text-gray-600">{dict?.common?.language ?? "Language"}</span>
+            <span className="text-sm text-gray-600 dark:text-gray-400">{dict?.common?.language ?? "Language"}</span>
             <LanguageSwitcher />
           </div>
         </div>
@@ -239,7 +239,7 @@ export default function SettingsPage() {
 
       {/* Profile */}
       <Card className="p-4 sm:p-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
           {s?.profileSection ?? "Profile"}
         </h2>
 
@@ -256,26 +256,26 @@ export default function SettingsPage() {
 
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               {dict?.auth?.fullName ?? "Full Name"}
             </label>
             <input
               type="text"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none min-h-[44px]"
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none min-h-[44px] dark:bg-gray-800 dark:border-gray-600 dark:text-white transition-colors duration-200"
             />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 {dict?.onboarding?.visaType ?? "Visa Type"}
               </label>
               <select
                 value={visaType}
                 onChange={(e) => setVisaType(e.target.value)}
-                className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none bg-white min-h-[44px]"
+                className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none bg-white min-h-[44px] dark:bg-gray-800 dark:border-gray-600 dark:text-white transition-colors duration-200"
               >
                 <option value="">{dict?.onboarding?.visaPlaceholder ?? "Choose visa type"}</option>
                 {VISA_TYPES.map((v) => (
@@ -284,13 +284,13 @@ export default function SettingsPage() {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 {dict?.onboarding?.applicationType ?? "Application Type"}
               </label>
               <select
                 value={applicationType}
                 onChange={(e) => setApplicationType(e.target.value)}
-                className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none bg-white min-h-[44px]"
+                className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none bg-white min-h-[44px] dark:bg-gray-800 dark:border-gray-600 dark:text-white transition-colors duration-200"
               >
                 <option value="">{dict?.onboarding?.selectVisaType ?? "Select"}</option>
                 <option value="first">{dict?.onboarding?.firstApplication ?? "First Application"}</option>
@@ -301,13 +301,13 @@ export default function SettingsPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 {dict?.onboarding?.city ?? "City"}
               </label>
               <select
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
-                className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none bg-white min-h-[44px]"
+                className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none bg-white min-h-[44px] dark:bg-gray-800 dark:border-gray-600 dark:text-white transition-colors duration-200"
               >
                 <option value="">{dict?.onboarding?.cityPlaceholder ?? "Choose city"}</option>
                 {GERMAN_CITIES.map((c) => (
@@ -316,7 +316,7 @@ export default function SettingsPage() {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 {dict?.onboarding?.zipCode ?? "ZIP Code"}
               </label>
               <input
@@ -325,20 +325,20 @@ export default function SettingsPage() {
                 onChange={(e) => setZipCode(e.target.value)}
                 placeholder={dict?.onboarding?.zipPlaceholder ?? "e.g. 10115"}
                 maxLength={5}
-                className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none min-h-[44px]"
+                className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none min-h-[44px] dark:bg-gray-800 dark:border-gray-600 dark:text-white transition-colors duration-200"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               {dict?.onboarding?.visaExpiry ?? "Visa Expiry Date"}
             </label>
             <input
               type="date"
               value={visaExpiry}
               onChange={(e) => setVisaExpiry(e.target.value)}
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none min-h-[44px]"
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none min-h-[44px] dark:bg-gray-800 dark:border-gray-600 dark:text-white transition-colors duration-200"
             />
           </div>
 
@@ -354,7 +354,7 @@ export default function SettingsPage() {
 
       {/* Change Password */}
       <Card className="p-4 sm:p-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
           {s?.changePassword ?? "Change Password"}
         </h2>
 
@@ -371,7 +371,7 @@ export default function SettingsPage() {
 
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               {dict?.auth?.newPassword ?? "New Password"}
             </label>
             <input
@@ -379,14 +379,14 @@ export default function SettingsPage() {
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
               placeholder="********"
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none min-h-[44px]"
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none min-h-[44px] dark:bg-gray-800 dark:border-gray-600 dark:text-white transition-colors duration-200"
             />
             <p className="text-xs text-gray-500 mt-1">
               {dict?.auth?.passwordHint ?? "At least 6 characters"}
             </p>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               {dict?.auth?.confirmNewPassword ?? "Confirm New Password"}
             </label>
             <input
@@ -394,7 +394,7 @@ export default function SettingsPage() {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="********"
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none min-h-[44px]"
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none min-h-[44px] dark:bg-gray-800 dark:border-gray-600 dark:text-white transition-colors duration-200"
             />
           </div>
           <Button
@@ -444,7 +444,7 @@ export default function SettingsPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               {(s?.typeDeleteConfirm ?? 'Type "DELETE" to confirm').replace('"DELETE"', '')}
               <span className="font-bold text-red-600"> DELETE </span>
               {s?.toConfirm ?? "to confirm"}

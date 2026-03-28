@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import React, { useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 
@@ -14,13 +14,17 @@ export function Modal({ isOpen, onClose, title, children, size = "md" }: ModalPr
   }, [isOpen, onClose]);
   if (!isOpen) return null;
   return (
-    <div ref={overlayRef} className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/50 backdrop-blur-sm"
+    <div ref={overlayRef} className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/50 backdrop-blur-sm animate-modal-overlay"
       onClick={(e) => { if (e.target === overlayRef.current) onClose(); }}>
-      <div className={cn("w-full bg-white shadow-xl sm:rounded-xl rounded-t-xl max-h-[90vh] flex flex-col", sizeStyles[size])}>
+      <div className={cn("w-full bg-white shadow-xl sm:rounded-xl rounded-t-xl max-h-[90vh] flex flex-col animate-modal-content dark:bg-gray-800 dark:border dark:border-gray-700", sizeStyles[size])}>
         {title && (
-          <div className="flex items-center justify-between px-4 sm:px-6 py-4 border-b flex-shrink-0">
-            <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
-            <button onClick={onClose} className="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 min-w-[40px] min-h-[40px] flex items-center justify-center">X</button>
+          <div className="flex items-center justify-between px-4 sm:px-6 py-4 border-b flex-shrink-0 dark:border-gray-700">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{title}</h2>
+            <button onClick={onClose} className="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 min-w-[40px] min-h-[40px] flex items-center justify-center transition-colors duration-200 dark:hover:bg-gray-700 dark:hover:text-gray-300">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
           </div>
         )}
         <div className="p-4 sm:p-6 overflow-y-auto flex-1">{children}</div>

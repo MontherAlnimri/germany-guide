@@ -6,6 +6,7 @@ import StructuredData from "@/components/StructuredData";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import PostHogProvider from "@/components/analytics/PostHogProvider";
+import { ToastProvider } from "@/components/ui/Toast";
 import { Suspense } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -95,8 +96,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="light" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{var t=localStorage.getItem("theme");if(t==="dark"||(!t&&window.matchMedia("(prefers-color-scheme:dark)").matches)){document.documentElement.classList.add("dark")}}catch(e){}`,
+          }}
+        />
         <script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3388930204483365"
@@ -107,12 +113,14 @@ export default function RootLayout({
           src="https://fundingchoicesmessages.google.com/i/pub-3388930204483365?ers=1"
         />
       </head>
-      <body className={`${inter.className} bg-white text-gray-900 antialiased`}>
+      <body className={`${inter.className} bg-white text-gray-900 antialiased dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300`}>
         <Suspense fallback={null}>
           <PostHogProvider>
             <I18nClientProvider>
-              <StructuredData />
-              {children}
+              <ToastProvider>
+                <StructuredData />
+                {children}
+              </ToastProvider>
             </I18nClientProvider>
           </PostHogProvider>
         </Suspense>

@@ -77,6 +77,20 @@
     step2Desc: string;
     step3Title: string;
     step3Desc: string;
+    statUsers: string;
+    statGuides: string;
+    statLanguages: string;
+    statRating: string;
+    testimonialsTitle: string;
+    testimonial1Quote: string;
+    testimonial1Name: string;
+    testimonial1Visa: string;
+    testimonial2Quote: string;
+    testimonial2Name: string;
+    testimonial2Visa: string;
+    testimonial3Quote: string;
+    testimonial3Name: string;
+    testimonial3Visa: string;
   };
   auth: {
     loginTitle: string;
@@ -575,6 +589,26 @@
     verified: string;
     notVerified: string;
   };
+  trial: {
+    title: string;
+    activeTrial: string;
+    trialBanner: string;
+    trialBannerDesc: string;
+    daysLeft: string;
+    dayLeft: string;
+    trialExpired: string;
+    trialExpiredDesc: string;
+    upgradeNow: string;
+    trialFeature: string;
+    startTrial: string;
+    freeTrialIncluded: string;
+    trialDaysRemaining: string;
+    enjoyingTrial: string;
+    trialEndsIn: string;
+    keepPremium: string;
+    trialActive: string;
+    expiresOn: string;
+  };
   guides: {
     sectionTitle: string;
     sectionSubtitle: string;
@@ -653,7 +687,7 @@ const en: Dictionary = {
   landing: {
     heroTitle: "Navigate German Bureaucracy with Confidence",
     heroSubtitle: "Step-by-step guides for visas, registration, insurance, and more. Built for international students and migrants in Germany.",
-    getStarted: "Get Started Free",
+    getStarted: "Start Free Trial",
     login: "Log In",
     whyTitle: "Everything You Need in One Place",
     feature1Title: "Step-by-Step Guides",
@@ -705,7 +739,7 @@ const en: Dictionary = {
     freeFeature1: "Up to 3 active guides",
     freeFeature2: "Up to 10 documents",
     freeFeature3: "Deadline reminders",
-    freeFeature4: "11 languages",
+    freeFeature4: "7-day free premium trial",
     premiumTier: "Premium",
     ctaTitle: "Ready to Start Your Journey?",
     ctaSubtitle: "Join thousands of migrants and students navigating German bureaucracy with confidence.",
@@ -718,6 +752,20 @@ const en: Dictionary = {
     step2Desc: "Get clear instructions for every bureaucratic process, tailored to your situation.",
     step3Title: "Track Everything",
     step3Desc: "Keep your documents organized and never miss a deadline with smart reminders.",
+    statUsers: "Users helped",
+    statGuides: "Visa guides",
+    statLanguages: "Languages",
+    statRating: "User rating",
+    testimonialsTitle: "What Our Users Say",
+    testimonial1Quote: "Germany Guide made my visa renewal so much easier. I knew exactly what documents to prepare and when.",
+    testimonial1Name: "Priya S.",
+    testimonial1Visa: "Blue Card",
+    testimonial2Quote: "As a student, navigating Anmeldung and health insurance was overwhelming. This app broke it down step by step.",
+    testimonial2Name: "Ahmed K.",
+    testimonial2Visa: "Student Visa",
+    testimonial3Quote: "The deadline reminders saved me from missing my visa renewal. Absolutely essential for expats.",
+    testimonial3Name: "Maria L.",
+    testimonial3Visa: "Family Reunion",
   },
   auth: {
     loginTitle: "Welcome Back",
@@ -1216,6 +1264,27 @@ const en: Dictionary = {
     verified: "Verified",
     notVerified: "Not verified",
   },
+  trial: {
+    title: "Free Trial",
+    activeTrial: "Trial Active",
+    trialBanner: "You have a free trial!",
+    trialBannerDesc: "Enjoy full premium access. Your trial ends in {days} days.",
+    daysLeft: "{days} days left",
+    dayLeft: "1 day left",
+    trialExpired: "Trial Ended",
+    trialExpiredDesc: "Your free trial has expired. Upgrade to keep premium features.",
+    upgradeNow: "Upgrade Now",
+    trialFeature: "Included in your free trial",
+    startTrial: "Start Free Trial",
+    freeTrialIncluded: "7-day free trial included",
+    trialDaysRemaining: "{days} days remaining in trial",
+    enjoyingTrial: "Enjoying your trial?",
+    trialEndsIn: "Trial ends in {days} days",
+    keepPremium: "Keep Premium Access",
+    trialActive: "Trial Active",
+    expiresOn: "Expires on {date}",
+  },
+
   guides: {
     sectionTitle: "Free Germany Guides",
     sectionSubtitle: "Detailed, step-by-step guides covering every aspect of life in Germany. Written by expats, updated for 2025.",

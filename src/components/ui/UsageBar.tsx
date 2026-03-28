@@ -17,9 +17,9 @@ export default function UsageBar({ label, current, max, isPremium }: UsageBarPro
   const isAtLimit = current >= max;
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-4">
+    <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
       <div className="flex items-center justify-between mb-2">
-        <span className="text-sm font-medium text-gray-700">{label}</span>
+        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{label}</span>
         <span
           className={`text-sm font-semibold ${
             isAtLimit
@@ -32,7 +32,7 @@ export default function UsageBar({ label, current, max, isPremium }: UsageBarPro
           {current} / {max}
         </span>
       </div>
-      <div className="w-full bg-gray-200 rounded-full h-2">
+      <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
         <div
           className={`h-2 rounded-full transition-all ${
             isAtLimit
