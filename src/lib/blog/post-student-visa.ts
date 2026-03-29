@@ -10,6 +10,8 @@ const post: BlogPost = {
   publishedAt: "2025-02-20",
   updatedAt: "2025-06-01",
   author: "Germany Guide Team",
+  relevantVisaTypes: ["student_visa"],
+  relevantApplicationTypes: ["first", "renewal"],
   content: `
 ## Overview: Studying in Germany
 

@@ -31,18 +31,18 @@ export default function LanguageSwitcher({ compact = false }: { compact?: boolea
     <div className="relative" ref={ref}>
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-1.5 px-2 py-1.5 text-sm rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors min-h-[36px] min-w-[36px] justify-center"
+        className="flex items-center gap-1.5 px-2 py-1.5 text-sm rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors min-h-[36px] min-w-[36px] justify-center"
         aria-label="Change language"
         type="button"
       >
         <span className="text-base">{localeFlags[locale]}</span>
         {!compact && (
-          <span className="hidden sm:inline text-gray-700">
+          <span className="hidden sm:inline text-gray-700 dark:text-gray-300">
             {localeNames[locale]}
           </span>
         )}
         <svg
-          className={"w-3 h-3 text-gray-500 transition-transform " + (open ? "rotate-180" : "")}
+          className={"w-3 h-3 text-gray-500 dark:text-gray-400 transition-transform " + (open ? "rotate-180" : "")}
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -52,12 +52,12 @@ export default function LanguageSwitcher({ compact = false }: { compact?: boolea
       </button>
 
       {open && (
-        <div className="absolute right-0 top-full mt-1 z-50 bg-white border border-gray-200 rounded-xl shadow-lg py-1 w-[200px] max-h-[60vh] overflow-y-auto">
+        <div className="absolute right-0 top-full mt-1 z-50 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-xl shadow-lg py-1 w-[200px] max-h-[60vh] overflow-y-auto">
           {i18n.locales.map((loc) => {
             const isActive = loc === locale;
             const dir = getDirection(loc);
-            let cls = "text-gray-700 hover:bg-gray-50";
-            if (isActive) cls = "bg-blue-50 text-blue-700 font-medium";
+            let cls = "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700";
+            if (isActive) cls = "bg-blue-50 dark:bg-blue-900/50 text-blue-700 dark:text-blue-400 font-medium";
             return (
               <button
                 key={loc}
@@ -71,7 +71,7 @@ export default function LanguageSwitcher({ compact = false }: { compact?: boolea
                   {localeNames[loc]}
                 </span>
                 {isActive && (
-                  <svg className="w-4 h-4 text-blue-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                  <svg className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                   </svg>
                 )}

@@ -10,6 +10,8 @@ const post: BlogPost = {
   publishedAt: "2025-01-20",
   updatedAt: "2025-06-01",
   author: "Germany Guide Team",
+  relevantVisaTypes: ["student_visa", "job_seeker_visa", "blue_card", "work_permit", "family_reunion", "freelance_visa", "permanent_residence", "other"],
+  relevantApplicationTypes: ["first", "renewal"],
   content: `
 ## Health Insurance is Mandatory in Germany
 

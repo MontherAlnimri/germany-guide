@@ -646,6 +646,11 @@
     guide6Title: string;
     guide6Desc: string;
     guide6Time: string;
+    recommendedForYou: string;
+    essentialGuides: string;
+    basedOnProfile: string;
+    loginForPersonalized: string;
+    otherGuides: string;
   };
   faq: {
     sectionTitle: string;
@@ -1330,6 +1335,11 @@ const en: Dictionary = {
     guide6Title: "Student Visa for Germany: Complete Application Guide (2025)",
     guide6Desc: "How to get a German student visa. Requirements, blocked account, health insurance, university admission, and step-by-step application process for international students.",
     guide6Time: "13",
+    recommendedForYou: "Recommended for You",
+    essentialGuides: "Essential Guides",
+    basedOnProfile: "Based on your visa type and application status",
+    loginForPersonalized: "Log in to see personalized guide recommendations based on your visa type",
+    otherGuides: "Other Guides",
   },
   faq: {
     sectionTitle: "Frequently Asked Questions",

@@ -10,6 +10,8 @@ const post: BlogPost = {
   publishedAt: "2025-02-10",
   updatedAt: "2025-06-01",
   author: "Germany Guide Team",
+  relevantVisaTypes: ["student_visa", "job_seeker_visa", "blue_card", "work_permit", "family_reunion", "freelance_visa", "permanent_residence", "other"],
+  relevantApplicationTypes: ["first"],
   content: `
 ## The German Housing Market: What to Expect
 

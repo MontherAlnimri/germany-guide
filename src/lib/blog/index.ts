@@ -1,4 +1,4 @@
-﻿import { BlogPost } from "./types";
+import { BlogPost } from "./types";
 import postAnmeldung from "./post-anmeldung";
 import postHealthInsurance from "./post-health-insurance";
 import postBankAccount from "./post-bank-account";
@@ -7,6 +7,11 @@ import postBlueCard from "./post-blue-card";
 import postStudentVisa from "./post-student-visa";
 import postTaxes from "./post-taxes";
 import postFirst30Days from "./post-first-30-days";
+import postWorkPermit from "./post-work-permit";
+import postJobSeekerVisa from "./post-job-seeker-visa";
+import postFamilyReunion from "./post-family-reunion";
+import postFreelanceVisa from "./post-freelance-visa";
+import postPermanentResidence from "./post-permanent-residence";
 
 export const blogPosts: BlogPost[] = [
   postAnmeldung,
@@ -17,6 +22,11 @@ export const blogPosts: BlogPost[] = [
   postStudentVisa,
   postTaxes,
   postFirst30Days,
+  postWorkPermit,
+  postJobSeekerVisa,
+  postFamilyReunion,
+  postFreelanceVisa,
+  postPermanentResidence,
 ];
 
 export function getBlogPost(slug: string): BlogPost | undefined {
@@ -42,6 +52,42 @@ export function getRelatedPosts(slug: string, limit = 3): BlogPost[] {
         p.tags.some((t) => post.tags.includes(t))
     )
     .slice(0, limit);
+}
+
+export function getRelevantPosts(
+  visaType?: string | null,
+  applicationType?: string | null
+): { recommended: BlogPost[]; essential: BlogPost[]; other: BlogPost[] } {
+  if (!visaType) {
+    return { recommended: [], essential: [], other: blogPosts };
+  }
+
+  const allVisaTypes = [
+    "student_visa", "job_seeker_visa", "blue_card", "work_permit",
+    "family_reunion", "freelance_visa", "permanent_residence", "other",
+  ];
+
+  const recommended: BlogPost[] = [];
+  const essential: BlogPost[] = [];
+  const other: BlogPost[] = [];
+
+  for (const post of blogPosts) {
+    const matchesVisa = post.relevantVisaTypes?.includes(visaType);
+    const matchesApp = !applicationType || !post.relevantApplicationTypes?.length || post.relevantApplicationTypes.includes(applicationType);
+    const isUniversal = post.relevantVisaTypes?.length === allVisaTypes.length;
+
+    if (matchesVisa && matchesApp) {
+      if (isUniversal) {
+        essential.push(post);
+      } else {
+        recommended.push(post);
+      }
+    } else {
+      other.push(post);
+    }
+  }
+
+  return { recommended, essential, other };
 }
 
 export { type BlogPost } from "./types";

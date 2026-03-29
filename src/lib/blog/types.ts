@@ -9,6 +9,8 @@ export interface BlogPost {
   publishedAt: string;
   updatedAt: string;
   author: string;
+  relevantVisaTypes?: string[];
+  relevantApplicationTypes?: string[];
 }
 
 export const BLOG_CATEGORIES = {

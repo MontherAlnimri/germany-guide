@@ -10,6 +10,8 @@ const post: BlogPost = {
   publishedAt: "2025-03-01",
   updatedAt: "2025-06-01",
   author: "Germany Guide Team",
+  relevantVisaTypes: ["job_seeker_visa", "blue_card", "work_permit", "family_reunion", "freelance_visa", "permanent_residence", "other"],
+  relevantApplicationTypes: ["first", "renewal"],
   content: `
 ## The German Tax System: Overview
 

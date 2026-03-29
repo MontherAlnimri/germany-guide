@@ -10,6 +10,8 @@ const post: BlogPost = {
   publishedAt: "2025-02-15",
   updatedAt: "2025-06-01",
   author: "Germany Guide Team",
+  relevantVisaTypes: ["blue_card"],
+  relevantApplicationTypes: ["first", "renewal"],
   content: `
 ## What is the EU Blue Card?
 
