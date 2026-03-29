@@ -52,19 +52,13 @@ export default function RegisterPage() {
         return;
       }
 
-      // Check if email confirmation is required
-      // When "Confirm email" is ON, the user object has identities but email_confirmed_at is null
-      // When OFF, email_confirmed_at is set immediately
       const needsConfirmation = data.user && !data.user.email_confirmed_at;
 
       if (needsConfirmation) {
-        // Sign out the unconfirmed session so useUser does not redirect
         await supabase.auth.signOut();
         trackEvent("user_signed_up", { method: "email" });
         setRegistered(true);
       } else {
-        // Email confirmation is OFF - user is auto-confirmed, let normal redirect happen
-        // The useUser hook will detect the session and redirect to onboarding
         setRegistered(true);
       }
     } catch {
@@ -76,17 +70,19 @@ export default function RegisterPage() {
 
   if (registered) {
     return (
-      <div className="min-h-screen flex items-center justify-center px-4 py-8 bg-gray-50">
-        <Card className="w-full max-w-md p-6 sm:p-8 text-center">
-          <div className="text-5xl mb-4">{"\uD83D\uDCE7"}</div>
-          <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
+      <div className="w-full max-w-md">
+        <div className="glass-dark rounded-2xl shadow-premium-lg p-6 sm:p-8 text-center">
+          <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-blue-500/25">
+            <span className="text-3xl">{"\uD83D\uDCE7"}</span>
+          </div>
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-2">
             {dict.verification?.checkEmailTitle ?? 'Check your email'}
           </h1>
-          <p className="text-gray-600 mb-2">
+          <p className="text-gray-600 dark:text-gray-300 mb-2">
             {dict.verification?.checkEmailDesc ?? 'We sent a verification link to:'}
           </p>
-          <p className="font-medium text-gray-900 mb-6">{email}</p>
-          <p className="text-sm text-gray-500 mb-6">
+          <p className="font-medium text-gray-900 dark:text-white mb-6">{email}</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
             {dict.verification?.checkEmailHint ?? 'Click the link in the email to verify your account, then sign in.'}
           </p>
           <Link href="/login">
@@ -94,32 +90,35 @@ export default function RegisterPage() {
               {dict.auth?.backToLogin ?? 'Back to Sign In'}
             </Button>
           </Link>
-        </Card>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-8 bg-gray-50">
-      <Card className="w-full max-w-md p-6 sm:p-8">
+    <div className="w-full max-w-md">
+      <div className="glass-dark rounded-2xl shadow-premium-lg p-6 sm:p-8">
         <div className="text-center mb-6 sm:mb-8">
-          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
+          <div className="w-14 h-14 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-blue-500/25">
+            <span className="text-2xl text-white">{"\u{2728}"}</span>
+          </div>
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
             {dict.auth?.registerTitle ?? 'Create Account'}
           </h1>
-          <p className="text-gray-600 text-sm mt-2">
+          <p className="text-gray-600 dark:text-gray-300 text-sm mt-2">
             {dict.auth?.registerDesc ?? 'Start your journey in Germany'}
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+            <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700/50 text-red-700 dark:text-red-400 px-4 py-3 rounded-xl text-sm">
               {error}
             </div>
           )}
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
               {dict.auth?.fullName ?? 'Full Name'}
             </label>
             <Input
@@ -133,7 +132,7 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
               {dict.auth?.email ?? 'Email'}
             </label>
             <Input
@@ -147,7 +146,7 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
               {dict.auth?.password ?? 'Password'}
             </label>
             <Input
@@ -158,13 +157,13 @@ export default function RegisterPage() {
               placeholder="********"
               className="min-h-[44px]"
             />
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
               {dict.auth?.passwordHint ?? 'At least 6 characters'}
             </p>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
               {dict.auth?.confirmPassword ?? 'Confirm Password'}
             </label>
             <Input
@@ -177,18 +176,22 @@ export default function RegisterPage() {
             />
           </div>
 
-          <Button type="submit" className="w-full min-h-[44px]" disabled={loading}>
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-medium hover:from-blue-700 hover:to-indigo-700 transition-all disabled:opacity-50 min-h-[48px] shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/30"
+          >
             {loading ? (dict.common?.loading ?? 'Loading...') : (dict.auth?.signUp ?? 'Sign Up')}
-          </Button>
+          </button>
         </form>
 
-        <p className="text-center text-sm text-gray-600 mt-6">
+        <p className="text-center text-sm text-gray-600 dark:text-gray-400 mt-6">
           {dict.auth?.hasAccount ?? 'Already have an account?'}{' '}
           <Link href="/login" className="text-blue-600 hover:text-blue-700 font-medium">
             {dict.auth?.signInLink ?? 'Sign In'}
           </Link>
         </p>
-      </Card>
+      </div>
     </div>
   );
 }

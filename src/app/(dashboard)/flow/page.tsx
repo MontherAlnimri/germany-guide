@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -35,7 +35,7 @@ interface FlowInstance {
 export default function FlowPage() {
   const dict = useDict();
   const router = useRouter();
-  const { canCreateFlow, flowCount, maxFlows, isPremium, loading: limitsLoading } = useUsageLimits();
+  const { canStartFlow: canCreateFlow, flowCount, maxFlows, isPremium, loading: limitsLoading } = useUsageLimits();
 
   const [baseFlows, setBaseFlows] = useState<BaseFlow[]>([]);
   const [variants, setVariants] = useState<FlowVariant[]>([]);
@@ -131,9 +131,9 @@ export default function FlowPage() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-4 space-y-8">
+    <div className="max-w-4xl mx-auto space-y-6 sm:space-y-8">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
           {dict.flows?.title || "Your Flows"}
         </h1>
       </div>
@@ -149,7 +149,7 @@ export default function FlowPage() {
 
       {myInstances.length > 0 && (
         <section>
-          <h2 className="text-lg font-semibold text-gray-800 mb-4">
+          <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">
             {dict.flows?.myFlows || "My Flows"}
           </h2>
           <div className="grid gap-4">
@@ -158,26 +158,26 @@ export default function FlowPage() {
               return (
                 <div
                   key={instance.id}
-                  className="bg-white rounded-xl border border-gray-200 p-5 hover:shadow-md transition-shadow cursor-pointer"
+                  className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-5 shadow-premium hover-lift cursor-pointer"
                   onClick={() => router.push(`/flow/${instance.id}`)}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <span className="text-2xl">{base?.icon || ""}</span>
                       <div>
-                        <h3 className="font-semibold text-gray-900">
+                        <h3 className="font-semibold text-gray-900 dark:text-white">
                           {base?.title || "Flow"}
                         </h3>
-                        <p className="text-sm text-gray-500">{base?.description}</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">{base?.description}</p>
                       </div>
                     </div>
                     <div className="text-right">
                       <div className="text-sm font-medium text-blue-600">
                         {instance.progress}%
                       </div>
-                      <div className="w-24 bg-gray-200 rounded-full h-2 mt-1">
+                      <div className="w-24 bg-gray-100 dark:bg-gray-700 rounded-full h-2 mt-1">
                         <div
-                          className="bg-blue-600 h-2 rounded-full"
+                          className="bg-gradient-to-r from-blue-500 to-indigo-500 h-2 rounded-full transition-all duration-500"
                           style={{ width: `${instance.progress}%` }}
                         />
                       </div>
@@ -192,10 +192,10 @@ export default function FlowPage() {
 
       {recommendedVariants.length > 0 && (
         <section>
-          <h2 className="text-lg font-semibold text-gray-800 mb-2">
+          <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-2">
             {dict.flows?.recommendedForYou || "Recommended for You"}
           </h2>
-          <p className="text-sm text-gray-500 mb-4">
+          <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
             {dict.flows?.basedOnVisa || "Based on your visa type and situation"}
           </p>
           <div className="grid gap-4">
@@ -204,21 +204,21 @@ export default function FlowPage() {
               return (
                 <div
                   key={variant.id}
-                  className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-200 p-5"
+                  className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 rounded-2xl border border-blue-200/60 dark:border-blue-700/40 p-5 shadow-premium hover-lift"
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <span className="text-2xl">{base?.icon || ""}</span>
                       <div>
-                        <h3 className="font-semibold text-gray-900">
+                        <h3 className="font-semibold text-gray-900 dark:text-white">
                           {base?.title || "Flow"}
                         </h3>
-                        <p className="text-sm text-gray-500">{base?.description}</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">{base?.description}</p>
                       </div>
                     </div>
                     <button
                       onClick={() => startFlow(variant.id)}
-                      className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+                      className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-2.5 rounded-xl text-sm font-medium hover:from-blue-700 hover:to-indigo-700 transition-all shadow-md shadow-blue-500/20 min-h-[44px]"
                     >
                       {dict.flows?.startNew || "Start"}
                     </button>
@@ -232,7 +232,7 @@ export default function FlowPage() {
 
       {otherVariants.length > 0 && (
         <section>
-          <h2 className="text-lg font-semibold text-gray-800 mb-4">
+          <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">
             {dict.flows?.otherFlows || "Other Flows"}
           </h2>
           <div className="grid gap-4">
@@ -241,21 +241,21 @@ export default function FlowPage() {
               return (
                 <div
                   key={variant.id}
-                  className="bg-white rounded-xl border border-gray-200 p-5"
+                  className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-5 shadow-premium hover-lift"
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <span className="text-2xl">{base?.icon || ""}</span>
                       <div>
-                        <h3 className="font-semibold text-gray-900">
+                        <h3 className="font-semibold text-gray-900 dark:text-white">
                           {base?.title || "Flow"}
                         </h3>
-                        <p className="text-sm text-gray-500">{base?.description}</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">{base?.description}</p>
                       </div>
                     </div>
                     <button
                       onClick={() => startFlow(variant.id)}
-                      className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors"
+                      className="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-4 py-2.5 rounded-xl text-sm font-medium hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors min-h-[44px]"
                     >
                       {dict.flows?.startNew || "Start"}
                     </button>

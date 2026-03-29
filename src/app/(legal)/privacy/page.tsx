@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useDict } from "@/lib/i18n/context";
 
@@ -20,28 +20,28 @@ export default function PrivacyPage() {
   ];
 
   return (
-    <div className="prose prose-blue max-w-none">
-      <h1 className="text-3xl font-bold text-gray-900 mb-2">
+    <div className="prose prose-blue dark:prose-invert max-w-none">
+      <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
         {p?.title || "Privacy Policy"}
       </h1>
-      <p className="text-sm text-gray-500 mb-8">
+      <p className="text-sm text-gray-500 dark:text-gray-400 mb-8">
         {p?.lastUpdated || "Last updated: July 2025"}
       </p>
-      <p className="text-gray-700 mb-8 text-lg leading-relaxed">
+      <p className="text-gray-700 dark:text-gray-300 mb-8 text-lg leading-relaxed">
         {p?.intro || "Your privacy is important to us."}
       </p>
 
       {sections.map((section, index) => (
         <div key={index} className="mb-8">
-          <h2 className="text-xl font-semibold text-gray-900 mb-3">
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
             {index + 1}. {section.title}
           </h2>
-          <p className="text-gray-700 leading-relaxed">{section.content}</p>
+          <p className="text-gray-700 dark:text-gray-300 leading-relaxed">{section.content}</p>
         </div>
       ))}
 
-      <div className="mt-8 p-4 bg-blue-50 rounded-lg">
-        <p className="text-gray-700">
+      <div className="mt-8 p-4 bg-blue-50 dark:bg-blue-900/30 rounded-lg">
+        <p className="text-gray-700 dark:text-gray-300">
           {p?.contactEmail || "support@my-germany-guide.vercel.app"}
         </p>
       </div>

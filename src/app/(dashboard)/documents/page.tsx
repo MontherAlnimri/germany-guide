@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -25,7 +25,7 @@ export default function DocumentsPage() {
   const d = dict.docs;
   const router = useRouter();
   const { isPremium } = useSubscription();
-  const { documentCount, maxDocuments, canCreateDocument } = useUsageLimits();
+  const { docCount: documentCount, maxDocs: maxDocuments, canAddDoc: canCreateDocument } = useUsageLimits();
 
   const [documents, setDocuments] = useState<Doc[]>([]);
   const [loading, setLoading] = useState(true);
@@ -69,10 +69,10 @@ export default function DocumentsPage() {
 
   const getStatusBadge = (status: string) => {
     const styles: Record<string, string> = {
-      valid: "bg-green-100 text-green-700",
-      pending: "bg-yellow-100 text-yellow-700",
-      expired: "bg-red-100 text-red-700",
-      notUploaded: "bg-gray-100 text-gray-600",
+      valid: "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400",
+      pending: "bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400",
+      expired: "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400",
+      notUploaded: "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400",
     };
     const labels: Record<string, string> = {
       valid: d?.valid || "Valid",
@@ -104,14 +104,14 @@ export default function DocumentsPage() {
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
           {d?.documentVault || "Document Vault"}
         </h1>
         <div className="flex items-center gap-2 sm:gap-3">
           {isPremium && documents.length > 0 && (
             <button
               onClick={handleExportPDF}
-              className="bg-amber-100 text-amber-800 px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium hover:bg-amber-200 transition-colors"
+              className="bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium hover:bg-amber-200 dark:hover:bg-amber-900/50 transition-colors"
             >
               Export PDF
             </button>
@@ -125,7 +125,7 @@ export default function DocumentsPage() {
               }
               router.push("/documents/new");
             }}
-            className="bg-blue-600 text-white px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium hover:bg-blue-700 transition-colors whitespace-nowrap"
+            className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-medium hover:from-blue-700 hover:to-indigo-700 transition-all whitespace-nowrap shadow-md shadow-blue-500/20"
           >
             + {d?.addNewDocument || "Add Document"}
           </button>
@@ -144,15 +144,15 @@ export default function DocumentsPage() {
       {documents.length === 0 ? (
         <div className="text-center py-12 sm:py-16">
           <div className="text-4xl sm:text-5xl mb-4">{"\u{1F4C4}"}</div>
-          <h2 className="text-lg font-semibold text-gray-900 mb-2">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
             {d?.noDocuments || "No documents added yet"}
           </h2>
-          <p className="text-gray-500 mb-6 text-sm sm:text-base">
+          <p className="text-gray-500 dark:text-gray-400 mb-6 text-sm sm:text-base">
             {d?.addFirst || "Add your first document to start tracking"}
           </p>
           <button
             onClick={() => router.push("/documents/new")}
-            className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+            className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-3 rounded-xl font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all shadow-md shadow-blue-500/20"
           >
             + {d?.addNewDocument || "Add Document"}
           </button>
@@ -162,21 +162,21 @@ export default function DocumentsPage() {
           {documents.map((doc) => (
             <div
               key={doc.id}
-              className="bg-white rounded-xl border border-gray-200 p-4 sm:p-5 hover:shadow-sm transition-shadow"
+              className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-4 sm:p-5 shadow-premium hover-lift transition-all"
             >
               <div className="flex items-start justify-between gap-3">
                 <div className="flex-1 min-w-0">
                   <div className="flex flex-wrap items-center gap-2 mb-1">
-                    <h3 className="font-semibold text-gray-900 text-sm sm:text-base truncate">{doc.doc_name}</h3>
+                    <h3 className="font-semibold text-gray-900 dark:text-white text-sm sm:text-base truncate">{doc.doc_name}</h3>
                     {getStatusBadge(doc.status)}
                     {isExpiringSoon(doc.expiry_date) && (
-                      <span className="text-xs px-2 py-1 rounded-full font-medium bg-orange-100 text-orange-700">
+                      <span className="text-xs px-2 py-1 rounded-full font-medium bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400">
                         {d?.expiringSoon || "Expiring Soon"}
                       </span>
                     )}
                   </div>
-                  <p className="text-xs sm:text-sm text-gray-500">{doc.doc_type}</p>
-                  <div className="flex flex-wrap gap-3 sm:gap-4 mt-2 text-xs text-gray-400">
+                  <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">{doc.doc_type}</p>
+                  <div className="flex flex-wrap gap-3 sm:gap-4 mt-2 text-xs text-gray-400 dark:text-gray-500">
                     {doc.issue_date && (
                       <span>
                         {d?.issued || "Issued"}: {new Date(doc.issue_date).toLocaleDateString()}
@@ -189,7 +189,7 @@ export default function DocumentsPage() {
                     )}
                   </div>
                   {doc.notes && (
-                    <p className="text-xs sm:text-sm text-gray-500 mt-2 italic line-clamp-2">{doc.notes}</p>
+                    <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-2 italic line-clamp-2">{doc.notes}</p>
                   )}
                 </div>
                 <button

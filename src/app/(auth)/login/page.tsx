@@ -26,7 +26,6 @@ export default function LoginPage() {
     const { data, error: signInError } = await supabase.auth.signInWithPassword({ email, password });
 
     if (signInError) {
-      // Supabase returns "Email not confirmed" when user has not verified
       if (signInError.message.toLowerCase().includes("email not confirmed")) {
         setShowVerificationMessage(true);
       } else {
@@ -36,8 +35,6 @@ export default function LoginPage() {
       return;
     }
 
-    // Double-check: if sign-in succeeded but email is not confirmed
-    // (this can happen if Supabase settings allow sign-in before confirmation)
     if (data.user && !data.user.email_confirmed_at) {
       setShowVerificationMessage(true);
       await supabase.auth.signOut();
@@ -45,7 +42,6 @@ export default function LoginPage() {
       return;
     }
 
-    // Track login
     if (data.user) {
       trackEvent("user_logged_in", { method: "email" });
       identifyUser(data.user.id, { email: data.user.email ?? undefined });
@@ -77,25 +73,28 @@ export default function LoginPage() {
 
   return (
     <div className="w-full max-w-md">
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8">
+      <div className="glass-dark rounded-2xl shadow-premium-lg p-6 sm:p-8">
         <div className="text-center mb-6 sm:mb-8">
-          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">{dict.auth.loginTitle}</h1>
-          <p className="text-gray-600 mt-2 text-sm sm:text-base">{dict.auth.loginSubtitle}</p>
+          <div className="w-14 h-14 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-blue-500/25">
+            <span className="text-2xl text-white">{"\uD83C\uDDE9\uD83C\uDDEA"}</span>
+          </div>
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">{dict.auth.loginTitle}</h1>
+          <p className="text-gray-600 dark:text-gray-300 mt-2 text-sm sm:text-base">{dict.auth.loginSubtitle}</p>
         </div>
 
         {showVerificationMessage && (
-          <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-4">
+          <div className="bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-700/50 rounded-xl p-4 mb-4">
             <div className="flex items-start gap-3">
               <span className="text-amber-500 text-xl flex-shrink-0">{"\uD83D\uDCE7"}</span>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-amber-800">
+                <p className="text-sm font-semibold text-amber-800 dark:text-amber-200">
                   {dict.verification?.checkEmailTitle ?? "Check your email"}
                 </p>
-                <p className="text-sm text-amber-700 mt-1">
+                <p className="text-sm text-amber-700 dark:text-amber-300 mt-1">
                   {dict.verification?.checkEmailDesc ?? "We sent a verification link to:"}
                 </p>
-                <p className="text-sm font-medium text-amber-900 mt-1">{email}</p>
-                <p className="text-xs text-amber-600 mt-2">
+                <p className="text-sm font-medium text-amber-900 dark:text-amber-100 mt-1">{email}</p>
+                <p className="text-xs text-amber-600 dark:text-amber-400 mt-2">
                   {dict.verification?.checkEmailHint ?? "Click the link in the email to verify your account, then sign in."}
                 </p>
                 <button
@@ -113,23 +112,23 @@ export default function LoginPage() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {error && (
-            <div className="bg-red-50 text-red-600 text-sm rounded-lg p-3">{error}</div>
+            <div className="bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 text-sm rounded-xl p-3 border border-red-100 dark:border-red-700/50">{error}</div>
           )}
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">{dict.auth.email}</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">{dict.auth.email}</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition min-h-[44px]"
+              className="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:bg-white dark:focus:bg-gray-800 dark:text-white outline-none transition-all min-h-[44px]"
               required
             />
           </div>
 
           <div>
-            <div className="flex items-center justify-between mb-1">
-              <label className="block text-sm font-medium text-gray-700">{dict.auth.password}</label>
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">{dict.auth.password}</label>
               <Link
                 href="/forgot-password"
                 className="text-xs text-blue-600 hover:text-blue-700 font-medium"
@@ -141,7 +140,7 @@ export default function LoginPage() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition min-h-[44px]"
+              className="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:bg-white dark:focus:bg-gray-800 dark:text-white outline-none transition-all min-h-[44px]"
               required
             />
           </div>
@@ -149,13 +148,13 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2.5 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 min-h-[48px]"
+            className="w-full py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-medium hover:from-blue-700 hover:to-indigo-700 transition-all disabled:opacity-50 min-h-[48px] shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/30"
           >
             {loading ? dict.common.loading : dict.auth.signIn}
           </button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-gray-600">
+        <p className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
           {dict.auth.noAccount}{" "}
           <Link href="/register" className="text-blue-600 hover:text-blue-700 font-medium">
             {dict.auth.createOne}

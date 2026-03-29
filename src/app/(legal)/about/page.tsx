@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { useDict } from "@/lib/i18n/context";
@@ -33,28 +33,28 @@ export default function AboutPage() {
   return (
     <div>
       <div className="text-center mb-12">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">
+        <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
           {a?.title || "About Germany Guide"}
         </h1>
-        <p className="text-xl text-gray-600">
+        <p className="text-xl text-gray-600 dark:text-gray-400">
           {a?.subtitle || "Making German bureaucracy manageable for everyone"}
         </p>
       </div>
 
       <div className="mb-12">
-        <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+        <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">
           {a?.missionTitle || "Our Mission"}
         </h2>
-        <p className="text-gray-700 text-lg leading-relaxed">
+        <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed">
           {a?.missionContent || "Moving to Germany is exciting but navigating the bureaucracy can be overwhelming."}
         </p>
       </div>
 
       <div className="mb-12">
-        <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+        <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">
           {a?.whatWeDoTitle || "What We Do"}
         </h2>
-        <p className="text-gray-700 text-lg leading-relaxed mb-8">
+        <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed mb-8">
           {a?.whatWeDoContent || "We provide step-by-step guides tailored to your visa type and situation."}
         </p>
 
@@ -62,23 +62,23 @@ export default function AboutPage() {
           {features.map((feature, index) => (
             <div
               key={index}
-              className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow"
+              className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm hover:shadow-md transition-shadow"
             >
               <div className="text-3xl mb-3">{feature.icon}</div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
                 {feature.title}
               </h3>
-              <p className="text-gray-600">{feature.desc}</p>
+              <p className="text-gray-600 dark:text-gray-400">{feature.desc}</p>
             </div>
           ))}
         </div>
       </div>
 
       <div className="mb-12">
-        <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+        <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">
           {a?.whoWeAreTitle || "Who We Are"}
         </h2>
-        <p className="text-gray-700 text-lg leading-relaxed">
+        <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed">
           {a?.whoWeAreContent || "Germany Guide was created by migrants who experienced the challenges of German bureaucracy firsthand."}
         </p>
       </div>
