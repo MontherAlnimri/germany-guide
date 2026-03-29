@@ -23,7 +23,7 @@
       <li>Export progress as PDF</li>
     </ul>
   </div>
-  <a href="https://my-germany-guide.vercel.app/dashboard" style="display:inline-block;background:#2563eb;color:#fff;text-decoration:none;padding:12px 32px;border-radius:10px;font-weight:600;font-size:15px">
+  <a href="https://germany-guide-1.vercel.app/dashboard" style="display:inline-block;background:#2563eb;color:#fff;text-decoration:none;padding:12px 32px;border-radius:10px;font-weight:600;font-size:15px">
     Go to Dashboard
   </a>
 </div>
@@ -74,7 +74,7 @@ export function deadlineReminderEmail(
     <p style="color:#6b7280;font-size:14px;margin:0">Due: ${dueDate}</p>
   </div>
   <div style="text-align:center">
-    <a href="https://my-germany-guide.vercel.app/deadlines" style="display:inline-block;background:#2563eb;color:#fff;text-decoration:none;padding:12px 32px;border-radius:10px;font-weight:600;font-size:15px">
+    <a href="https://germany-guide-1.vercel.app/deadlines" style="display:inline-block;background:#2563eb;color:#fff;text-decoration:none;padding:12px 32px;border-radius:10px;font-weight:600;font-size:15px">
       View Deadlines
     </a>
   </div>
@@ -128,7 +128,7 @@ export function visaExpiryEmail(
     </ul>
   </div>
   <div style="text-align:center">
-    <a href="https://my-germany-guide.vercel.app/flow" style="display:inline-block;background:#2563eb;color:#fff;text-decoration:none;padding:12px 32px;border-radius:10px;font-weight:600;font-size:15px">
+    <a href="https://germany-guide-1.vercel.app/flow" style="display:inline-block;background:#2563eb;color:#fff;text-decoration:none;padding:12px 32px;border-radius:10px;font-weight:600;font-size:15px">
       Start Renewal Guide
     </a>
   </div>
@@ -166,7 +166,7 @@ export function flowCompletionEmail(
   <p style="color:#6b7280;font-size:14px;line-height:1.6;margin:0 0 24px">
     Great job navigating this process. Check your dashboard for more guides or track your documents.
   </p>
-  <a href="https://my-germany-guide.vercel.app/dashboard" style="display:inline-block;background:#2563eb;color:#fff;text-decoration:none;padding:12px 32px;border-radius:10px;font-weight:600;font-size:15px">
+  <a href="https://germany-guide-1.vercel.app/dashboard" style="display:inline-block;background:#2563eb;color:#fff;text-decoration:none;padding:12px 32px;border-radius:10px;font-weight:600;font-size:15px">
     Back to Dashboard
   </a>
 </div>

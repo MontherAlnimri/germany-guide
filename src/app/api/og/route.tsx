@@ -98,7 +98,7 @@ export async function GET(req: NextRequest) {
             display: "flex",
           }}
         >
-          my-germany-guide.vercel.app
+          germany-guide-1.vercel.app
         </div>
       </div>
     ),

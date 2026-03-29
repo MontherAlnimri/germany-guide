@@ -2,7 +2,7 @@ import { MetadataRoute } from "next";
 import { blogPosts } from "@/lib/blog";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://my-germany-guide.vercel.app";
+  const baseUrl = "https://germany-guide-1.vercel.app";
 
   const staticPages: MetadataRoute.Sitemap = [
     { url: baseUrl, lastModified: new Date(), changeFrequency: "weekly", priority: 1.0 },

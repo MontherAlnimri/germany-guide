@@ -268,9 +268,9 @@ export default function GuideArticle({ slug }: { slug: string }) {
     publisher: {
       "@type": "Organization",
       name: "Germany Guide",
-      url: "https://my-germany-guide.vercel.app",
+      url: "https://germany-guide-1.vercel.app",
     },
-    mainEntityOfPage: `https://my-germany-guide.vercel.app/guides/${slug}`,
+    mainEntityOfPage: `https://germany-guide-1.vercel.app/guides/${slug}`,
   };
 
   return (

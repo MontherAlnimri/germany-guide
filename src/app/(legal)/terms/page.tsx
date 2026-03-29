@@ -44,7 +44,7 @@ export default function TermsPage() {
 
       <div className="mt-8 p-4 bg-blue-50 dark:bg-blue-900/30 rounded-lg">
         <p className="text-gray-700 dark:text-gray-300">
-          {"support@my-germany-guide.vercel.app"}
+          {"support@germany-guide-1.vercel.app"}
         </p>
       </div>
     </div>

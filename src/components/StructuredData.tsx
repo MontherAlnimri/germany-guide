@@ -5,7 +5,7 @@
     name: "Germany Guide",
     description:
       "Step-by-step guidance for visas, city registration, health insurance, and settling in Germany. Available in 11 languages.",
-    url: "https://my-germany-guide.vercel.app",
+    url: "https://germany-guide-1.vercel.app",
     applicationCategory: "UtilitiesApplication",
     operatingSystem: "Web",
     offers: [

@@ -3,7 +3,7 @@
 Multilingual web app helping migrants and international students navigate German bureaucracy — visa guides, document tracking, deadline management, email notifications, and PDF export.
 
 - **Stack:** Next.js 16 (App Router), TypeScript, TailwindCSS, Supabase (Postgres + Auth), Stripe, Resend, PostHog, Vercel
-- **Live:** https://my-germany-guide.vercel.app
+- **Live:** https://germany-guide-1.vercel.app
 - **GitHub:** https://github.com/MontherAlnimri/germany-guide
 - **Path alias:** `@/*` maps to `./src/*`
 - **TypeScript strict mode:** OFF (`strict: false` in tsconfig)
@@ -178,7 +178,7 @@ All client-side functions are SSR-safe (no-op if `window` undefined).
 | `RESEND_API_KEY` | Resend email service key |
 | `NEXT_PUBLIC_POSTHOG_KEY` | PostHog project API key |
 | `CRON_SECRET` | Protects `/api/reminders` endpoint |
-| `NEXT_PUBLIC_APP_URL` | App base URL (e.g., `https://my-germany-guide.vercel.app`) |
+| `NEXT_PUBLIC_APP_URL` | App base URL (e.g., `https://germany-guide-1.vercel.app`) |
 
 ### Optional
 | Variable | Default | Description |

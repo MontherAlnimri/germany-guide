@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/api/", "/dashboard/", "/admin/", "/onboarding/"],
       },
     ],
-    sitemap: "https://my-germany-guide.vercel.app/sitemap.xml",
+    sitemap: "https://germany-guide-1.vercel.app/sitemap.xml",
   };
 }
