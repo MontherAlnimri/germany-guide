@@ -173,14 +173,14 @@ export default function OnboardingPage() {
 
   return (
     <div className="max-w-lg mx-auto py-8 px-4">
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8">
-        <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
+      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 sm:p-8">
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-2">
           {isUpdate
             ? (dict?.onboarding?.title ?? "Set Up Your Profile")
             : (dict?.onboarding?.welcome ?? "Welcome to Germany Guide")}
         </h1>
         <div className="flex items-center gap-2 mb-6">
-          <span className="text-sm text-gray-500">
+          <span className="text-sm text-gray-500 dark:text-gray-400">
             {(dict?.onboarding?.progress ?? "Step {current} of {total}")
               .replace("{current}", String(step))
               .replace("{total}", "3")}
@@ -189,25 +189,25 @@ export default function OnboardingPage() {
             {[1, 2, 3].map((s) => (
               <div
                 key={s}
-                className={`h-1.5 flex-1 rounded-full ${s <= step ? "bg-blue-600" : "bg-gray-200"}`}
+                className={`h-1.5 flex-1 rounded-full ${s <= step ? "bg-blue-600" : "bg-gray-200 dark:bg-gray-600"}`}
               />
             ))}
           </div>
         </div>
         {error && (
-          <div className="bg-red-50 text-red-600 text-sm rounded-lg p-3 mb-4">{error}</div>
+          <div className="bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 text-sm rounded-lg p-3 mb-4">{error}</div>
         )}
 
         {step === 1 && (
           <div className="space-y-4">
-            <h2 className="text-lg font-semibold text-gray-900">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
               {dict?.onboarding?.aboutYou ?? "About You"}
             </h2>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-gray-600 dark:text-gray-400">
               {dict?.onboarding?.step1Desc ?? "What type of visa do you have or are applying for?"}
             </p>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 {dict?.auth?.fullName ?? "Full Name"}
               </label>
               <input
@@ -215,17 +215,17 @@ export default function OnboardingPage() {
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 placeholder="Your full name"
-                className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none min-h-[44px]"
+                className="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none min-h-[44px] dark:bg-gray-700 dark:text-white"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 {dict?.onboarding?.visaType ?? "Visa Type"}
               </label>
               <select
                 value={visaType}
                 onChange={(e) => setVisaType(e.target.value)}
-                className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none bg-white min-h-[44px]"
+                className="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none bg-white dark:bg-gray-700 dark:text-white min-h-[44px]"
               >
                 <option value="">{dict?.onboarding?.visaPlaceholder ?? "Choose your visa type"}</option>
                 {VISA_TYPES.map((v) => (
@@ -234,13 +234,13 @@ export default function OnboardingPage() {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 {dict?.onboarding?.applicationType ?? "Application Type"}
               </label>
               <select
                 value={applicationType}
                 onChange={(e) => setApplicationType(e.target.value)}
-                className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none bg-white min-h-[44px]"
+                className="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none bg-white dark:bg-gray-700 dark:text-white min-h-[44px]"
               >
                 <option value="">{dict?.onboarding?.selectVisaType ?? "Select type"}</option>
                 <option value="first">{dict?.onboarding?.firstApplication ?? "First Application"}</option>
@@ -258,20 +258,20 @@ export default function OnboardingPage() {
 
         {step === 2 && (
           <div className="space-y-4">
-            <h2 className="text-lg font-semibold text-gray-900">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
               {dict?.onboarding?.location ?? "Location"}
             </h2>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-gray-600 dark:text-gray-400">
               {dict?.onboarding?.step2Desc ?? "Where do you live or plan to live in Germany?"}
             </p>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 {dict?.onboarding?.city ?? "City"}
               </label>
               <select
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
-                className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none bg-white min-h-[44px]"
+                className="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none bg-white dark:bg-gray-700 dark:text-white min-h-[44px]"
               >
                 <option value="">{dict?.onboarding?.cityPlaceholder ?? "Choose your city"}</option>
                 {GERMAN_CITIES.map((c) => (
@@ -280,7 +280,7 @@ export default function OnboardingPage() {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 {dict?.onboarding?.zipCode ?? "ZIP Code"}
               </label>
               <input
@@ -289,13 +289,13 @@ export default function OnboardingPage() {
                 onChange={(e) => setZipCode(e.target.value)}
                 placeholder={dict?.onboarding?.zipPlaceholder ?? "e.g. 10115"}
                 maxLength={5}
-                className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none min-h-[44px]"
+                className="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none min-h-[44px] dark:bg-gray-700 dark:text-white"
               />
             </div>
             <div className="flex gap-3">
               <button
                 onClick={() => setStep(1)}
-                className="flex-1 py-2.5 bg-gray-100 text-gray-700 rounded-xl font-medium hover:bg-gray-200 transition-colors min-h-[44px]"
+                className="flex-1 py-2.5 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl font-medium hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors min-h-[44px]"
               >
                 {dict?.common?.back ?? "Back"}
               </button>
@@ -311,30 +311,30 @@ export default function OnboardingPage() {
 
         {step === 3 && (
           <div className="space-y-4">
-            <h2 className="text-lg font-semibold text-gray-900">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
               {dict?.onboarding?.step3Title ?? "Important Dates"}
             </h2>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-gray-600 dark:text-gray-400">
               {dict?.onboarding?.step3Desc ?? "When does your current visa expire?"}
             </p>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 {dict?.onboarding?.visaExpiry ?? "Visa Expiry Date"}
               </label>
               <input
                 type="date"
                 value={visaExpiry}
                 onChange={(e) => setVisaExpiry(e.target.value)}
-                className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none min-h-[44px]"
+                className="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none min-h-[44px] dark:bg-gray-700 dark:text-white"
               />
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                 {dict?.onboarding?.expiryHint ?? "This helps us send you renewal reminders"}
               </p>
             </div>
             <div className="flex gap-3">
               <button
                 onClick={() => setStep(2)}
-                className="flex-1 py-2.5 bg-gray-100 text-gray-700 rounded-xl font-medium hover:bg-gray-200 transition-colors min-h-[44px]"
+                className="flex-1 py-2.5 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl font-medium hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors min-h-[44px]"
               >
                 {dict?.common?.back ?? "Back"}
               </button>

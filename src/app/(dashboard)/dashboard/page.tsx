@@ -17,6 +17,7 @@ import UsageBar from '@/components/ui/UsageBar';
 import AdBanner from '@/components/AdBanner';
 import EmailVerificationBanner from '@/components/EmailVerificationBanner';
 import TrialBanner from "@/components/TrialBanner";
+import { ClipboardList, FileText, Clock, CheckCircle, Star, Calendar } from "lucide-react";
 
 interface DashboardStats {
   activeFlows: number;
@@ -140,10 +141,10 @@ export default function DashboardPage() {
   const overallProgress = stats.totalSteps > 0 ? Math.round((stats.completedSteps / stats.totalSteps) * 100) : 0;
 
   const statCards = [
-    { icon: "\uD83D\uDCCB", label: dict?.dashboard?.activeFlows ?? 'Active Flows', value: stats.activeFlows, gradient: "from-blue-500 to-indigo-500" },
-    { icon: "\uD83D\uDCC4", label: dict?.dashboard?.totalDocuments ?? 'Documents', value: stats.totalDocuments, gradient: "from-emerald-500 to-green-500" },
-    { icon: "\u23F0", label: dict?.dashboard?.upcomingDeadlines ?? 'Deadlines', value: stats.upcomingDeadlines, gradient: "from-amber-500 to-orange-500" },
-    { icon: "\u2705", label: dict?.dashboard?.yourProgress ?? 'Progress', value: overallProgress, gradient: "from-purple-500 to-indigo-500", isPercent: true },
+    { icon: <ClipboardList className="w-5 h-5 text-white" />, label: dict?.dashboard?.activeFlows ?? 'Active Flows', value: stats.activeFlows, gradient: "from-blue-500 to-indigo-500" },
+    { icon: <FileText className="w-5 h-5 text-white" />, label: dict?.dashboard?.totalDocuments ?? 'Documents', value: stats.totalDocuments, gradient: "from-emerald-500 to-green-500" },
+    { icon: <Clock className="w-5 h-5 text-white" />, label: dict?.dashboard?.upcomingDeadlines ?? 'Deadlines', value: stats.upcomingDeadlines, gradient: "from-amber-500 to-orange-500" },
+    { icon: <CheckCircle className="w-5 h-5 text-white" />, label: dict?.dashboard?.yourProgress ?? 'Progress', value: overallProgress, gradient: "from-purple-500 to-indigo-500", isPercent: true },
   ];
 
   return (
@@ -162,12 +163,12 @@ export default function DashboardPage() {
                 {dict?.premium?.subtitle ?? 'Unlock all features'}
               </p>
             </div>
-            <Button
+            <button
               onClick={() => router.push('/premium')}
-              className="bg-white !text-blue-700 hover:bg-blue-50 flex-shrink-0 w-full sm:w-auto !shadow-lg"
+              className="bg-white text-blue-700 hover:bg-blue-50 flex-shrink-0 w-full sm:w-auto shadow-xl border-2 border-white/30 px-4 py-2 text-sm font-medium rounded-xl transition-all active:scale-[0.97]"
             >
               {dict?.premium?.subscribe ?? 'Go Premium'}
-            </Button>
+            </button>
           </div>
         </div>
       )}
@@ -186,7 +187,7 @@ export default function DashboardPage() {
           <Card key={i} className="p-3 sm:p-4 stagger-item">
             <div className="flex items-center gap-2 sm:gap-3">
               <div className={`w-10 h-10 sm:w-11 sm:h-11 bg-gradient-to-br ${card.gradient} rounded-xl flex items-center justify-center flex-shrink-0 shadow-md`}>
-                <span className="text-lg sm:text-xl">{card.icon}</span>
+                {card.icon}
               </div>
               <div className="min-w-0">
                 <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 truncate">{card.label}</p>
@@ -242,17 +243,17 @@ export default function DashboardPage() {
             {dict?.dashboard?.quickActions ?? 'Quick Actions'}
           </h2>
           <div className="grid grid-cols-1 xs:grid-cols-2 gap-2 sm:gap-3">
-            <Button onClick={() => router.push('/flow')} variant="outline" className="justify-start min-h-[44px] text-sm">
-              {"\uD83D\uDCCB"} {dict?.dashboard?.startFlow ?? 'Start Flow'}
+            <Button onClick={() => router.push('/flow')} variant="outline" className="justify-start min-h-[44px] text-sm gap-2">
+              <ClipboardList className="w-4 h-4" /> {dict?.dashboard?.startFlow ?? 'Start Flow'}
             </Button>
-            <Button onClick={() => router.push('/documents/new')} variant="outline" className="justify-start min-h-[44px] text-sm">
-              {"\uD83D\uDCC4"} {dict?.dashboard?.totalDocuments ?? 'Add Document'}
+            <Button onClick={() => router.push('/documents/new')} variant="outline" className="justify-start min-h-[44px] text-sm gap-2">
+              <FileText className="w-4 h-4" /> {dict?.dashboard?.totalDocuments ?? 'Add Document'}
             </Button>
-            <Button onClick={() => router.push('/deadlines')} variant="outline" className="justify-start min-h-[44px] text-sm">
-              {"\u23F0"} {dict?.dashboard?.upcomingDeadlines ?? 'Add Deadline'}
+            <Button onClick={() => router.push('/deadlines')} variant="outline" className="justify-start min-h-[44px] text-sm gap-2">
+              <Clock className="w-4 h-4" /> {dict?.dashboard?.upcomingDeadlines ?? 'Add Deadline'}
             </Button>
-            <Button onClick={() => router.push('/premium')} variant="outline" className="justify-start min-h-[44px] text-sm">
-              {"\u2B50"} {dict?.premium?.upgradeNow ?? 'Go Premium'}
+            <Button onClick={() => router.push('/premium')} variant="outline" className="justify-start min-h-[44px] text-sm gap-2">
+              <Star className="w-4 h-4" /> {dict?.premium?.upgradeNow ?? 'Go Premium'}
             </Button>
           </div>
         </Card>
@@ -263,7 +264,7 @@ export default function DashboardPage() {
           </h2>
           {upcomingDeadlines.length === 0 ? (
             <div className="text-center py-6">
-              <div className="text-3xl mb-2 animate-bounce-in">{"\u{1F4C5}"}</div>
+              <div className="mb-2 animate-bounce-in flex justify-center"><Calendar className="w-8 h-8 text-gray-400 dark:text-gray-500" /></div>
               <p className="text-gray-500 dark:text-gray-400 text-sm">{dict?.dashboard?.noDeadlines ?? 'No upcoming deadlines'}</p>
               <Button variant="ghost" size="sm" onClick={() => router.push('/deadlines')} className="mt-2">
                 {dict?.dashboard?.upcomingDeadlines ?? 'Add one'}
@@ -307,8 +308,8 @@ export default function DashboardPage() {
                 <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
                   <div className="flex items-center gap-2">
                     <span className={`w-2 h-2 rounded-full flex-shrink-0 ${flow.status === 'completed' ? 'bg-emerald-500' : flow.progress > 0 ? 'bg-blue-500' : 'bg-gray-300 dark:bg-gray-500'}`} />
-                    <span className="text-lg sm:text-xl flex-shrink-0 group-hover:scale-110 transition-transform">
-                      {flow.flow_variant?.base_flow?.icon ?? '\uD83D\uDCCB'}
+                    <span className="flex-shrink-0 group-hover:scale-110 transition-transform">
+                      <ClipboardList className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                     </span>
                   </div>
                   <div className="min-w-0">

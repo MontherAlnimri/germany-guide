@@ -77,6 +77,7 @@
     step2Desc: string;
     step3Title: string;
     step3Desc: string;
+    trustBadge: string;
     statUsers: string;
     statGuides: string;
     statLanguages: string;
@@ -614,6 +615,13 @@
     sectionSubtitle: string;
     viewAll: string;
     minRead: string;
+    pageTitle: string;
+    pageSubtitle: string;
+    backToHome: string;
+    allGuides: string;
+    noGuides: string;
+    aboutTitle: string;
+    updated: string;
     guide1Category: string;
     guide1Title: string;
     guide1Desc: string;
@@ -742,7 +750,7 @@ const en: Dictionary = {
     freeFeature4: "7-day free premium trial",
     premiumTier: "Premium",
     ctaTitle: "Ready to Start Your Journey?",
-    ctaSubtitle: "Join thousands of migrants and students navigating German bureaucracy with confidence.",
+    ctaSubtitle: "Start your free account and get step-by-step guidance for your visa, registration, and more.",
     ctaButton: "Get Started Free",
     learnMore: "Learn More",
     featuresTitle: "Key Features",
@@ -752,6 +760,7 @@ const en: Dictionary = {
     step2Desc: "Get clear instructions for every bureaucratic process, tailored to your situation.",
     step3Title: "Track Everything",
     step3Desc: "Keep your documents organized and never miss a deadline with smart reminders.",
+    trustBadge: "Free & open to everyone",
     statUsers: "Users helped",
     statGuides: "Visa guides",
     statLanguages: "Languages",
@@ -1290,6 +1299,13 @@ const en: Dictionary = {
     sectionSubtitle: "Detailed, step-by-step guides covering every aspect of life in Germany. Written by expats, updated for 2025.",
     viewAll: "View All Guides",
     minRead: "min read",
+    pageTitle: "Germany Guides",
+    pageSubtitle: "Comprehensive, free guides for navigating German bureaucracy. Written by expats who have been through it all.",
+    backToHome: "Back to Home",
+    allGuides: "All Guides",
+    noGuides: "No guides in this category yet. Check back soon!",
+    aboutTitle: "About Our Germany Guides",
+    updated: "Updated",
     guide1Category: "City Registration",
     guide1Title: "Anmeldung: The Complete Guide to City Registration in Germany (2025)",
     guide1Desc: "Everything you need to know about registering your address in Germany. Step-by-step Anmeldung guide with required documents, deadlines, and city-specific tips.",

@@ -5,6 +5,7 @@ import { useDict } from "@/lib/i18n/context";
 import { useSubscription } from "@/hooks/useSubscription";
 import { useUser } from "@/hooks/useUser";
 import { trackEvent } from "@/lib/analytics";
+import { Star, Sparkles } from "lucide-react";
 
 export default function PremiumPage() {
   const dict = useDict();
@@ -64,7 +65,7 @@ export default function PremiumPage() {
     return (
       <div className="max-w-2xl mx-auto p-4 md:p-6">
         <div className="bg-gradient-to-br from-amber-50 to-yellow-50 dark:from-amber-900/30 dark:to-yellow-900/20 border border-amber-200/60 dark:border-amber-700/40 rounded-2xl p-8 text-center shadow-premium">
-          <span className="text-5xl mb-4 block">{"\u2B50"}</span>
+          <span className="mb-4 block flex justify-center"><Star className="w-12 h-12 text-amber-400" /></span>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
             {p?.premiumPlan ?? "Premium Plan"}
           </h1>
@@ -107,7 +108,7 @@ export default function PremiumPage() {
         <div className="mb-8 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700/50 rounded-xl p-5">
           <div className="flex flex-col sm:flex-row sm:items-center gap-4">
             <div className="flex items-center gap-3">
-              <span className="text-3xl">{"\u2728"}</span>
+              <Sparkles className="w-7 h-7 text-blue-500 dark:text-blue-400" />
               <div>
                 <h3 className="font-semibold text-blue-900 dark:text-blue-200">
                   {t?.trialActive ?? "Trial Active"} — {trialDaysLeft === 1
@@ -218,7 +219,7 @@ export default function PremiumPage() {
           <button
             onClick={handleCheckout}
             disabled={checkoutLoading}
-            className="w-full py-3 bg-white text-blue-700 rounded-xl font-semibold hover:bg-blue-50 transition-colors disabled:opacity-50 shadow-lg"
+            className="w-full py-3 bg-white text-blue-700 rounded-xl font-semibold hover:bg-blue-50 transition-colors disabled:opacity-50 shadow-xl border-2 border-white/30"
           >
             {checkoutLoading
               ? (dict?.common?.loading ?? "Loading...")

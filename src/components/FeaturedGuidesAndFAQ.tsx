@@ -1,48 +1,56 @@
 ﻿"use client";
 
+import Link from "next/link";
 import { useDict } from "@/lib/i18n/context";
+import { Building2, Shield, Landmark, Home, FileCheck, GraduationCap } from "lucide-react";
 
 export function FeaturedGuides() {
   const dict = useDict();
 
   const guides = [
     {
-      icon: "\uD83C\uDFE2",
+      icon: <Building2 className="w-5 h-5 text-blue-600 dark:text-blue-400" />,
+      slug: "anmeldung-city-registration-guide",
       category: dict?.guides?.guide1Category ?? "City Registration",
       title: dict?.guides?.guide1Title ?? "",
       desc: dict?.guides?.guide1Desc ?? "",
       time: dict?.guides?.guide1Time ?? "12",
     },
     {
-      icon: "\uD83D\uDEE1\uFE0F",
+      icon: <Shield className="w-5 h-5 text-blue-600 dark:text-blue-400" />,
+      slug: "german-health-insurance-guide",
       category: dict?.guides?.guide2Category ?? "Insurance",
       title: dict?.guides?.guide2Title ?? "",
       desc: dict?.guides?.guide2Desc ?? "",
       time: dict?.guides?.guide2Time ?? "14",
     },
     {
-      icon: "\uD83C\uDFE6",
+      icon: <Landmark className="w-5 h-5 text-blue-600 dark:text-blue-400" />,
+      slug: "opening-bank-account-germany",
       category: dict?.guides?.guide3Category ?? "Banking & Finance",
       title: dict?.guides?.guide3Title ?? "",
       desc: dict?.guides?.guide3Desc ?? "",
       time: dict?.guides?.guide3Time ?? "11",
     },
     {
-      icon: "\uD83C\uDFE0",
+      icon: <Home className="w-5 h-5 text-blue-600 dark:text-blue-400" />,
+      slug: "finding-apartment-germany",
       category: dict?.guides?.guide4Category ?? "Housing",
       title: dict?.guides?.guide4Title ?? "",
       desc: dict?.guides?.guide4Desc ?? "",
       time: dict?.guides?.guide4Time ?? "15",
     },
     {
-      icon: "\uD83D\uDCCB",
+      icon: <FileCheck className="w-5 h-5 text-blue-600 dark:text-blue-400" />,
+      slug: "german-blue-card-guide",
       category: dict?.guides?.guide5Category ?? "Visa & Residence Permits",
       title: dict?.guides?.guide5Title ?? "",
       desc: dict?.guides?.guide5Desc ?? "",
       time: dict?.guides?.guide5Time ?? "13",
     },
     {
-      icon: "\uD83C\uDF93",
+      icon: <GraduationCap className="w-5 h-5 text-blue-600 dark:text-blue-400" />,
+      slug: "student-visa-germany-guide",
       category: dict?.guides?.guide6Category ?? "Education",
       title: dict?.guides?.guide6Title ?? "",
       desc: dict?.guides?.guide6Desc ?? "",
@@ -61,9 +69,10 @@ export function FeaturedGuides() {
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {guides.map((g, i) => (
-            <div
+            <Link
               key={i}
-              className="bg-gray-50 dark:bg-gray-800 rounded-xl p-5 hover:shadow-md transition-shadow border dark:border-gray-700 group"
+              href={`/guides/${g.slug}`}
+              className="bg-gray-50 dark:bg-gray-800 rounded-xl p-5 hover:shadow-md transition-shadow border dark:border-gray-700 group block"
             >
               <div className="flex items-center gap-2 mb-2">
                 <span>{g.icon}</span>
@@ -78,13 +87,13 @@ export function FeaturedGuides() {
               <span className="text-xs text-gray-400 mt-2 block">
                 {g.time} {dict?.guides?.minRead ?? "min read"}
               </span>
-            </div>
+            </Link>
           ))}
         </div>
         <div className="text-center mt-8">
-          <span className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold">
+          <Link href="/guides" className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
             {dict?.guides?.viewAll ?? "View All Guides"} &rarr;
-          </span>
+          </Link>
         </div>
       </div>
     </section>

@@ -12,11 +12,23 @@
 export const APPLICATION_TYPES = ['first', 'renewal'] as const;
 
 export const GERMAN_CITIES = [
-  'Berlin', 'Munich', 'Hamburg', 'Frankfurt', 'Cologne', 'Stuttgart',
-  'D\u00FCsseldorf', 'Dortmund', 'Essen', 'Leipzig', 'Bremen', 'Dresden',
-  'Hannover', 'Nuremberg', 'Duisburg', 'Bochum', 'Wuppertal', 'Bielefeld',
-  'Bonn', 'Mannheim', 'Karlsruhe', 'Augsburg', 'Wiesbaden', 'Aachen',
-  'Heidelberg', 'Freiburg', 'Other',
+  'Aachen', 'Augsburg', 'Bergisch Gladbach', 'Berlin', 'Bielefeld',
+  'Bochum', 'Bonn', 'Bottrop', 'Braunschweig', 'Bremen', 'Bremerhaven',
+  'Chemnitz', 'Cottbus', 'Darmstadt', 'Dortmund', 'Dresden', 'Duisburg',
+  'D\u00FCsseldorf', 'Erfurt', 'Erlangen', 'Essen', 'Flensburg',
+  'Frankfurt am Main', 'Freiburg', 'F\u00FCrth', 'Gelsenkirchen', 'Gera',
+  'Gie\u00DFen', 'G\u00F6ttingen', 'G\u00FCtersloh', 'Hagen', 'Halle (Saale)',
+  'Hamburg', 'Hamm', 'Hanau', 'Hannover', 'Heidelberg', 'Heilbronn',
+  'Herne', 'Hildesheim', 'Ingolstadt', 'Jena', 'Kaiserslautern',
+  'Karlsruhe', 'Kassel', 'Kiel', 'Koblenz', 'Cologne', 'Krefeld',
+  'Leipzig', 'Leverkusen', 'L\u00FCbeck', 'Ludwigshafen', 'Magdeburg',
+  'Mainz', 'Mannheim', 'Moers', 'M\u00F6nchengladbach',
+  'M\u00FClheim an der Ruhr', 'Munich', 'M\u00FCnster', 'Neuss',
+  'Nuremberg', 'Oberhausen', 'Offenbach', 'Oldenburg', 'Osnabr\u00FCck',
+  'Paderborn', 'Pforzheim', 'Potsdam', 'Recklinghausen', 'Regensburg',
+  'Remscheid', 'Reutlingen', 'Rostock', 'Saarbr\u00FCcken', 'Salzgitter',
+  'Siegen', 'Solingen', 'Stuttgart', 'Trier', 'Ulm', 'Wiesbaden',
+  'Witten', 'Wolfsburg', 'Wuppertal', 'W\u00FCrzburg', 'Other',
 ] as const;
 
 export const DOCUMENT_TYPES = [

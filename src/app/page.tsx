@@ -9,6 +9,7 @@ import LegalFooter from "@/components/layout/LegalFooter";
 import StructuredData from "@/components/StructuredData";
 import { FeaturedGuides, FAQSection } from "@/components/FeaturedGuidesAndFAQ";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
+import { ClipboardList, FolderOpen, Clock, Globe } from "lucide-react";
 
 function AnimatedCounter({ target, suffix = "" }: { target: number; suffix?: string }) {
   const [count, setCount] = useState(0);
@@ -103,10 +104,12 @@ export default function LandingPage() {
         <section className="relative overflow-hidden">
           {/* Background */}
           <div className="absolute inset-0 bg-hero-gradient" />
-          {/* Decorative blobs */}
-          <div className="absolute top-20 left-10 w-72 h-72 bg-blue-400/20 rounded-full blur-3xl animate-blob" />
-          <div className="absolute bottom-10 right-10 w-96 h-96 bg-indigo-400/15 rounded-full blur-3xl animate-blob delay-500" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[40rem] h-[40rem] bg-purple-400/10 rounded-full blur-3xl" />
+          {/* Decorative blobs — contained to prevent overflow glitch */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            <div className="absolute top-20 left-10 w-72 h-72 bg-blue-400/20 rounded-full blur-3xl animate-blob will-change-transform" />
+            <div className="absolute bottom-10 right-10 w-96 h-96 bg-indigo-400/15 rounded-full blur-3xl animate-blob delay-500 will-change-transform" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[40rem] h-[40rem] bg-purple-400/10 rounded-full blur-3xl" />
+          </div>
 
           <div className="relative py-16 sm:py-28 px-4">
             <div className="max-w-4xl mx-auto text-center">
@@ -129,18 +132,12 @@ export default function LandingPage() {
                   {l?.learnMore || "Learn More"}
                 </a>
               </div>
-              {/* Trust stats bar */}
-              <div className="flex flex-wrap justify-center gap-6 sm:gap-10 mt-10 sm:mt-14 animate-fade-in-up delay-500">
-                {[
-                  { value: "10,000+", label: l?.statUsers ?? "Users helped" },
-                  { value: "50+", label: l?.statGuides ?? "Visa guides" },
-                  { value: "11", label: l?.statLanguages ?? "Languages" },
-                ].map((stat, i) => (
-                  <div key={i} className="text-center">
-                    <div className="text-xl sm:text-2xl font-bold text-white">{stat.value}</div>
-                    <div className="text-xs sm:text-sm text-blue-200/80">{stat.label}</div>
-                  </div>
-                ))}
+              {/* Trust badge */}
+              <div className="flex justify-center mt-10 sm:mt-14 animate-fade-in-up delay-500">
+                <div className="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full">
+                  <svg className="w-4 h-4 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+                  <span className="text-sm text-blue-100 font-medium">{l?.trustBadge ?? "Free & open to everyone"}</span>
+                </div>
               </div>
             </div>
           </div>
@@ -164,39 +161,17 @@ export default function LandingPage() {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
               {[
-                { icon: "\u{1F4CB}", title: l?.feature1Title || "Visa Flow Engine", desc: l?.feature1Desc || "Personalized step-by-step guides based on your visa type.", color: "from-blue-500 to-blue-600" },
-                { icon: "\u{1F4C2}", title: l?.feature2Title || "Document Vault", desc: l?.feature2Desc || "Track all your important documents in one place.", color: "from-emerald-500 to-emerald-600" },
-                { icon: "\u{23F0}", title: l?.feature3Title || "Deadline Reminders", desc: l?.feature3Desc || "Never miss a visa renewal or appointment.", color: "from-amber-500 to-orange-500" },
-                { icon: "\u{1F310}", title: l?.feature4Title || "11 Languages", desc: l?.feature4Desc || "Available in 11 languages.", color: "from-purple-500 to-indigo-600" },
+                { icon: <ClipboardList className="w-6 h-6 text-white" />, title: l?.feature1Title || "Visa Flow Engine", desc: l?.feature1Desc || "Personalized step-by-step guides based on your visa type.", color: "from-blue-500 to-blue-600" },
+                { icon: <FolderOpen className="w-6 h-6 text-white" />, title: l?.feature2Title || "Document Vault", desc: l?.feature2Desc || "Track all your important documents in one place.", color: "from-emerald-500 to-emerald-600" },
+                { icon: <Clock className="w-6 h-6 text-white" />, title: l?.feature3Title || "Deadline Reminders", desc: l?.feature3Desc || "Never miss a visa renewal or appointment.", color: "from-amber-500 to-orange-500" },
+                { icon: <Globe className="w-6 h-6 text-white" />, title: l?.feature4Title || "11 Languages", desc: l?.feature4Desc || "Available in 11 languages.", color: "from-purple-500 to-indigo-600" },
               ].map((f, i) => (
                 <div key={i} className="group bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-premium card-hover border border-gray-100/80 dark:border-gray-700/80 stagger-item">
-                  <div className={`w-12 h-12 bg-gradient-to-br ${f.color} rounded-xl flex items-center justify-center text-2xl mb-4 shadow-md group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300`}>
+                  <div className={`w-12 h-12 bg-gradient-to-br ${f.color} rounded-xl flex items-center justify-center mb-4 shadow-md group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300`}>
                     {f.icon}
                   </div>
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">{f.title}</h3>
                   <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">{f.desc}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ===== SOCIAL PROOF / STATS ===== */}
-        <section className="py-12 sm:py-16 px-4 bg-white dark:bg-gray-800/50">
-          <div className="max-w-5xl mx-auto">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8">
-              {[
-                { target: 10000, suffix: "+", label: l?.statUsers ?? "Users helped", icon: "\u{1F465}" },
-                { target: 50, suffix: "+", label: l?.statGuides ?? "Visa guides", icon: "\u{1F4D1}" },
-                { target: 11, suffix: "", label: l?.statLanguages ?? "Languages", icon: "\u{1F30D}" },
-                { target: 4, suffix: ".8", label: l?.statRating ?? "User rating", icon: "\u2B50" },
-              ].map((stat, i) => (
-                <div key={i} className="text-center p-4 sm:p-6 rounded-2xl bg-gray-50 dark:bg-gray-800 border border-gray-100 dark:border-gray-700 stagger-item">
-                  <div className="text-2xl mb-2">{stat.icon}</div>
-                  <div className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
-                    <AnimatedCounter target={stat.target} suffix={stat.suffix} />
-                  </div>
-                  <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">{stat.label}</div>
                 </div>
               ))}
             </div>
@@ -309,43 +284,6 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* ===== TESTIMONIALS ===== */}
-        <section className="py-16 sm:py-24 px-4 bg-white dark:bg-gray-900">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-12 sm:mb-16">
-              <h2 className="text-2xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-                {l?.testimonialsTitle ?? "What Our Users Say"}
-              </h2>
-              <div className="w-16 h-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full mx-auto" />
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {[
-                { quote: l?.testimonial1Quote ?? "Germany Guide made my visa renewal so much easier. I knew exactly what documents to prepare and when.", name: l?.testimonial1Name ?? "Priya S.", visa: l?.testimonial1Visa ?? "Blue Card", flag: "\u{1F1EE}\u{1F1F3}" },
-                { quote: l?.testimonial2Quote ?? "As a student, navigating Anmeldung and health insurance was overwhelming. This app broke it down step by step.", name: l?.testimonial2Name ?? "Ahmed K.", visa: l?.testimonial2Visa ?? "Student Visa", flag: "\u{1F1EA}\u{1F1EC}" },
-                { quote: l?.testimonial3Quote ?? "The deadline reminders saved me from missing my visa renewal. Absolutely essential for expats.", name: l?.testimonial3Name ?? "Maria L.", visa: l?.testimonial3Visa ?? "Family Reunion", flag: "\u{1F1E7}\u{1F1F7}" },
-              ].map((t, i) => (
-                <div key={i} className="bg-gray-50 dark:bg-gray-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700 card-hover stagger-item">
-                  <div className="flex gap-1 mb-4">
-                    {[...Array(5)].map((_, j) => (
-                      <svg key={j} className="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                      </svg>
-                    ))}
-                  </div>
-                  <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed mb-4 italic">&ldquo;{t.quote}&rdquo;</p>
-                  <div className="flex items-center gap-2">
-                    <span className="text-lg">{t.flag}</span>
-                    <div>
-                      <div className="text-sm font-semibold text-gray-900 dark:text-white">{t.name}</div>
-                      <div className="text-xs text-blue-600 dark:text-blue-400">{t.visa}</div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
         {/* ===== CTA ===== */}
         <section className="relative overflow-hidden py-16 sm:py-20 px-4">
           <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 animate-gradient" />
@@ -356,7 +294,7 @@ export default function LandingPage() {
           <div className="absolute bottom-8 left-[25%] w-4 h-4 bg-white/10 rounded-full animate-float" />
           <div className="relative max-w-3xl mx-auto text-center">
             <h2 className="text-2xl sm:text-4xl font-bold text-white mb-4">{l?.ctaTitle || "Ready to simplify your move to Germany?"}</h2>
-            <p className="text-base sm:text-lg text-blue-100 mb-8">{l?.ctaSubtitle || "Join thousands of migrants and students who use Germany Guide."}</p>
+            <p className="text-base sm:text-lg text-blue-100 mb-8">{l?.ctaSubtitle || "Start your free account and get step-by-step guidance for your visa, registration, and more."}</p>
             <Link href="/register" className="inline-block bg-white text-blue-700 px-8 py-3.5 rounded-xl text-lg font-semibold hover:bg-blue-50 transition-all shadow-xl hover:shadow-2xl hover:-translate-y-0.5 active:scale-[0.97]">
               {l?.ctaButton || "Create Free Account"}
             </Link>
