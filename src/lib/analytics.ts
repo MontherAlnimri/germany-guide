@@ -1,6 +1,7 @@
-import posthog from "posthog-js";
+﻿import posthog from "posthog-js";
 
 type AnalyticsEvents = {
+  trial_started: { visa_type?: string };
   user_signed_up: { method: string };
   user_logged_in: { method: string };
   onboarding_completed: {

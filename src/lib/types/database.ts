@@ -1,5 +1,6 @@
 ﻿export interface Profile {
   id: string;
+  email: string;
   full_name: string | null;
   visa_type: string | null;
   first_vs_renewal: string | null;
@@ -7,7 +8,9 @@
   zip_code: string | null;
   visa_expiry_date: string | null;
   onboarding_complete: boolean;
+  locale: string | null;
   is_premium: boolean;
+  trial_ends_at: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -46,11 +49,24 @@ export interface FlowInstance {
   id: string;
   user_id: string;
   flow_variant_id: string;
-  status: string;
+  status: "not_started" | "in_progress" | "completed";
   progress: number;
-  step_snapshot: Record<string, { done: boolean; notes: string }> | null;
+  step_snapshot: StepSnapshot[] | null;
   created_at: string;
   updated_at: string;
+}
+
+export interface StepSnapshot {
+  step_id: string;
+  title: string;
+  description: string | null;
+  step_order: number;
+  required_documents: string[] | null;
+  useful_links: { label: string; url: string }[] | null;
+  tips: string | null;
+  is_optional: boolean;
+  is_done: boolean;
+  user_notes: string;
 }
 
 export interface Document {
@@ -84,8 +100,8 @@ export interface Subscription {
   user_id: string;
   stripe_customer_id: string | null;
   stripe_subscription_id: string | null;
-  plan: 'free' | 'monthly' | 'yearly';
-  status: 'active' | 'cancelled' | 'expired' | 'past_due';
+  plan: "free" | "monthly" | "yearly";
+  status: "active" | "cancelled" | "expired" | "past_due";
   current_period_start: string | null;
   current_period_end: string | null;
   created_at: string;
@@ -97,7 +113,7 @@ export interface Tip {
   user_id: string | null;
   amount: number;
   currency: string;
-  stripe_payment_intent_id: string | null;
-  status: 'pending' | 'succeeded' | 'failed';
+  stripe_payment_intent_id: string;
+  status: "pending" | "succeeded" | "failed";
   created_at: string;
 }

@@ -1,58 +1,84 @@
-﻿'use client';
+﻿"use client";
 
-import { useState, useEffect } from 'react';
-import { createClient } from '@/lib/supabase/client';
+import { useState, useEffect } from "react";
+import { createClient } from "@/lib/supabase/client";
 
-export interface Subscription {
-  id: string;
-  user_id: string;
-  stripe_customer_id: string | null;
-  stripe_subscription_id: string | null;
-  plan: 'free' | 'monthly' | 'yearly';
-  status: 'active' | 'cancelled' | 'expired' | 'past_due';
-  current_period_start: string | null;
-  current_period_end: string | null;
+interface SubscriptionState {
+  isPremium: boolean;
+  isTrialing: boolean;
+  trialDaysLeft: number;
+  trialEndsAt: string | null;
+  plan: string;
+  status: string;
+  loading: boolean;
 }
 
-export function useSubscription() {
-  const [subscription, setSubscription] = useState<Subscription | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [isPremium, setIsPremium] = useState(false);
-  const supabase = createClient();
+export function useSubscription(): SubscriptionState {
+  const [state, setState] = useState<SubscriptionState>({
+    isPremium: false,
+    isTrialing: false,
+    trialDaysLeft: 0,
+    trialEndsAt: null,
+    plan: "free",
+    status: "active",
+    loading: true,
+  });
 
   useEffect(() => {
     async function fetchSubscription() {
-      try {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (!user) {
-          setLoading(false);
-          return;
-        }
-
-        const { data: sub } = await supabase
-          .from('subscriptions')
-          .select('*')
-          .eq('user_id', user.id)
-          .single();
-
-        if (sub) {
-          setSubscription(sub);
-          setIsPremium(
-            (sub.plan === 'monthly' || sub.plan === 'yearly') &&
-            sub.status === 'active'
-          );
-        } else {
-          setIsPremium(false);
-        }
-      } catch {
-        setIsPremium(false);
-      } finally {
-        setLoading(false);
+      const supabase = createClient();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) {
+        setState((s) => ({ ...s, loading: false }));
+        return;
       }
+
+      // Fetch profile for trial info
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("is_premium, trial_ends_at")
+        .eq("id", user.id)
+        .single();
+
+      // Fetch subscription
+      const { data: sub } = await supabase
+        .from("subscriptions")
+        .select("plan, status")
+        .eq("user_id", user.id)
+        .single();
+
+      // Calculate trial status
+      let isTrialing = false;
+      let trialDaysLeft = 0;
+      const trialEndsAt = profile?.trial_ends_at || null;
+
+      if (trialEndsAt) {
+        const now = new Date();
+        const trialEnd = new Date(trialEndsAt);
+        const diffMs = trialEnd.getTime() - now.getTime();
+        trialDaysLeft = Math.max(0, Math.ceil(diffMs / (1000 * 60 * 60 * 24)));
+        isTrialing = diffMs > 0;
+      }
+
+      const hasPaidPremium =
+        profile?.is_premium === true ||
+        (sub?.plan && sub.plan !== "free" && sub.status === "active");
+
+      setState({
+        isPremium: hasPaidPremium || isTrialing,
+        isTrialing: isTrialing && !hasPaidPremium,
+        trialDaysLeft,
+        trialEndsAt,
+        plan: sub?.plan || "free",
+        status: sub?.status || "active",
+        loading: false,
+      });
     }
 
     fetchSubscription();
-  }, [supabase]);
+  }, []);
 
-  return { subscription, isPremium, loading };
+  return state;
 }
