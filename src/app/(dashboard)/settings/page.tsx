@@ -430,11 +430,11 @@ export default function SettingsPage() {
         title={s?.deleteAccountConfirmTitle ?? "Delete Account"}
       >
         <div className="space-y-4">
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-            <p className="text-sm text-red-800 font-medium mb-2">
+          <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg p-4">
+            <p className="text-sm text-red-800 dark:text-red-200 font-medium mb-2">
               {s?.deleteAccountWarning ?? "This will permanently delete:"}
             </p>
-            <ul className="text-sm text-red-700 space-y-1 list-disc list-inside">
+            <ul className="text-sm text-red-700 dark:text-red-300 space-y-1 list-disc list-inside">
               <li>{s?.deleteItem1 ?? "Your profile and account"}</li>
               <li>{s?.deleteItem2 ?? "All your flows and progress"}</li>
               <li>{s?.deleteItem3 ?? "All your documents"}</li>
@@ -454,12 +454,12 @@ export default function SettingsPage() {
               value={deleteConfirmText}
               onChange={(e) => setDeleteConfirmText(e.target.value)}
               placeholder="DELETE"
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none min-h-[44px]"
+              className="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none min-h-[44px] dark:bg-gray-800 dark:text-white dark:placeholder-gray-400"
             />
           </div>
 
           {deleteError && (
-            <div className="bg-red-50 text-red-600 text-sm rounded-lg p-3">{deleteError}</div>
+            <div className="bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 text-sm rounded-lg p-3">{deleteError}</div>
           )}
 
           <div className="flex gap-3">

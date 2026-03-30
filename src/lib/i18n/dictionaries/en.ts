@@ -651,6 +651,19 @@
     basedOnProfile: string;
     loginForPersonalized: string;
     otherGuides: string;
+    personalizedFor: string;
+    inYourCity: string;
+    startProcess: string;
+    continueProcess: string;
+    progressLabel: string;
+    trackProgress: string;
+    trackProgressDesc: string;
+    viewFlows: string;
+    ctaDescription: string;
+    getStarted: string;
+    relatedGuides: string;
+    contents: string;
+    backToGuides: string;
   };
   faq: {
     sectionTitle: string;
@@ -1340,6 +1353,19 @@ const en: Dictionary = {
     basedOnProfile: "Based on your visa type and application status",
     loginForPersonalized: "Log in to see personalized guide recommendations based on your visa type",
     otherGuides: "Other Guides",
+    personalizedFor: "Personalized for",
+    inYourCity: "in",
+    startProcess: "Start Your Personalized Guide",
+    continueProcess: "Continue Your Guide",
+    progressLabel: "through this process",
+    trackProgress: "Track Your Progress with Germany Guide",
+    trackProgressDesc: "Explore all available flows to find step-by-step guidance for your situation.",
+    viewFlows: "View All Flows",
+    ctaDescription: "Stop juggling spreadsheets and checklists. Our app guides you through every step of German bureaucracy, tracks your documents, and reminds you of deadlines.",
+    getStarted: "Get Started Free",
+    relatedGuides: "Related Guides",
+    contents: "Contents",
+    backToGuides: "All Guides",
   },
   faq: {
     sectionTitle: "Frequently Asked Questions",
